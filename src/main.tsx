@@ -2,8 +2,12 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import {
+	Dashboard as DashboardIcon,
+	Settings as SettingsIcon
+} from '@mui/icons-material'
 import './index.css'
-import { NovaWrapper } from './lib'
+import { NovaWrapper, type SidebarLink } from './lib'
 
 // Create a default MUI theme with Joy UI-style CSS variables
 const theme = createTheme({
@@ -131,6 +135,20 @@ const theme = createTheme({
 	},
 });
 
+// Demo sidebar links
+const demoLinks: SidebarLink[] = [
+	{
+		text: 'Dashboard',
+		path: '/dashboard',
+		icon: <DashboardIcon />
+	},
+	{
+		text: 'Settings',
+		path: '/settings',
+		icon: <SettingsIcon />
+	}
+];
+
 // Demo content component with Joy UI CSS variables
 const DemoContent = () => (
 	<div>
@@ -138,6 +156,7 @@ const DemoContent = () => (
 		<p>This is a demonstration of the NovaWrapper component with:</p>
 		<ul>
 			<li>Consistent header and sidebar layout</li>
+			<li>Configurable navigation links with icons</li>
 			<li>Responsive design (try resizing the window)</li>
 			<li>Proactive token refresh logic</li>
 			<li>MUI Material Design components</li>
@@ -209,7 +228,7 @@ createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<NovaWrapper>
+			<NovaWrapper sidebarLinks={demoLinks}>
 				<DemoContent />
 			</NovaWrapper>
 		</ThemeProvider>

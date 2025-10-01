@@ -14,15 +14,19 @@ import {
 	ListItemIcon,
 	ListItemText
 } from '@mui/material';
-import {
-	Dashboard as DashboardIcon,
-	Settings as SettingsIcon
-} from '@mui/icons-material';
 import Cookies from 'js-cookie';
+
+// Type for sidebar navigation links
+export type SidebarLink = {
+	text: string;
+	path: string;
+	icon: React.ReactNode;
+};
 
 // Interface for NovaWrapper props
 export interface NovaWrapperProps {
 	children: React.ReactNode;
+	sidebarLinks?: SidebarLink[];
 }
 
 // Constants for token refresh logic
@@ -34,7 +38,7 @@ const LOGIN_REDIRECT_URL = '/login';
  * NovaWrapper component provides a consistent layout structure for authenticated pages
  * and handles proactive token refresh to prevent session expiry during active use.
  */
-const NovaWrapper: React.FC<NovaWrapperProps> = ({ children }) => {
+const NovaWrapper: React.FC<NovaWrapperProps> = ({ children, sidebarLinks = [] }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -158,10 +162,18 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({ children }) => {
 					<Typography variant="h6" gutterBottom>
 						Navigation
 					</Typography>
-					{/* Navigation items will be added in future iterations */}
-					<Typography variant="body2" color="text.secondary">
-						Sidebar content placeholder
-					</Typography>
+					<List>
+						{sidebarLinks.map((link, index) => (
+							<ListItem key={index} disablePadding>
+								<ListItemButton component="a" href={link.path}>
+									<ListItemIcon>
+										{link.icon}
+									</ListItemIcon>
+									<ListItemText primary={link.text} />
+								</ListItemButton>
+							</ListItem>
+						))}
+					</List>
 				</Box>
 			</Drawer>
 
