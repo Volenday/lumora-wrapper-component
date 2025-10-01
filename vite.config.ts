@@ -19,11 +19,22 @@ export default defineConfig({
       fileName: (format) => `nova-wrapper-component.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: [
+        'react',
+        'react-dom',
+        '@mui/material',
+        '@emotion/react',
+        '@emotion/styled',
+        '@mui/icons-material'
+      ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          '@mui/material': 'MaterialUI',
+          '@emotion/react': 'EmotionReact',
+          '@emotion/styled': 'EmotionStyled',
+          '@mui/icons-material': 'MaterialUIIcons'
         },
       },
     },
