@@ -9,6 +9,10 @@ export default defineConfig({
     react(),
     dts({
       insertTypesEntry: true,
+      include: ['src/lib/**/*'],
+      exclude: ['src/lib/**/*.test.*', 'src/lib/**/*.spec.*'],
+      outDir: 'dist',
+      rollupTypes: true
     }),
   ],
   build: {
@@ -23,18 +27,22 @@ export default defineConfig({
         'react',
         'react-dom',
         '@mui/material',
+        '@mui/icons-material',
         '@emotion/react',
         '@emotion/styled',
-        '@mui/icons-material'
+        'js-cookie',
+        'axios'
       ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
           '@mui/material': 'MaterialUI',
+          '@mui/icons-material': 'MaterialUIIcons',
           '@emotion/react': 'EmotionReact',
           '@emotion/styled': 'EmotionStyled',
-          '@mui/icons-material': 'MaterialUIIcons'
+          'js-cookie': 'Cookies',
+          'axios': 'axios'
         },
       },
     },
