@@ -4,7 +4,10 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import {
 	Dashboard as DashboardIcon,
-	Settings as SettingsIcon
+	Settings as SettingsIcon,
+	Adb as AdbIcon,
+	Analytics as AnalyticsIcon,
+	People as PeopleIcon
 } from '@mui/icons-material'
 import './index.css'
 import { NovaWrapper, type SidebarLink } from './lib'
@@ -143,6 +146,16 @@ const demoLinks: SidebarLink[] = [
 		icon: <DashboardIcon />
 	},
 	{
+		text: 'Analytics',
+		path: '/analytics',
+		icon: <AnalyticsIcon />
+	},
+	{
+		text: 'Users',
+		path: '/users',
+		icon: <PeopleIcon />
+	},
+	{
 		text: 'Settings',
 		path: '/settings',
 		icon: <SettingsIcon />
@@ -157,6 +170,9 @@ const DemoContent = () => (
 		<ul>
 			<li>Consistent header and sidebar layout</li>
 			<li>Configurable navigation links with icons</li>
+			<li>Customizable header title and logo</li>
+			<li>Conditional rendering (hide header/sidebar)</li>
+			<li>Custom styling for all layout elements</li>
 			<li>Responsive design (try resizing the window)</li>
 			<li>Proactive token refresh logic</li>
 			<li>MUI Material Design components</li>
@@ -166,6 +182,29 @@ const DemoContent = () => (
 			<strong>Note:</strong> The token refresh logic will check for a 'tokenExpiry' cookie 
 			and attempt to refresh the token if it expires within 10 minutes.
 		</p>
+		
+		{/* Demo showing customization features */}
+		<div style={{ 
+			marginTop: 'var(--joy-spacing-lg)', 
+			padding: 'var(--joy-spacing-md)', 
+			backgroundColor: 'var(--joy-palette-primary-50)', 
+			borderRadius: 'var(--joy-radius-md)',
+			boxShadow: 'var(--joy-shadow-sm)'
+		}}>
+			<h3 style={{ color: 'var(--joy-palette-primary-700)', fontSize: 'var(--joy-fontSize-lg)' }}>
+				New Customization Features
+			</h3>
+			<p style={{ fontSize: 'var(--joy-fontSize-sm)', color: 'var(--joy-palette-primary-700)' }}>
+				The NovaWrapper now supports extensive customization:
+			</p>
+			<ul style={{ fontSize: 'var(--joy-fontSize-sm)', color: 'var(--joy-palette-primary-600)' }}>
+				<li><strong>headerTitle:</strong> Custom header title (currently "My Custom App")</li>
+				<li><strong>appLogo:</strong> Custom logo component (currently Adb icon)</li>
+				<li><strong>showHeader/showSidebar:</strong> Toggle visibility of layout elements</li>
+				<li><strong>style props:</strong> Custom styling for header, sidebar, content, and root container</li>
+				<li><strong>headerStyles:</strong> Custom header styling (currently dark background)</li>
+			</ul>
+		</div>
 		
 		{/* Demo showing Joy UI CSS variables usage */}
 		<div style={{ 
@@ -228,7 +267,15 @@ createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<NovaWrapper sidebarLinks={demoLinks}>
+			<NovaWrapper 
+				sidebarLinks={demoLinks}
+				headerTitle="My Custom App"
+				appLogo={<AdbIcon />}
+				headerStyles={{ backgroundColor: '#333' }}
+				// Uncomment the lines below to test conditional rendering:
+				// showHeader={false}  // Hide the header completely
+				// showSidebar={false} // Hide the sidebar completely
+			>
 				<DemoContent />
 			</NovaWrapper>
 		</ThemeProvider>

@@ -14,6 +14,7 @@ import {
 	ListItemIcon,
 	ListItemText
 } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material';
 import Cookies from 'js-cookie';
 
 // Type for sidebar navigation links
@@ -27,6 +28,14 @@ export type SidebarLink = {
 export interface NovaWrapperProps {
 	children: React.ReactNode;
 	sidebarLinks?: SidebarLink[];
+	headerTitle?: string;
+	appLogo?: React.ReactNode;
+	showHeader?: boolean;
+	showSidebar?: boolean;
+	style?: SxProps<Theme>;
+	headerStyles?: SxProps<Theme>;
+	sidebarStyles?: SxProps<Theme>;
+	contentStyles?: SxProps<Theme>;
 }
 
 // Constants for token refresh logic
@@ -38,7 +47,18 @@ const LOGIN_REDIRECT_URL = '/login';
  * NovaWrapper component provides a consistent layout structure for authenticated pages
  * and handles proactive token refresh to prevent session expiry during active use.
  */
-const NovaWrapper: React.FC<NovaWrapperProps> = ({ children, sidebarLinks = [] }) => {
+const NovaWrapper: React.FC<NovaWrapperProps> = ({ 
+	children, 
+	sidebarLinks = [],
+	headerTitle,
+	appLogo,
+	showHeader = true,
+	showSidebar = true,
+	style,
+	headerStyles,
+	sidebarStyles,
+	contentStyles
+}) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -124,58 +144,67 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({ children, sidebarLinks = [] }
 	}, []);
 
 	return (
-		<Box sx={{ display: 'flex', height: '100vh' }}>
+		<Box sx={{ display: 'flex', height: '100vh', ...style }}>
 			<CssBaseline />
 			
 			{/* Header */}
-			<AppBar 
-				position="fixed" 
-				sx={{ 
-					zIndex: theme.zIndex.drawer + 1,
-					width: isMobile ? '100%' : `calc(100% - 240px)`,
-					ml: isMobile ? 0 : '240px'
-				}}
-			>
-				<Toolbar>
-					<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						Nova Application
-					</Typography>
-				</Toolbar>
-			</AppBar>
+			{showHeader && (
+				<AppBar 
+					position="fixed" 
+					sx={{ 
+						zIndex: theme.zIndex.drawer + 1,
+						width: '100%',
+						...headerStyles
+					}}
+				>
+					<Toolbar>
+						{appLogo && (
+							<Box sx={{ mr: 2 }}>
+								{appLogo}
+							</Box>
+						)}
+						{headerTitle && (
+							<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+								{headerTitle}
+							</Typography>
+						)}
+					</Toolbar>
+				</AppBar>
+			)}
 
 			{/* Sidebar */}
-			<Drawer
-				variant={isMobile ? 'temporary' : 'permanent'}
-				sx={{
-					width: 240,
-					flexShrink: 0,
-					'& .MuiDrawer-paper': {
+			{showSidebar && (
+				<Drawer
+					variant={isMobile ? 'temporary' : 'permanent'}
+					sx={{
 						width: 240,
-						boxSizing: 'border-box',
-						mt: isMobile ? 0 : '64px', // Account for AppBar height
-					},
-				}}
-				open={!isMobile}
-			>
-				<Toolbar />
-				<Box sx={{ overflow: 'auto', p: 2 }}>
-					<Typography variant="h6" gutterBottom>
-						Navigation
-					</Typography>
-					<List>
-						{sidebarLinks.map((link, index) => (
-							<ListItem key={index} disablePadding>
-								<ListItemButton component="a" href={link.path}>
-									<ListItemIcon>
-										{link.icon}
-									</ListItemIcon>
-									<ListItemText primary={link.text} />
-								</ListItemButton>
-							</ListItem>
-						))}
-					</List>
-				</Box>
-			</Drawer>
+						flexShrink: 0,
+						'& .MuiDrawer-paper': {
+							width: 240,
+							boxSizing: 'border-box',
+							mt: isMobile ? 0 : '64px', // Account for AppBar height
+						},
+						...sidebarStyles
+					}}
+					open={!isMobile}
+				>
+					<Toolbar />
+					<Box sx={{ overflow: 'auto', p: 2 }}>
+						<List>
+							{sidebarLinks.map((link, index) => (
+								<ListItem key={index} disablePadding>
+									<ListItemButton component="a" href={link.path}>
+										<ListItemIcon>
+											{link.icon}
+										</ListItemIcon>
+										<ListItemText primary={link.text} />
+									</ListItemButton>
+								</ListItem>
+							))}
+						</List>
+					</Box>
+				</Drawer>
+			)}
 
 			{/* Main Content Area */}
 			<Box
@@ -183,9 +212,10 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({ children, sidebarLinks = [] }
 				sx={{
 					flexGrow: 1,
 					p: 3,
-					width: isMobile ? '100%' : `calc(100% - 240px)`,
-					mt: '64px', // Account for AppBar height
+					width: isMobile ? '100%' : showSidebar ? `calc(100% - 240px)` : '100%',
+					mt: showHeader ? '64px' : 0, // Account for AppBar height only if header is shown
 					overflow: 'auto',
+					...contentStyles
 				}}
 			>
 				{children}
