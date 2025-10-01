@@ -7,8 +7,17 @@ import {
 	Typography,
 	CssBaseline,
 	useTheme,
-	useMediaQuery
+	useMediaQuery,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText
 } from '@mui/material';
+import {
+	Dashboard as DashboardIcon,
+	Settings as SettingsIcon
+} from '@mui/icons-material';
 import Cookies from 'js-cookie';
 
 // Interface for NovaWrapper props
