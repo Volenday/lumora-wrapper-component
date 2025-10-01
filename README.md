@@ -6,16 +6,16 @@ A flexible and customizable React wrapper component built with Material-UI that 
 
 Since this is a private package hosted on GitHub Packages, you must first configure your `.npmrc` file to authenticate with GitHub Packages.
 
-Create or update your `.npmrc` file in your project root with the following content, replacing `@OWNER` with your GitHub username or organization name:
+Create or update your `.npmrc` file in your project root with the following content:
 
 ```
-@OWNER:registry=https://npm.pkg.github.com
+@volenday:registry=https://npm.pkg.github.com
 ```
 
 Then install the package using npm:
 
 ```bash
-npm install @OWNER/nova-wrapper-component
+npm install @volenday/nova-wrapper-component
 ```
 
 ## Usage
@@ -24,7 +24,7 @@ Import and use the NovaWrapper component to wrap your page content:
 
 ```tsx
 import React from "react";
-import { NovaWrapper } from "@OWNER/nova-wrapper-component";
+import { NovaWrapper } from "@volenday/nova-wrapper-component";
 import { Home, Settings, Dashboard } from "@mui/icons-material";
 
 const App = () => {
@@ -85,7 +85,7 @@ The component's layout can be customized using the `style`, `headerStyles`, `sid
 ### Example: Customizing Header Background
 
 ```tsx
-import { NovaWrapper } from "@OWNER/nova-wrapper-component";
+import { NovaWrapper } from "@volenday/nova-wrapper-component";
 
 const App = () => {
   return (
