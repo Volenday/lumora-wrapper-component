@@ -25,11 +25,11 @@ const theme = createTheme({
 	},
 });
 
-// Demo sidebar links
-const demoLinks: SidebarLink[] = [
+// Demo sidebar links - Main navigation
+const demoMainLinks: SidebarLink[] = [
 	{
-		text: 'Dashboard',
-		path: '/dashboard',
+		text: 'Home',
+		path: '/home',
 		icon: <DashboardIcon />
 	},
 	{
@@ -38,14 +38,33 @@ const demoLinks: SidebarLink[] = [
 		icon: <AnalyticsIcon />
 	},
 	{
-		text: 'Users',
-		path: '/users',
+		text: 'Clients',
+		path: '/clients',
 		icon: <PeopleIcon />
 	},
+	{
+		text: 'Tasks',
+		path: '/tasks',
+		icon: <AdbIcon />
+	}
+];
+
+// Demo sidebar links - Secondary navigation
+const demoSecondaryLinks: SidebarLink[] = [
 	{
 		text: 'Settings',
 		path: '/settings',
 		icon: <SettingsIcon />
+	},
+	{
+		text: 'About',
+		path: '/about',
+		icon: <AnalyticsIcon />
+	},
+	{
+		text: 'Feedback',
+		path: '/feedback',
+		icon: <PeopleIcon />
 	}
 ];
 
@@ -53,20 +72,24 @@ const demoLinks: SidebarLink[] = [
 const DemoContent = () => (
 	<div>
 		<h1>NovaWrapper Component Demo</h1>
-		<p>This is a demonstration of the NovaWrapper component with:</p>
+		<p>This is a demonstration of the NovaWrapper component with modern sidebar design:</p>
 		<ul>
-			<li>Consistent header and sidebar layout</li>
+			<li>Clean, modern sidebar with main and secondary navigation sections</li>
+			<li>User profile section with avatar and options menu</li>
+			<li>Notification badge in header</li>
+			<li>Responsive design - mobile sidebar slides in from the right</li>
+			<li>Active state highlighting for current page</li>
 			<li>Configurable navigation links with icons</li>
 			<li>Customizable header title and logo</li>
-			<li>Conditional rendering (hide header/sidebar)</li>
-			<li>Custom styling for all layout elements</li>
-			<li>Responsive design (try resizing the window)</li>
-			<li>Proactive token refresh logic (configurable via enableRefreshToken prop)</li>
+			<li>Proactive token refresh logic</li>
 			<li>MUI Material Design components</li>
 		</ul>
 		<p>
 			<strong>Note:</strong> The token refresh logic (enabled via <code>enableRefreshToken={true}</code>) 
 			will check for a 'tokenExpiry' cookie and attempt to refresh the token if it expires within 10 minutes.
+		</p>
+		<p>
+			<strong>Mobile:</strong> On smaller screens, the sidebar becomes a slide-out drawer accessible via the menu button in the header.
 		</p>
 		
 		{/* Demo showing customization features */}
@@ -155,10 +178,21 @@ createRoot(document.getElementById('root')!).render(
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
 			<NovaWrapper 
-				sidebarLinks={demoLinks}
+				sidebarLinks={demoMainLinks}
+				secondarySidebarLinks={demoSecondaryLinks}
 				headerTitle="My Custom App"
 				appLogo={<AdbIcon />}
-				headerStyles={{ backgroundColor: '#333' }}
+				activePath="/home"
+				userName="Riley Carter"
+				userEmail="riley@email.com"
+				userAvatar="/static/images/avatar/7.jpg"
+				showNotifications={true}
+				notificationCount={3}
+				onLogout={() => console.log('Logout clicked')}
+				onProfileClick={() => console.log('Profile clicked')}
+				onAccountClick={() => console.log('Account clicked')}
+				onSettingsClick={() => console.log('Settings clicked')}
+				onLinkClick={(path) => console.log('Link clicked:', path)}
 				enableRefreshToken={true}
 				// Uncomment the lines below to test conditional rendering:
 				// showHeader={false}  // Hide the header completely

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	AppBar,
 	Box,
@@ -8,14 +8,17 @@ import {
 	CssBaseline,
 	useTheme,
 	useMediaQuery,
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText
+	IconButton,
+	Badge
 } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import Cookies from 'js-cookie';
+import MenuIcon from '@mui/icons-material/Menu';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import MenuContent from './MenuContent';
+import UserProfile from './UserProfile';
+import CardAlert from './CardAlert';
+import MobileSidebar from './MobileSidebar';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -28,11 +31,34 @@ export type SidebarLink = {
 export interface NovaWrapperProps {
 	children: React.ReactNode;
 	sidebarLinks?: SidebarLink[];
+	secondarySidebarLinks?: SidebarLink[];
 	headerTitle?: string;
 	appLogo?: React.ReactNode;
 	showHeader?: boolean;
 	showSidebar?: boolean;
 	enableRefreshToken?: boolean;
+	activePath?: string;
+	onLinkClick?: (path: string) => void;
+	// User profile props
+	userName?: string;
+	userEmail?: string;
+	userAvatar?: string;
+	onLogout?: () => void;
+	onProfileClick?: () => void;
+	onAccountClick?: () => void;
+	onSettingsClick?: () => void;
+	// Notification props
+	showNotifications?: boolean;
+	notificationCount?: number;
+	// Alert card props
+	alertProps?: {
+		title?: string;
+		message?: string;
+		buttonText?: string;
+		onButtonClick?: () => void;
+		show?: boolean;
+	};
+	// Styling props
 	style?: SxProps<Theme>;
 	headerStyles?: SxProps<Theme>;
 	sidebarStyles?: SxProps<Theme>;
@@ -51,11 +77,24 @@ const LOGIN_REDIRECT_URL = '/login';
 const NovaWrapper: React.FC<NovaWrapperProps> = ({ 
 	children, 
 	sidebarLinks = [],
+	secondarySidebarLinks = [],
 	headerTitle,
 	appLogo,
 	showHeader = true,
 	showSidebar = true,
 	enableRefreshToken = false,
+	activePath,
+	onLinkClick,
+	userName,
+	userEmail,
+	userAvatar,
+	onLogout,
+	onProfileClick,
+	onAccountClick,
+	onSettingsClick,
+	showNotifications = false,
+	notificationCount = 0,
+	alertProps,
 	style,
 	headerStyles,
 	sidebarStyles,
@@ -63,6 +102,15 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+	const handleMobileSidebarToggle = () => {
+		setMobileSidebarOpen(!mobileSidebarOpen);
+	};
+
+	const handleMobileSidebarClose = () => {
+		setMobileSidebarOpen(false);
+	};
 
 	// Token refresh logic
 	useEffect(() => {
@@ -165,6 +213,17 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 					}}
 				>
 					<Toolbar>
+						{isMobile && showSidebar && (
+							<IconButton
+								color="inherit"
+								aria-label="open drawer"
+								edge="start"
+								onClick={handleMobileSidebarToggle}
+								sx={{ mr: 2 }}
+							>
+								<MenuIcon />
+							</IconButton>
+						)}
 						{appLogo && (
 							<Box sx={{ mr: 2 }}>
 								{appLogo}
@@ -175,42 +234,92 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 								{headerTitle}
 							</Typography>
 						)}
+						{showNotifications && (
+							<Badge
+								color="error"
+								variant="dot"
+								invisible={notificationCount === 0}
+								sx={{ '& .MuiBadge-badge': { right: 2, top: 2 } }}
+							>
+								<IconButton color="inherit">
+									<NotificationsRoundedIcon />
+								</IconButton>
+							</Badge>
+						)}
 					</Toolbar>
 				</AppBar>
 			)}
 
-			{/* Sidebar */}
-			{showSidebar && (
+			{/* Desktop Sidebar */}
+			{showSidebar && !isMobile && (
 				<Drawer
-					variant={isMobile ? 'temporary' : 'permanent'}
+					variant="permanent"
 					sx={{
 						width: 240,
 						flexShrink: 0,
 						'& .MuiDrawer-paper': {
 							width: 240,
 							boxSizing: 'border-box',
-							mt: isMobile ? 0 : '64px', // Account for AppBar height
+							backgroundColor: 'background.paper',
+							mt: showHeader ? '64px' : 0,
 						},
 						...sidebarStyles
 					}}
-					open={!isMobile}
 				>
-					<Toolbar />
-					<Box sx={{ overflow: 'auto', p: 2 }}>
-						<List>
-							{sidebarLinks.map((link, index) => (
-								<ListItem key={index} disablePadding>
-									<ListItemButton component="a" href={link.path}>
-										<ListItemIcon>
-											{link.icon}
-										</ListItemIcon>
-										<ListItemText primary={link.text} />
-									</ListItemButton>
-								</ListItem>
-							))}
-						</List>
+					<Box
+						sx={{
+							display: 'flex',
+							mt: 'calc(var(--template-frame-height, 0px) + 4px)',
+							p: 1.5,
+						}}
+					>
+						{/* Optional: Add SelectContent component here if needed */}
 					</Box>
+					<Box
+						sx={{
+							overflow: 'auto',
+							height: '100%',
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<MenuContent
+							mainLinks={sidebarLinks}
+							secondaryLinks={secondarySidebarLinks}
+							activePath={activePath}
+							onLinkClick={onLinkClick}
+						/>
+						{alertProps?.show && <CardAlert {...alertProps} />}
+					</Box>
+					<UserProfile
+						userName={userName}
+						userEmail={userEmail}
+						userAvatar={userAvatar}
+						onLogout={onLogout}
+						onProfileClick={onProfileClick}
+						onAccountClick={onAccountClick}
+						onSettingsClick={onSettingsClick}
+					/>
 				</Drawer>
+			)}
+
+			{/* Mobile Sidebar */}
+			{showSidebar && isMobile && (
+				<MobileSidebar
+					open={mobileSidebarOpen}
+					onClose={handleMobileSidebarClose}
+					mainLinks={sidebarLinks}
+					secondaryLinks={secondarySidebarLinks}
+					activePath={activePath}
+					onLinkClick={onLinkClick}
+					userName={userName}
+					userEmail={userEmail}
+					userAvatar={userAvatar}
+					onLogout={onLogout}
+					showNotifications={showNotifications}
+					notificationCount={notificationCount}
+					alertProps={alertProps}
+				/>
 			)}
 
 			{/* Main Content Area */}
