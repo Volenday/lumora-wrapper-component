@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {
-	AppBar,
 	Box,
 	Drawer,
-	Toolbar,
-	Typography,
 	CssBaseline,
 	useTheme,
-	useMediaQuery,
-	IconButton,
-	Badge
+	useMediaQuery
 } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import Cookies from 'js-cookie';
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import MenuContent from './MenuContent';
 import UserProfile from './UserProfile';
 import CardAlert from './CardAlert';
 import MobileSidebar from './MobileSidebar';
+import AppNavbar from './AppNavbar';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -32,8 +26,9 @@ export interface NovaWrapperProps {
 	children: React.ReactNode;
 	sidebarLinks?: SidebarLink[];
 	secondarySidebarLinks?: SidebarLink[];
-	headerTitle?: string;
-	appLogo?: React.ReactNode;
+	// Header props
+	appName?: string;
+	pageName?: string;
 	showHeader?: boolean;
 	showSidebar?: boolean;
 	enableRefreshToken?: boolean;
@@ -60,7 +55,6 @@ export interface NovaWrapperProps {
 	};
 	// Styling props
 	style?: SxProps<Theme>;
-	headerStyles?: SxProps<Theme>;
 	sidebarStyles?: SxProps<Theme>;
 	contentStyles?: SxProps<Theme>;
 }
@@ -78,8 +72,8 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 	children, 
 	sidebarLinks = [],
 	secondarySidebarLinks = [],
-	headerTitle,
-	appLogo,
+	appName = 'Dashboard',
+	pageName = 'Home',
 	showHeader = true,
 	showSidebar = true,
 	enableRefreshToken = false,
@@ -96,7 +90,6 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 	notificationCount = 0,
 	alertProps,
 	style,
-	headerStyles,
 	sidebarStyles,
 	contentStyles
 }) => {
@@ -204,50 +197,12 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 			
 			{/* Header */}
 			{showHeader && (
-				<AppBar 
-					position="fixed" 
-					sx={{ 
-						zIndex: theme.zIndex.drawer + 1,
-						width: '100%',
-						...headerStyles
-					}}
-				>
-					<Toolbar>
-						{isMobile && showSidebar && (
-							<IconButton
-								color="inherit"
-								aria-label="open drawer"
-								edge="start"
-								onClick={handleMobileSidebarToggle}
-								sx={{ mr: 2 }}
-							>
-								<MenuIcon />
-							</IconButton>
-						)}
-						{appLogo && (
-							<Box sx={{ mr: 2 }}>
-								{appLogo}
-							</Box>
-						)}
-						{headerTitle && (
-							<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-								{headerTitle}
-							</Typography>
-						)}
-						{showNotifications && (
-							<Badge
-								color="error"
-								variant="dot"
-								invisible={notificationCount === 0}
-								sx={{ '& .MuiBadge-badge': { right: 2, top: 2 } }}
-							>
-								<IconButton color="inherit">
-									<NotificationsRoundedIcon />
-								</IconButton>
-							</Badge>
-						)}
-					</Toolbar>
-				</AppBar>
+				<AppNavbar
+					appName={appName}
+					pageName={pageName}
+					onMenuClick={isMobile && showSidebar ? handleMobileSidebarToggle : undefined}
+					showMenuButton={isMobile && showSidebar}
+				/>
 			)}
 
 			{/* Desktop Sidebar */}
@@ -257,11 +212,12 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 					sx={{
 						width: 240,
 						flexShrink: 0,
+						zIndex: 2, // Higher z-index than app bar
 						'& .MuiDrawer-paper': {
 							width: 240,
 							boxSizing: 'border-box',
 							backgroundColor: 'background.paper',
-							mt: showHeader ? '64px' : 0,
+							mt: 0, // Extend to top
 						},
 						...sidebarStyles
 					}}
@@ -329,7 +285,8 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 					flexGrow: 1,
 					p: 3,
 					width: isMobile ? '100%' : showSidebar ? `calc(100% - 240px)` : '100%',
-					mt: showHeader ? '64px' : 0, // Account for AppBar height only if header is shown
+					mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
+					ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
 					overflow: 'auto',
 					...contentStyles
 				}}

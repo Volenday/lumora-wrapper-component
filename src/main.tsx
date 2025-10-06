@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import { getDesignTokens } from './themePrimitives'
 import {
 	Dashboard as DashboardIcon,
 	Settings as SettingsIcon,
@@ -12,19 +13,78 @@ import {
 import './index.css'
 import { NovaWrapper, type SidebarLink } from './lib'
 
-// Create a default MUI theme
-const theme = createTheme({
-	palette: {
-		mode: 'light',
-		primary: {
-			main: '#1976d2',
+// Create theme using the comprehensive design system
+const theme = createTheme(getDesignTokens('light'), {
+	components: {
+		MuiCssBaseline: {
+			styleOverrides: {
+				'*': {
+					'&::-webkit-scrollbar': {
+						width: '8px',
+						height: '8px',
+					},
+					'&::-webkit-scrollbar-track': {
+						background: 'transparent',
+					},
+					'&::-webkit-scrollbar-thumb': {
+						background: 'rgba(0, 0, 0, 0.1)',
+						borderRadius: '4px',
+						'&:hover': {
+							background: 'rgba(0, 0, 0, 0.2)',
+						},
+					},
+					'&::-webkit-scrollbar-corner': {
+						background: 'transparent',
+					},
+				},
+				// Firefox scrollbar styling
+				'*': {
+					scrollbarWidth: 'thin',
+					scrollbarColor: 'rgba(0, 0, 0, 0.1) transparent',
+				},
+			},
 		},
-		secondary: {
-			main: '#dc004e',
+		MuiDataGrid: {
+			styleOverrides: {
+				root: ({ theme }: { theme: any }) => ({
+					border: 'none',
+					'& .MuiDataGrid-cell': {
+						borderBottom: `1px solid ${(theme.vars || theme).palette.divider}`,
+					},
+					'& .MuiDataGrid-columnHeaders': {
+						borderBottom: `1px solid ${(theme.vars || theme).palette.divider}`,
+						backgroundColor: (theme.vars || theme).palette.background.paper,
+					},
+					'& .MuiDataGrid-columnHeader': {
+						fontWeight: 600,
+						color: (theme.vars || theme).palette.text.primary,
+					},
+					'& .MuiDataGrid-row': {
+						'&:hover': {
+							backgroundColor: (theme.vars || theme).palette.action.hover,
+						},
+						'&.Mui-selected': {
+							backgroundColor: (theme.vars || theme).palette.action.selected,
+							'&:hover': {
+								backgroundColor: (theme.vars || theme).palette.action.selected,
+							},
+						},
+					},
+					'& .MuiDataGrid-footerContainer': {
+						borderTop: `1px solid ${(theme.vars || theme).palette.divider}`,
+						backgroundColor: (theme.vars || theme).palette.background.paper,
+					},
+					...theme.applyStyles('dark', {
+						'& .MuiDataGrid-columnHeaders': {
+							backgroundColor: (theme.vars || theme).palette.background.paper,
+						},
+						'& .MuiDataGrid-footerContainer': {
+							backgroundColor: (theme.vars || theme).palette.background.paper,
+						},
+					}),
+				}),
+			},
 		},
-	},
-	typography: {
-		fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 	},
 });
 
@@ -183,8 +243,8 @@ createRoot(document.getElementById('root')!).render(
 			<NovaWrapper 
 				sidebarLinks={demoMainLinks}
 				secondarySidebarLinks={demoSecondaryLinks}
-				headerTitle="My Custom Lumora App"
-				appLogo={<AdbIcon />}
+				appName="Dashboard"
+				pageName="Home"
 				activePath="/home"
 				userName="Riley Carter"
 				userEmail="riley@email.com"
