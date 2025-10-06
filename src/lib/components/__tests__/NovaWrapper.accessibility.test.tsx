@@ -50,7 +50,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={true} 
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			// Check that links are properly structured
@@ -68,7 +70,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={true} 
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			const homeLink = screen.getByRole('link', { name: /home/i });
@@ -86,7 +90,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={true} 
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			// Check that icons are present
@@ -100,7 +106,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={false} 
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			expect(screen.queryByRole('link', { name: /home/i })).not.toBeInTheDocument();
@@ -113,7 +121,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={true} 
 					sidebarLinks={[]}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			// Sidebar should still be rendered but with no links
@@ -165,7 +175,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showSidebar={true} 
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			const homeLink = screen.getByRole('link', { name: /home/i });
@@ -230,7 +242,9 @@ describe('NovaWrapper - Accessibility', () => {
 					showSidebar={true}
 					headerTitle="Test App"
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			// All interactive elements should be in the document

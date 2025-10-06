@@ -25,7 +25,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 			<NovaWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const drawer = screen.getByRole('presentation');
@@ -39,7 +41,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 			<NovaWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const drawer = screen.getByRole('presentation');
@@ -53,7 +57,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 			<NovaWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -67,7 +73,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 			<NovaWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -80,7 +88,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		render(
 			<NovaWrapper 
 				showSidebar={false}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -95,7 +105,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 				showSidebar={true} 
 				showHeader={false}
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const drawer = screen.getByRole('presentation');
@@ -110,7 +122,9 @@ describe('NovaWrapper - Responsive Behavior', () => {
 				showSidebar={true} 
 				showHeader={true}
 				sidebarLinks={mockSidebarLinks}
-			/>
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
 		);
 
 		const drawer = screen.getByRole('presentation');

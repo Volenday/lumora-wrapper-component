@@ -12,7 +12,7 @@ jest.mock('js-cookie', () => ({
 }));
 
 // Mock fetch
-global.fetch = jest.fn();
+(globalThis as any).fetch = jest.fn();
 
 // Mock window.location to avoid navigation errors
 Object.defineProperty(window, 'location', {
