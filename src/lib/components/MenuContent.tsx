@@ -36,6 +36,27 @@ const MenuContent: React.FC<MenuContentProps> = ({
 							onClick={() => handleLinkClick(link.path)}
 							component="a"
 							href={link.path}
+							sx={{
+								borderRadius: '10px',
+								'&:hover': {
+									backgroundColor: 'action.hover',
+									'& .MuiListItemText-primary': {
+										color: 'text.primary',
+									},
+									'& .MuiListItemIcon-root': {
+										color: 'text.primary',
+									},
+								},
+								'&.Mui-selected': {
+									backgroundColor: 'action.selected',
+									'& .MuiListItemText-primary': {
+										color: 'text.primary',
+									},
+									'& .MuiListItemIcon-root': {
+										color: 'text.primary',
+									},
+								},
+							}}
 						>
 							<ListItemIcon>{link.icon}</ListItemIcon>
 							<ListItemText primary={link.text} />
@@ -46,17 +67,38 @@ const MenuContent: React.FC<MenuContentProps> = ({
 			{secondaryLinks.length > 0 && (
 				<List dense>
 					{secondaryLinks.map((link, index) => (
-						<ListItem key={index} disablePadding sx={{ display: 'block' }}>
-							<ListItemButton 
-								selected={activePath === link.path}
-								onClick={() => handleLinkClick(link.path)}
-								component="a"
-								href={link.path}
-							>
-								<ListItemIcon>{link.icon}</ListItemIcon>
-								<ListItemText primary={link.text} />
-							</ListItemButton>
-						</ListItem>
+					<ListItem key={index} disablePadding sx={{ display: 'block' }}>
+						<ListItemButton 
+							selected={activePath === link.path}
+							onClick={() => handleLinkClick(link.path)}
+							component="a"
+							href={link.path}
+							sx={{
+								borderRadius: '10px',
+								'&:hover': {
+									backgroundColor: 'action.hover',
+									'& .MuiListItemText-primary': {
+										color: 'text.primary',
+									},
+									'& .MuiListItemIcon-root': {
+										color: 'text.primary',
+									},
+								},
+								'&.Mui-selected': {
+									backgroundColor: 'action.selected',
+									'& .MuiListItemText-primary': {
+										color: 'text.primary',
+									},
+									'& .MuiListItemIcon-root': {
+										color: 'text.primary',
+									},
+								},
+							}}
+						>
+							<ListItemIcon>{link.icon}</ListItemIcon>
+							<ListItemText primary={link.text} />
+						</ListItemButton>
+					</ListItem>
 					))}
 				</List>
 			)}

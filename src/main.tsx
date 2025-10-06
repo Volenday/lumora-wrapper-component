@@ -23,6 +23,9 @@ const theme = createTheme({
 			main: '#dc004e',
 		},
 	},
+	typography: {
+		fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+	},
 });
 
 // Demo sidebar links - Main navigation
@@ -180,7 +183,7 @@ createRoot(document.getElementById('root')!).render(
 			<NovaWrapper 
 				sidebarLinks={demoMainLinks}
 				secondarySidebarLinks={demoSecondaryLinks}
-				headerTitle="My Custom App"
+				headerTitle="My Custom Lumora App"
 				appLogo={<AdbIcon />}
 				activePath="/home"
 				userName="Riley Carter"
