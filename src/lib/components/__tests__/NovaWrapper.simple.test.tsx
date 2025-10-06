@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
 import NovaWrapper, { type NovaWrapperProps, type SidebarLink } from '../NovaWrapper';
+import '@testing-library/jest-dom';
 
 // Mock js-cookie
 jest.mock('js-cookie', () => ({
@@ -15,15 +16,13 @@ jest.mock('js-cookie', () => ({
 (globalThis as any).fetch = jest.fn();
 
 // Mock window.location to avoid navigation errors
-Object.defineProperty(window, 'location', {
-	value: {
-		href: 'http://localhost:3000',
-		assign: jest.fn(),
-		replace: jest.fn(),
-		reload: jest.fn()
-	},
-	writable: true
-});
+delete (window as any).location;
+(window as any).location = {
+	href: 'http://localhost:3000',
+	assign: jest.fn(),
+	replace: jest.fn(),
+	reload: jest.fn()
+};
 
 // Test theme
 const theme = createTheme();
