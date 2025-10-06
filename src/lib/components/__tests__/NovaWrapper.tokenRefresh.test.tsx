@@ -1,4 +1,3 @@
-import React from 'react';
 import { waitFor } from '@testing-library/react';
 import Cookies from 'js-cookie';
 import NovaWrapper from '../NovaWrapper';
@@ -24,10 +23,23 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 	});
 
 	describe('Token Validation', () => {
+		it('does not run token refresh logic when enableRefreshToken is false', async () => {
+			mockCookies.get.mockReturnValue(mockTokenExpiry(5) as any); // 5 minutes from now (should trigger refresh)
+
+			render(<NovaWrapper enableRefreshToken={false}><div>Test Content</div></NovaWrapper>);
+
+			await waitFor(() => {
+				expect(mockFetch).not.toHaveBeenCalled();
+			});
+
+			expect(console.warn).not.toHaveBeenCalled();
+			expect(console.log).not.toHaveBeenCalled();
+		});
+
 		it('does not refresh when token is valid for more than 10 minutes', async () => {
 			mockCookies.get.mockReturnValue(mockTokenExpiry(20) as any); // 20 minutes from now
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -48,7 +60,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalledWith('/api/auth/refresh', {
@@ -66,7 +78,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 		it('redirects to login when token is already expired', async () => {
 			mockCookies.get.mockReturnValue(mockExpiredToken(5) as any); // 5 minutes ago
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -95,7 +107,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -128,7 +140,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -150,7 +162,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -167,7 +179,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 
 			mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -189,7 +201,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -211,7 +223,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -227,7 +239,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 		it('handles missing tokenExpiry cookie', async () => {
 			mockCookies.get.mockReturnValue(undefined);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -239,7 +251,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 		it('handles invalid date in tokenExpiry cookie', async () => {
 			mockCookies.get.mockReturnValue('invalid-date' as any);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(console.error).toHaveBeenCalledWith('Error checking token expiry:', expect.any(Error));
@@ -261,7 +273,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -276,7 +288,7 @@ describe('NovaWrapper - Token Refresh Logic', () => {
 			beyondThresholdTime.setMinutes(beyondThresholdTime.getMinutes() + 11);
 			mockCookies.get.mockReturnValue(beyondThresholdTime.toISOString() as any);
 
-			render(<NovaWrapper />);
+			render(<NovaWrapper enableRefreshToken={true}><div>Test Content</div></NovaWrapper>);
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();

@@ -32,6 +32,7 @@ export interface NovaWrapperProps {
 	appLogo?: React.ReactNode;
 	showHeader?: boolean;
 	showSidebar?: boolean;
+	enableRefreshToken?: boolean;
 	style?: SxProps<Theme>;
 	headerStyles?: SxProps<Theme>;
 	sidebarStyles?: SxProps<Theme>;
@@ -54,6 +55,7 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 	appLogo,
 	showHeader = true,
 	showSidebar = true,
+	enableRefreshToken = false,
 	style,
 	headerStyles,
 	sidebarStyles,
@@ -64,6 +66,11 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 
 	// Token refresh logic
 	useEffect(() => {
+		// Only run token refresh logic if enableRefreshToken is true
+		if (!enableRefreshToken) {
+			return;
+		}
+
 		const checkAndRefreshToken = async () => {
 			try {
 				// Read token expiry from cookies
@@ -141,7 +148,7 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 
 		// Run token check on component mount
 		checkAndRefreshToken();
-	}, []);
+	}, [enableRefreshToken]);
 
 	return (
 		<Box sx={{ display: 'flex', height: '100vh', ...style }}>

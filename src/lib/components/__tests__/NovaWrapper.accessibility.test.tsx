@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { Home, Settings, Person } from '@mui/icons-material';
 import NovaWrapper from '../NovaWrapper';
 import { render, mockSidebarLinks } from './testUtils';
+import '@testing-library/jest-dom';
 
 describe('NovaWrapper - Accessibility', () => {
 	describe('Header Accessibility', () => {
@@ -11,7 +12,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showHeader={true} 
 					headerTitle="Test Application"
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			const header = screen.getByRole('banner');
@@ -23,7 +26,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showHeader={true} 
 					headerTitle="My Application"
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			const title = screen.getByText('My Application');
@@ -36,7 +41,9 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showHeader={false} 
 					headerTitle="Should not appear"
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			expect(screen.queryByRole('banner')).not.toBeInTheDocument();
@@ -201,7 +208,9 @@ describe('NovaWrapper - Accessibility', () => {
 					showSidebar={true}
 					headerTitle="My Application"
 					sidebarLinks={mockSidebarLinks}
-				/>
+				>
+					<div data-testid="test-content">Test Content</div>
+				</NovaWrapper>
 			);
 
 			// Header title should be readable

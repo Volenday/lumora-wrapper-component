@@ -10,8 +10,7 @@ jest.mock('js-cookie', () => ({
 // Mock fetch globally
 global.fetch = jest.fn();
 
-// Mock window.location
-delete (window as any).location;
+// Mock window.location.href
 (window as any).location = {
 	href: 'http://localhost:3000',
 	assign: jest.fn(),

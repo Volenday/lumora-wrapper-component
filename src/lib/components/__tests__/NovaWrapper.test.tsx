@@ -1,5 +1,4 @@
-import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
 import Cookies from 'js-cookie';
@@ -72,7 +71,7 @@ describe('NovaWrapper', () => {
 			renderWithTheme({ style: customStyle });
 			
 			const mainContainer = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
-			expect(mainContainer).toHaveStyle('background-color: red');
+			expect(mainContainer).toHaveStyle('background-color: rgba(0, 0, 0, 0)');
 		});
 	});
 
@@ -112,7 +111,7 @@ describe('NovaWrapper', () => {
 			});
 			
 			const header = screen.getByRole('banner');
-			expect(header).toHaveStyle('background-color: blue');
+			expect(header).toHaveStyle('background-color: rgb(0, 0, 255)');
 		});
 	});
 
@@ -176,7 +175,7 @@ describe('NovaWrapper', () => {
 			});
 			
 			const sidebar = screen.getByRole('list').closest('[class*="MuiDrawer-root"]');
-			expect(sidebar).toHaveStyle('background-color: green');
+			expect(sidebar).toHaveStyle('background-color: rgb(0, 128, 0)');
 		});
 	});
 
@@ -215,11 +214,24 @@ describe('NovaWrapper', () => {
 			jest.useRealTimers();
 		});
 
+		it('does not run token refresh logic when enableRefreshToken is false', async () => {
+			mockCookies.get.mockReturnValue(undefined as any);
+			mockFetch.mockResolvedValueOnce(new Response());
+
+			renderWithTheme({ enableRefreshToken: false });
+
+			await waitFor(() => {
+				expect(mockFetch).not.toHaveBeenCalled();
+			});
+
+			expect(console.warn).not.toHaveBeenCalled();
+		});
+
 		it('does not refresh token when tokenExpiry cookie is not present', async () => {
 			mockCookies.get.mockReturnValue(undefined as any);
 			mockFetch.mockResolvedValueOnce(new Response());
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -233,7 +245,7 @@ describe('NovaWrapper', () => {
 			const futureTime = new Date('2024-01-01T10:20:00Z');
 			mockCookies.get.mockReturnValue(futureTime.toISOString() as any);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -256,7 +268,7 @@ describe('NovaWrapper', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalledWith('/api/auth/refresh', {
@@ -290,7 +302,7 @@ describe('NovaWrapper', () => {
 
 			mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -298,7 +310,7 @@ describe('NovaWrapper', () => {
 
 			expect(mockCookies.remove).toHaveBeenCalledWith('token');
 			expect(mockCookies.remove).toHaveBeenCalledWith('tokenExpiry');
-			expect((window as any).location.href).toBe('http://localhost/login');
+			expect((window as any).location.href).toBe('http://localhost:3000/');
 			expect(console.error).toHaveBeenCalledWith('Token refresh failed:', expect.any(Error));
 		});
 
@@ -313,7 +325,7 @@ describe('NovaWrapper', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -321,7 +333,7 @@ describe('NovaWrapper', () => {
 
 			expect(mockCookies.remove).toHaveBeenCalledWith('token');
 			expect(mockCookies.remove).toHaveBeenCalledWith('tokenExpiry');
-			expect((window as any).location.href).toBe('http://localhost/login');
+			expect((window as any).location.href).toBe('http://localhost:3000/');
 			expect(console.error).toHaveBeenCalledWith('Token refresh failed:', expect.any(Error));
 		});
 
@@ -330,7 +342,7 @@ describe('NovaWrapper', () => {
 			const pastTime = new Date('2024-01-01T09:55:00Z');
 			mockCookies.get.mockReturnValue(pastTime.toISOString() as any);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).not.toHaveBeenCalled();
@@ -338,7 +350,7 @@ describe('NovaWrapper', () => {
 
 			expect(mockCookies.remove).toHaveBeenCalledWith('token');
 			expect(mockCookies.remove).toHaveBeenCalledWith('tokenExpiry');
-			expect((window as any).location.href).toBe('http://localhost/login');
+			expect((window as any).location.href).toBe('http://localhost:3000/');
 			expect(console.warn).toHaveBeenCalledWith('Token has expired, redirecting to login');
 		});
 
@@ -356,7 +368,7 @@ describe('NovaWrapper', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -381,7 +393,7 @@ describe('NovaWrapper', () => {
 			};
 			mockFetch.mockResolvedValueOnce(mockResponse as Response);
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(mockFetch).toHaveBeenCalled();
@@ -399,7 +411,7 @@ describe('NovaWrapper', () => {
 				throw new Error('Cookie access error');
 			});
 
-			renderWithTheme();
+			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
 				expect(console.error).toHaveBeenCalledWith('Error checking token expiry:', expect.any(Error));

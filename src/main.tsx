@@ -174,13 +174,13 @@ const DemoContent = () => (
 			<li>Conditional rendering (hide header/sidebar)</li>
 			<li>Custom styling for all layout elements</li>
 			<li>Responsive design (try resizing the window)</li>
-			<li>Proactive token refresh logic</li>
+			<li>Proactive token refresh logic (configurable via enableRefreshToken prop)</li>
 			<li>MUI Material Design components</li>
 			<li>Joy UI-style CSS variables for customization</li>
 		</ul>
 		<p>
-			<strong>Note:</strong> The token refresh logic will check for a 'tokenExpiry' cookie 
-			and attempt to refresh the token if it expires within 10 minutes.
+			<strong>Note:</strong> The token refresh logic (enabled via <code>enableRefreshToken={true}</code>) 
+			will check for a 'tokenExpiry' cookie and attempt to refresh the token if it expires within 10 minutes.
 		</p>
 		
 		{/* Demo showing customization features */}
@@ -201,6 +201,7 @@ const DemoContent = () => (
 				<li><strong>headerTitle:</strong> Custom header title (currently "My Custom App")</li>
 				<li><strong>appLogo:</strong> Custom logo component (currently Adb icon)</li>
 				<li><strong>showHeader/showSidebar:</strong> Toggle visibility of layout elements</li>
+				<li><strong>enableRefreshToken:</strong> Enable/disable token refresh logic (currently enabled)</li>
 				<li><strong>style props:</strong> Custom styling for header, sidebar, content, and root container</li>
 				<li><strong>headerStyles:</strong> Custom header styling (currently dark background)</li>
 			</ul>
@@ -272,9 +273,11 @@ createRoot(document.getElementById('root')!).render(
 				headerTitle="My Custom App"
 				appLogo={<AdbIcon />}
 				headerStyles={{ backgroundColor: '#333' }}
+				enableRefreshToken={true}
 				// Uncomment the lines below to test conditional rendering:
 				// showHeader={false}  // Hide the header completely
 				// showSidebar={false} // Hide the sidebar completely
+				// enableRefreshToken={false} // Disable token refresh logic
 			>
 				<DemoContent />
 			</NovaWrapper>
