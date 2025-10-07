@@ -1,7 +1,7 @@
 {
 	"name": "@volenday/lumora-wrapper-component",
 	"private": false,
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"type": "module",
 	"main": "./dist/lumora-wrapper-component.umd.js",
 	"module": "./dist/lumora-wrapper-component.es.js",
@@ -16,7 +16,8 @@
 		"dist"
 	],
 	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
+		"registry": "https://npm.pkg.github.com",
+		"@volenday:registry": "https://npm.pkg.github.com"
 	},
 	"scripts": {
 		"dev": "vite",

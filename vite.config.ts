@@ -12,7 +12,8 @@ export default defineConfig({
 			include: ['src/lib/**/*'],
 			exclude: ['src/lib/**/*.test.*', 'src/lib/**/*.spec.*'],
 			outDir: 'dist',
-			rollupTypes: true
+			rollupTypes: true,
+			tsconfigPath: './tsconfig.build.json'
 		})
 	],
 	build: {
@@ -34,6 +35,7 @@ export default defineConfig({
 				'axios'
 			],
 			output: {
+				exports: 'named',
 				globals: {
 					react: 'React',
 					'react-dom': 'ReactDOM',
