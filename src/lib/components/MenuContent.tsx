@@ -30,32 +30,36 @@ const MenuContent: React.FC<MenuContentProps> = ({
 		<Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
 			<List dense>
 				{mainLinks.map((link, index) => (
-					<ListItem key={index} disablePadding sx={{ display: 'block' }}>
-						<ListItemButton 
+					<ListItem
+						key={index}
+						disablePadding
+						sx={{ display: 'block' }}
+					>
+						<ListItemButton
 							selected={activePath === link.path}
 							onClick={() => handleLinkClick(link.path)}
-							component="a"
+							component='a'
 							href={link.path}
 							sx={{
 								borderRadius: '10px',
 								'&:hover': {
 									backgroundColor: 'action.hover',
 									'& .MuiListItemText-primary': {
-										color: 'text.primary',
+										color: 'text.primary'
 									},
 									'& .MuiListItemIcon-root': {
-										color: 'text.primary',
-									},
+										color: 'text.primary'
+									}
 								},
 								'&.Mui-selected': {
 									backgroundColor: 'action.selected',
 									'& .MuiListItemText-primary': {
-										color: 'text.primary',
+										color: 'text.primary'
 									},
 									'& .MuiListItemIcon-root': {
-										color: 'text.primary',
-									},
-								},
+										color: 'text.primary'
+									}
+								}
 							}}
 						>
 							<ListItemIcon>{link.icon}</ListItemIcon>
@@ -67,38 +71,42 @@ const MenuContent: React.FC<MenuContentProps> = ({
 			{secondaryLinks.length > 0 && (
 				<List dense>
 					{secondaryLinks.map((link, index) => (
-					<ListItem key={index} disablePadding sx={{ display: 'block' }}>
-						<ListItemButton 
-							selected={activePath === link.path}
-							onClick={() => handleLinkClick(link.path)}
-							component="a"
-							href={link.path}
-							sx={{
-								borderRadius: '10px',
-								'&:hover': {
-									backgroundColor: 'action.hover',
-									'& .MuiListItemText-primary': {
-										color: 'text.primary',
-									},
-									'& .MuiListItemIcon-root': {
-										color: 'text.primary',
-									},
-								},
-								'&.Mui-selected': {
-									backgroundColor: 'action.selected',
-									'& .MuiListItemText-primary': {
-										color: 'text.primary',
-									},
-									'& .MuiListItemIcon-root': {
-										color: 'text.primary',
-									},
-								},
-							}}
+						<ListItem
+							key={index}
+							disablePadding
+							sx={{ display: 'block' }}
 						>
-							<ListItemIcon>{link.icon}</ListItemIcon>
-							<ListItemText primary={link.text} />
-						</ListItemButton>
-					</ListItem>
+							<ListItemButton
+								selected={activePath === link.path}
+								onClick={() => handleLinkClick(link.path)}
+								component='a'
+								href={link.path}
+								sx={{
+									borderRadius: '10px',
+									'&:hover': {
+										backgroundColor: 'action.hover',
+										'& .MuiListItemText-primary': {
+											color: 'text.primary'
+										},
+										'& .MuiListItemIcon-root': {
+											color: 'text.primary'
+										}
+									},
+									'&.Mui-selected': {
+										backgroundColor: 'action.selected',
+										'& .MuiListItemText-primary': {
+											color: 'text.primary'
+										},
+										'& .MuiListItemIcon-root': {
+											color: 'text.primary'
+										}
+									}
+								}}
+							>
+								<ListItemIcon>{link.icon}</ListItemIcon>
+								<ListItemText primary={link.text} />
+							</ListItemButton>
+						</ListItem>
 					))}
 				</List>
 			)}

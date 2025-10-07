@@ -2,7 +2,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
 import Cookies from 'js-cookie';
-import LumoraWrapper, { type LumoraWrapperProps, type SidebarLink } from '../LumoraWrapper';
+import LumoraWrapper, {
+	type LumoraWrapperProps,
+	type SidebarLink
+} from '../LumoraWrapper';
 import '@testing-library/jest-dom';
 
 // Mock js-cookie
@@ -21,26 +24,26 @@ const mockSidebarLinks: SidebarLink[] = [
 	{
 		text: 'Home',
 		path: '/home',
-		icon: <Home data-testid="home-icon" />
+		icon: <Home data-testid='home-icon' />
 	},
 	{
 		text: 'Settings',
 		path: '/settings',
-		icon: <Settings data-testid="settings-icon" />
+		icon: <Settings data-testid='settings-icon' />
 	},
 	{
 		text: 'Profile',
 		path: '/profile',
-		icon: <Person data-testid="profile-icon" />
+		icon: <Person data-testid='profile-icon' />
 	}
 ];
 
-const mockAppLogo = <div data-testid="app-logo">Test Logo</div>;
+const mockAppLogo = <div data-testid='app-logo'>Test Logo</div>;
 
 // Helper function to render component with theme
 const renderWithTheme = (props: Partial<LumoraWrapperProps> = {}) => {
 	const defaultProps: LumoraWrapperProps = {
-		children: <div data-testid="test-content">Test Content</div>,
+		children: <div data-testid='test-content'>Test Content</div>,
 		...props
 	};
 
@@ -70,9 +73,13 @@ describe('LumoraWrapper', () => {
 		it('applies custom styles to main container', () => {
 			const customStyle = { backgroundColor: 'red' };
 			renderWithTheme({ style: customStyle });
-			
-			const mainContainer = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
-			expect(mainContainer).toHaveStyle('background-color: rgba(0, 0, 0, 0)');
+
+			const mainContainer = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
+			expect(mainContainer).toHaveStyle(
+				'background-color: rgba(0, 0, 0, 0)'
+			);
 		});
 	});
 
@@ -89,40 +96,44 @@ describe('LumoraWrapper', () => {
 		});
 
 		it('renders app name when provided', () => {
-			renderWithTheme({ 
-				showHeader: true, 
-				appName: 'My App' 
+			renderWithTheme({
+				showHeader: true,
+				appName: 'My App'
 			});
 			expect(screen.getByText('My App')).toBeInTheDocument();
 		});
 
 		it('renders page name when provided', () => {
-			renderWithTheme({ 
-				showHeader: true, 
-				pageName: 'My Application' 
+			renderWithTheme({
+				showHeader: true,
+				pageName: 'My Application'
 			});
 			expect(screen.getByText('My Application')).toBeInTheDocument();
 		});
 
 		it('applies custom styles to main container', () => {
 			const customStyle = { backgroundColor: 'blue' };
-			renderWithTheme({ 
-				showHeader: true, 
-				style: customStyle 
+			renderWithTheme({
+				showHeader: true,
+				style: customStyle
 			});
-			
-			const mainContainer = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
-			expect(mainContainer).toHaveStyle('background-color: rgb(0, 0, 255)');
+
+			const mainContainer = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
+			expect(mainContainer).toHaveStyle(
+				'background-color: rgb(0, 0, 255)'
+			);
 		});
 	});
 
 	describe('Sidebar Functionality', () => {
 		it('renders sidebar when showSidebar is true', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: mockSidebarLinks 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: mockSidebarLinks
 			});
-			
+
 			// Check if sidebar links are rendered
 			expect(screen.getByText('Home')).toBeInTheDocument();
 			expect(screen.getByText('Settings')).toBeInTheDocument();
@@ -131,16 +142,16 @@ describe('LumoraWrapper', () => {
 
 		it('does not render sidebar when showSidebar is false', () => {
 			renderWithTheme({ showSidebar: false });
-			
+
 			// Check that sidebar links are not rendered
 			expect(screen.queryByText('Home')).not.toBeInTheDocument();
 			expect(screen.queryByText('Settings')).not.toBeInTheDocument();
 		});
 
 		it('renders sidebar links with correct paths and icons', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: mockSidebarLinks 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: mockSidebarLinks
 			});
 
 			// Check links have correct href attributes
@@ -159,23 +170,25 @@ describe('LumoraWrapper', () => {
 		});
 
 		it('handles empty sidebar links array', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: [] 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: []
 			});
-			
+
 			// Sidebar should still be rendered but with no links
 			expect(screen.getByRole('list')).toBeInTheDocument();
 		});
 
 		it('applies custom sidebar styles', () => {
 			const sidebarStyles = { backgroundColor: 'green' };
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarStyles 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarStyles
 			});
-			
-			const sidebar = screen.getByRole('list').closest('[class*="MuiDrawer-root"]');
+
+			const sidebar = screen
+				.getByRole('list')
+				.closest('[class*="MuiDrawer-root"]');
 			expect(sidebar).toHaveStyle('background-color: rgb(0, 128, 0)');
 		});
 	});
@@ -183,23 +196,29 @@ describe('LumoraWrapper', () => {
 	describe('Content Area', () => {
 		it('applies correct margin when header is shown', () => {
 			renderWithTheme({ showHeader: true });
-			
-			const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+
+			const contentArea = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
 			expect(contentArea).toHaveStyle('margin-top: 64px');
 		});
 
 		it('applies no margin when header is not shown', () => {
 			renderWithTheme({ showHeader: false });
-			
-			const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+
+			const contentArea = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
 			expect(contentArea).toHaveStyle('margin-top: 0px');
 		});
 
 		it('applies custom content styles', () => {
 			const contentStyles = { padding: '20px' };
 			renderWithTheme({ contentStyles });
-			
-			const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+
+			const contentArea = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
 			expect(contentArea).toHaveStyle('padding: 20px');
 		});
 	});
@@ -238,7 +257,9 @@ describe('LumoraWrapper', () => {
 				expect(mockFetch).not.toHaveBeenCalled();
 			});
 
-			expect(console.warn).toHaveBeenCalledWith('No tokenExpiry cookie found');
+			expect(console.warn).toHaveBeenCalledWith(
+				'No tokenExpiry cookie found'
+			);
 		});
 
 		it('does not refresh token when token is still valid', async () => {
@@ -252,7 +273,9 @@ describe('LumoraWrapper', () => {
 				expect(mockFetch).not.toHaveBeenCalled();
 			});
 
-			expect(console.log).toHaveBeenCalledWith('Token is still valid, no refresh needed');
+			expect(console.log).toHaveBeenCalledWith(
+				'Token is still valid, no refresh needed'
+			);
 		});
 
 		/** 
@@ -417,7 +440,10 @@ describe('LumoraWrapper', () => {
 			renderWithTheme({ enableRefreshToken: true });
 
 			await waitFor(() => {
-				expect(console.error).toHaveBeenCalledWith('Error checking token expiry:', expect.any(Error));
+				expect(console.error).toHaveBeenCalledWith(
+					'Error checking token expiry:',
+					expect.any(Error)
+				);
 			});
 		});
 	});

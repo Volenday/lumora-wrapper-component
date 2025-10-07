@@ -116,10 +116,10 @@ Contains helper functions and mock data:
 ### js-cookie
 
 ```javascript
-jest.mock("js-cookie", () => ({
-  get: jest.fn(),
-  set: jest.fn(),
-  remove: jest.fn(),
+jest.mock('js-cookie', () => ({
+	get: jest.fn(),
+	set: jest.fn(),
+	remove: jest.fn()
 }));
 ```
 
@@ -132,14 +132,14 @@ global.fetch = jest.fn();
 ### window.location
 
 ```javascript
-Object.defineProperty(window, "location", {
-  value: {
-    href: "http://localhost:3000",
-    assign: jest.fn(),
-    replace: jest.fn(),
-    reload: jest.fn(),
-  },
-  writable: true,
+Object.defineProperty(window, 'location', {
+	value: {
+		href: 'http://localhost:3000',
+		assign: jest.fn(),
+		replace: jest.fn(),
+		reload: jest.fn()
+	},
+	writable: true
 });
 ```
 
@@ -148,45 +148,45 @@ Object.defineProperty(window, "location", {
 ### Testing Component Rendering
 
 ```javascript
-it("renders component correctly", () => {
-  renderWithTheme({ prop: "value" });
-  expect(screen.getByTestId("element")).toBeInTheDocument();
+it('renders component correctly', () => {
+	renderWithTheme({ prop: 'value' });
+	expect(screen.getByTestId('element')).toBeInTheDocument();
 });
 ```
 
 ### Testing Conditional Rendering
 
 ```javascript
-it("renders when condition is true", () => {
-  renderWithTheme({ showHeader: true });
-  expect(screen.getByRole("banner")).toBeInTheDocument();
+it('renders when condition is true', () => {
+	renderWithTheme({ showHeader: true });
+	expect(screen.getByRole('banner')).toBeInTheDocument();
 });
 
-it("does not render when condition is false", () => {
-  renderWithTheme({ showHeader: false });
-  expect(screen.queryByRole("banner")).not.toBeInTheDocument();
+it('does not render when condition is false', () => {
+	renderWithTheme({ showHeader: false });
+	expect(screen.queryByRole('banner')).not.toBeInTheDocument();
 });
 ```
 
 ### Testing User Interactions
 
 ```javascript
-it("handles user interaction", async () => {
-  renderWithTheme();
-  const button = screen.getByRole("button");
-  await user.click(button);
-  expect(mockFunction).toHaveBeenCalled();
+it('handles user interaction', async () => {
+	renderWithTheme();
+	const button = screen.getByRole('button');
+	await user.click(button);
+	expect(mockFunction).toHaveBeenCalled();
 });
 ```
 
 ### Testing Async Operations
 
 ```javascript
-it("handles async operations", async () => {
-  renderWithTheme();
-  await waitFor(() => {
-    expect(screen.getByText("Loaded content")).toBeInTheDocument();
-  });
+it('handles async operations', async () => {
+	renderWithTheme();
+	await waitFor(() => {
+		expect(screen.getByText('Loaded content')).toBeInTheDocument();
+	});
 });
 ```
 

@@ -106,9 +106,9 @@ I have successfully created a comprehensive Jest testing setup for the LumoraWra
 
 ```json
 {
-  "test": "jest",
-  "test:watch": "jest --watch",
-  "test:coverage": "jest --coverage"
+	"test": "jest",
+	"test:watch": "jest --watch",
+	"test:coverage": "jest --coverage"
 }
 ```
 

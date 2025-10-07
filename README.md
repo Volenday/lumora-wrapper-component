@@ -23,29 +23,29 @@ npm install @volenday/lumora-wrapper-component
 Import and use the LumoraWrapper component to wrap your page content:
 
 ```tsx
-import React from "react";
-import { LumoraWrapper } from "@volenday/lumora-wrapper-component";
-import { Home, Settings, Dashboard } from "@mui/icons-material";
+import React from 'react';
+import { LumoraWrapper } from '@volenday/lumora-wrapper-component';
+import { Home, Settings, Dashboard } from '@mui/icons-material';
 
 const App = () => {
-  const sidebarLinks = [
-    { text: "Home", path: "/", icon: <Home /> },
-    { text: "Dashboard", path: "/dashboard", icon: <Dashboard /> },
-    { text: "Settings", path: "/settings", icon: <Settings /> },
-  ];
+	const sidebarLinks = [
+		{ text: 'Home', path: '/', icon: <Home /> },
+		{ text: 'Dashboard', path: '/dashboard', icon: <Dashboard /> },
+		{ text: 'Settings', path: '/settings', icon: <Settings /> }
+	];
 
-  return (
-    <LumoraWrapper
-      headerTitle="My Application"
-      sidebarLinks={sidebarLinks}
-      appLogo={<img src="/logo.png" alt="Logo" />}
-    >
-      <div>
-        <h1>Welcome to your application</h1>
-        <p>Your page content goes here...</p>
-      </div>
-    </LumoraWrapper>
-  );
+	return (
+		<LumoraWrapper
+			headerTitle='My Application'
+			sidebarLinks={sidebarLinks}
+			appLogo={<img src='/logo.png' alt='Logo' />}
+		>
+			<div>
+				<h1>Welcome to your application</h1>
+				<p>Your page content goes here...</p>
+			</div>
+		</LumoraWrapper>
+	);
 };
 
 export default App;
@@ -72,9 +72,9 @@ The `SidebarLink` type is defined as:
 
 ```tsx
 type SidebarLink = {
-  text: string; // Display text for the navigation link
-  path: string; // URL path for navigation
-  icon: React.ReactNode; // Icon component to display next to the text
+	text: string; // Display text for the navigation link
+	path: string; // URL path for navigation
+	icon: React.ReactNode; // Icon component to display next to the text
 };
 ```
 
@@ -85,26 +85,26 @@ The component's layout can be customized using the `style`, `headerStyles`, `sid
 ### Example: Customizing Header Background
 
 ```tsx
-import { LumoraWrapper } from "@volenday/lumora-wrapper-component";
+import { LumoraWrapper } from '@volenday/lumora-wrapper-component';
 
 const App = () => {
-  return (
-    <LumoraWrapper
-      headerTitle="My App"
-      headerStyles={{
-        backgroundColor: "#1976d2",
-        "& .MuiToolbar-root": {
-          justifyContent: "space-between",
-        },
-      }}
-      contentStyles={{
-        backgroundColor: "#f5f5f5",
-        padding: 4,
-      }}
-    >
-      <div>Your content here</div>
-    </LumoraWrapper>
-  );
+	return (
+		<LumoraWrapper
+			headerTitle='My App'
+			headerStyles={{
+				backgroundColor: '#1976d2',
+				'& .MuiToolbar-root': {
+					justifyContent: 'space-between'
+				}
+			}}
+			contentStyles={{
+				backgroundColor: '#f5f5f5',
+				padding: 4
+			}}
+		>
+			<div>Your content here</div>
+		</LumoraWrapper>
+	);
 };
 ```
 
@@ -112,23 +112,23 @@ const App = () => {
 
 ```tsx
 const App = () => {
-  return (
-    <LumoraWrapper
-      sidebarStyles={{
-        "& .MuiDrawer-paper": {
-          backgroundColor: "#2c3e50",
-          color: "white",
-          "& .MuiListItemButton-root": {
-            "&:hover": {
-              backgroundColor: "#34495e",
-            },
-          },
-        },
-      }}
-    >
-      <div>Your content here</div>
-    </LumoraWrapper>
-  );
+	return (
+		<LumoraWrapper
+			sidebarStyles={{
+				'& .MuiDrawer-paper': {
+					backgroundColor: '#2c3e50',
+					color: 'white',
+					'& .MuiListItemButton-root': {
+						'&:hover': {
+							backgroundColor: '#34495e'
+						}
+					}
+				}
+			}}
+		>
+			<div>Your content here</div>
+		</LumoraWrapper>
+	);
 };
 ```
 

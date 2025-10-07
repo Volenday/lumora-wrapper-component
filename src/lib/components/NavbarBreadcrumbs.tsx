@@ -8,11 +8,11 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
 	margin: theme.spacing(1, 0),
 	[`& .${breadcrumbsClasses.separator}`]: {
 		color: (theme.vars || theme).palette.action.disabled,
-		margin: 1,
+		margin: 1
 	},
 	[`& .${breadcrumbsClasses.ol}`]: {
-		alignItems: 'center',
-	},
+		alignItems: 'center'
+	}
 }));
 
 interface NavbarBreadcrumbsProps {
@@ -26,11 +26,14 @@ const NavbarBreadcrumbs: React.FC<NavbarBreadcrumbsProps> = ({
 }) => {
 	return (
 		<StyledBreadcrumbs
-			aria-label="breadcrumb"
-			separator={<NavigateNextRoundedIcon fontSize="small" />}
+			aria-label='breadcrumb'
+			separator={<NavigateNextRoundedIcon fontSize='small' />}
 		>
-			<Typography variant="body1">{appName}</Typography>
-			<Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
+			<Typography variant='body1'>{appName}</Typography>
+			<Typography
+				variant='body1'
+				sx={{ color: 'text.primary', fontWeight: 600 }}
+			>
 				{pageName}
 			</Typography>
 		</StyledBreadcrumbs>

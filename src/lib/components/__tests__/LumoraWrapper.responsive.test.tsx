@@ -12,7 +12,9 @@ jest.mock('@mui/material', () => ({
 	useMediaQuery: jest.fn()
 }));
 
-const mockUseMediaQuery = useMediaQuery as jest.MockedFunction<typeof useMediaQuery>;
+const mockUseMediaQuery = useMediaQuery as jest.MockedFunction<
+	typeof useMediaQuery
+>;
 
 describe('LumoraWrapper - Responsive Behavior', () => {
 	beforeEach(() => {
@@ -23,11 +25,8 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<LumoraWrapper 
-				showSidebar={true} 
-				sidebarLinks={mockSidebarLinks}
-			>
-				<div data-testid="test-content">Test Content</div>
+			<LumoraWrapper showSidebar={true} sidebarLinks={mockSidebarLinks}>
+				<div data-testid='test-content'>Test Content</div>
 			</LumoraWrapper>
 		);
 
@@ -40,8 +39,8 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 	// 	mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 	// 	render(
-	// 		<LumoraWrapper 
-	// 			showSidebar={true} 
+	// 		<LumoraWrapper
+	// 			showSidebar={true}
 	// 			sidebarLinks={mockSidebarLinks}
 	// 		>
 	// 			<div data-testid="test-content">Test Content</div>
@@ -60,15 +59,14 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<LumoraWrapper 
-				showSidebar={true} 
-				sidebarLinks={mockSidebarLinks}
-			>
-				<div data-testid="test-content">Test Content</div>
+			<LumoraWrapper showSidebar={true} sidebarLinks={mockSidebarLinks}>
+				<div data-testid='test-content'>Test Content</div>
 			</LumoraWrapper>
 		);
 
-		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+		const contentArea = screen
+			.getByTestId('test-content')
+			.closest('[class*="MuiBox-root"]');
 		expect(contentArea).toHaveStyle('width: calc(100% - 240px)');
 	});
 
@@ -76,15 +74,14 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 		render(
-			<LumoraWrapper 
-				showSidebar={true} 
-				sidebarLinks={mockSidebarLinks}
-			>
-				<div data-testid="test-content">Test Content</div>
+			<LumoraWrapper showSidebar={true} sidebarLinks={mockSidebarLinks}>
+				<div data-testid='test-content'>Test Content</div>
 			</LumoraWrapper>
 		);
 
-		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+		const contentArea = screen
+			.getByTestId('test-content')
+			.closest('[class*="MuiBox-root"]');
 		expect(contentArea).toHaveStyle('width: 100%');
 	});
 
@@ -92,14 +89,14 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<LumoraWrapper 
-				showSidebar={false}
-			>
-				<div data-testid="test-content">Test Content</div>
+			<LumoraWrapper showSidebar={false}>
+				<div data-testid='test-content'>Test Content</div>
 			</LumoraWrapper>
 		);
 
-		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+		const contentArea = screen
+			.getByTestId('test-content')
+			.closest('[class*="MuiBox-root"]');
 		expect(contentArea).toHaveStyle('width: 100%');
 	});
 
@@ -107,8 +104,8 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 	// 	mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 	// 	render(
-	// 		<LumoraWrapper 
-	// 			showSidebar={true} 
+	// 		<LumoraWrapper
+	// 			showSidebar={true}
 	// 			showHeader={false}
 	// 			sidebarLinks={mockSidebarLinks}
 	// 		>
@@ -125,12 +122,12 @@ describe('LumoraWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<LumoraWrapper 
-				showSidebar={true} 
+			<LumoraWrapper
+				showSidebar={true}
 				showHeader={true}
 				sidebarLinks={mockSidebarLinks}
 			>
-				<div data-testid="test-content">Test Content</div>
+				<div data-testid='test-content'>Test Content</div>
 			</LumoraWrapper>
 		);
 

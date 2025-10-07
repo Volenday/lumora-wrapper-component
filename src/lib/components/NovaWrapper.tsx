@@ -68,8 +68,8 @@ const LOGIN_REDIRECT_URL = '/login';
  * LumoraWrapper component provides a consistent layout structure for authenticated pages
  * and handles proactive token refresh to prevent session expiry during active use.
  */
-const LumoraWrapper: React.FC<LumoraWrapperProps> = ({ 
-	children, 
+const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
+	children,
 	sidebarLinks = [],
 	secondarySidebarLinks = [],
 	appName = 'Dashboard',
@@ -118,7 +118,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			try {
 				// Read token expiry from cookies
 				const tokenExpiry = Cookies.get('tokenExpiry');
-				
+
 				if (!tokenExpiry) {
 					console.warn('No tokenExpiry cookie found');
 					return;
@@ -127,39 +127,45 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				// Calculate time until expiry
 				const currentTime = new Date();
 				const expiryTime = new Date(tokenExpiry);
-				const timeUntilExpiry = expiryTime.getTime() - currentTime.getTime();
+				const timeUntilExpiry =
+					expiryTime.getTime() - currentTime.getTime();
 
 				// Only refresh if token expires within 10 minutes and is not already expired
-				if (timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD && timeUntilExpiry > 0) {
+				if (
+					timeUntilExpiry <= TOKEN_REFRESH_THRESHOLD &&
+					timeUntilExpiry > 0
+				) {
 					console.log('Token expires soon, refreshing...');
-					
+
 					try {
 						// Make API call to refresh token
 						const response = await fetch(REFRESH_ENDPOINT, {
 							method: 'POST',
 							headers: {
-								'Content-Type': 'application/json',
+								'Content-Type': 'application/json'
 							},
-							credentials: 'include', // Include cookies in the request
+							credentials: 'include' // Include cookies in the request
 						});
 
 						if (!response.ok) {
-							throw new Error(`Refresh token API failed with status: ${response.status}`);
+							throw new Error(
+								`Refresh token API failed with status: ${response.status}`
+							);
 						}
 
 						const data = await response.json();
-						
+
 						// Update cookies with new token and expiry
 						if (data.token) {
-							Cookies.set('token', data.token, { 
+							Cookies.set('token', data.token, {
 								expires: 7, // 7 days
 								secure: true,
 								sameSite: 'strict'
 							});
 						}
-						
+
 						if (data.tokenExpiry) {
-							Cookies.set('tokenExpiry', data.tokenExpiry, { 
+							Cookies.set('tokenExpiry', data.tokenExpiry, {
 								expires: 7, // 7 days
 								secure: true,
 								sameSite: 'strict'
@@ -169,7 +175,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						console.log('Token refreshed successfully');
 					} catch (error) {
 						console.error('Token refresh failed:', error);
-						
+
 						// Clear cookies and redirect to login on failure
 						Cookies.remove('token');
 						Cookies.remove('tokenExpiry');
@@ -196,13 +202,17 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	return (
 		<Box sx={{ display: 'flex', height: '100vh', ...style }}>
 			<CssBaseline />
-			
+
 			{/* Header */}
 			{showHeader && (
 				<AppNavbar
 					appName={appName}
 					pageName={pageName}
-					onMenuClick={isMobile && showSidebar ? handleMobileSidebarToggle : undefined}
+					onMenuClick={
+						isMobile && showSidebar
+							? handleMobileSidebarToggle
+							: undefined
+					}
 					showMenuButton={isMobile && showSidebar}
 				/>
 			)}
@@ -219,7 +229,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							width: 240,
 							boxSizing: 'border-box',
 							backgroundColor: 'background.paper',
-							mt: 0, // Extend to top
+							mt: 0 // Extend to top
 						},
 						...sidebarStyles
 					}}
@@ -228,7 +238,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						sx={{
 							display: 'flex',
 							mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-							p: 1.5,
+							p: 1.5
 						}}
 					>
 						{/* Optional: Add SelectContent component here if needed */}
@@ -238,7 +248,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							overflow: 'auto',
 							height: '100%',
 							display: 'flex',
-							flexDirection: 'column',
+							flexDirection: 'column'
 						}}
 					>
 						<MenuContent
@@ -285,9 +295,13 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				component='main'
 				sx={{
 					flexGrow: 1,
-					p: 3, 
+					p: 3,
 					m: 1,
-					width: isMobile ? '100%' : showSidebar ? `calc(100% - 240px)` : '100%',
+					width: isMobile
+						? '100%'
+						: showSidebar
+							? `calc(100% - 240px)`
+							: '100%',
 					// mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
 					// ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
 					overflow: 'auto',

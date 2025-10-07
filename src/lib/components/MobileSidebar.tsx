@@ -56,46 +56,46 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 
 	return (
 		<Drawer
-			anchor="right"
+			anchor='right'
 			open={open}
 			onClose={onClose}
 			sx={{
-				zIndex: (theme) => theme.zIndex.drawer + 1,
+				zIndex: theme => theme.zIndex.drawer + 1,
 				'& .MuiDrawer-paper': {
 					backgroundImage: 'none',
-					backgroundColor: 'background.paper',
-				},
+					backgroundColor: 'background.paper'
+				}
 			}}
 		>
 			<Stack
 				sx={{
 					maxWidth: '70dvw',
-					height: '100%',
+					height: '100%'
 				}}
 			>
-				<Stack direction="row" sx={{ p: 2, pb: 0, gap: 1 }}>
+				<Stack direction='row' sx={{ p: 2, pb: 0, gap: 1 }}>
 					<Stack
-						direction="row"
+						direction='row'
 						sx={{ gap: 1, alignItems: 'center', flexGrow: 1, p: 1 }}
 					>
 						<Avatar
-							sizes="small"
+							sizes='small'
 							alt={userName}
 							src={userAvatar}
 							sx={{ width: 24, height: 24 }}
 						/>
-						<Typography component="p" variant="h6">
+						<Typography component='p' variant='h6'>
 							{userName}
 						</Typography>
 					</Stack>
 					{showNotifications && (
 						<Badge
-							color="error"
-							variant="dot"
+							color='error'
+							variant='dot'
 							invisible={notificationCount === 0}
 							sx={{ '& .MuiBadge-badge': { right: 2, top: 2 } }}
 						>
-							<IconButton size="small">
+							<IconButton size='small'>
 								<NotificationsRoundedIcon />
 							</IconButton>
 						</Badge>
@@ -113,9 +113,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 				</Stack>
 				{alertProps?.show && <CardAlert {...alertProps} />}
 				<Stack sx={{ p: 2 }}>
-					<Button 
-						variant="outlined" 
-						fullWidth 
+					<Button
+						variant='outlined'
+						fullWidth
 						startIcon={<LogoutRoundedIcon />}
 						onClick={onLogout}
 					>

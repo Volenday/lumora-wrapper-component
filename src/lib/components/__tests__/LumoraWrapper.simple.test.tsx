@@ -2,7 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
-import LumoraWrapper, { type LumoraWrapperProps, type SidebarLink } from '../LumoraWrapper';
+import LumoraWrapper, {
+	type LumoraWrapperProps,
+	type SidebarLink
+} from '../LumoraWrapper';
 import '@testing-library/jest-dom';
 
 // Mock js-cookie
@@ -32,26 +35,26 @@ const mockSidebarLinks: SidebarLink[] = [
 	{
 		text: 'Home',
 		path: '/home',
-		icon: <Home data-testid="home-icon" />
+		icon: <Home data-testid='home-icon' />
 	},
 	{
 		text: 'Settings',
 		path: '/settings',
-		icon: <Settings data-testid="settings-icon" />
+		icon: <Settings data-testid='settings-icon' />
 	},
 	{
 		text: 'Profile',
 		path: '/profile',
-		icon: <Person data-testid="profile-icon" />
+		icon: <Person data-testid='profile-icon' />
 	}
 ];
 
-const mockAppLogo = <div data-testid="app-logo">Test Logo</div>;
+const mockAppLogo = <div data-testid='app-logo'>Test Logo</div>;
 
 // Helper function to render component with theme
 const renderWithTheme = (props: Partial<LumoraWrapperProps> = {}) => {
 	const defaultProps: LumoraWrapperProps = {
-		children: <div data-testid="test-content">Test Content</div>,
+		children: <div data-testid='test-content'>Test Content</div>,
 		...props
 	};
 
@@ -92,17 +95,17 @@ describe('LumoraWrapper - Basic Functionality', () => {
 		});
 
 		it('renders app name when provided', () => {
-			renderWithTheme({ 
-				showHeader: true, 
-				appName: 'My App' 
+			renderWithTheme({
+				showHeader: true,
+				appName: 'My App'
 			});
 			expect(screen.getByText('My App')).toBeInTheDocument();
 		});
 
 		it('renders page name when provided', () => {
-			renderWithTheme({ 
-				showHeader: true, 
-				pageName: 'My Application' 
+			renderWithTheme({
+				showHeader: true,
+				pageName: 'My Application'
 			});
 			expect(screen.getByText('My Application')).toBeInTheDocument();
 		});
@@ -110,11 +113,11 @@ describe('LumoraWrapper - Basic Functionality', () => {
 
 	describe('Sidebar Functionality', () => {
 		it('renders sidebar when showSidebar is true', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: mockSidebarLinks 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: mockSidebarLinks
 			});
-			
+
 			// Check if sidebar links are rendered
 			expect(screen.getByText('Home')).toBeInTheDocument();
 			expect(screen.getByText('Settings')).toBeInTheDocument();
@@ -123,16 +126,16 @@ describe('LumoraWrapper - Basic Functionality', () => {
 
 		it('does not render sidebar when showSidebar is false', () => {
 			renderWithTheme({ showSidebar: false });
-			
+
 			// Check that sidebar links are not rendered
 			expect(screen.queryByText('Home')).not.toBeInTheDocument();
 			expect(screen.queryByText('Settings')).not.toBeInTheDocument();
 		});
 
 		it('renders sidebar links with correct paths and icons', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: mockSidebarLinks 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: mockSidebarLinks
 			});
 
 			// Check links have correct href attributes
@@ -151,11 +154,11 @@ describe('LumoraWrapper - Basic Functionality', () => {
 		});
 
 		it('handles empty sidebar links array', () => {
-			renderWithTheme({ 
-				showSidebar: true, 
-				sidebarLinks: [] 
+			renderWithTheme({
+				showSidebar: true,
+				sidebarLinks: []
 			});
-			
+
 			// Sidebar should still be rendered but with no links
 			expect(screen.getByRole('list')).toBeInTheDocument();
 		});
@@ -164,15 +167,19 @@ describe('LumoraWrapper - Basic Functionality', () => {
 	describe('Content Area', () => {
 		it('applies correct margin when header is shown', () => {
 			renderWithTheme({ showHeader: true });
-			
-			const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+
+			const contentArea = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
 			expect(contentArea).toHaveStyle('margin-top: 64px');
 		});
 
 		it('applies no margin when header is not shown', () => {
 			renderWithTheme({ showHeader: false });
-			
-			const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+
+			const contentArea = screen
+				.getByTestId('test-content')
+				.closest('[class*="MuiBox-root"]');
 			expect(contentArea).toHaveStyle('margin-top: 0px');
 		});
 	});

@@ -16,7 +16,7 @@ const Toolbar = styled(MuiToolbar)({
 	alignItems: 'start',
 	justifyContent: 'center',
 	gap: '8px',
-	flexShrink: 0,
+	flexShrink: 0
 });
 
 interface AppNavbarProps {
@@ -35,7 +35,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 	return (
 		<AppBar
 			position='fixed'
-			sx={{ 
+			sx={{
 				boxShadow: 0,
 				background: 'white',
 				backgroundImage: 'none',
@@ -53,20 +53,23 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 						alignItems: 'center',
 						flexGrow: 1,
 						width: '100%',
-						gap: 1,
+						gap: 1
 					}}
 				>
 					<Box sx={{ mr: 'auto' }}>
-						<NavbarBreadcrumbs appName={appName} pageName={pageName} />
+						<NavbarBreadcrumbs
+							appName={appName}
+							pageName={pageName}
+						/>
 					</Box>
 					{showMenuButton && (
 						<IconButton
 							aria-label='menu'
 							onClick={onMenuClick}
-							sx={{ 
+							sx={{
 								color: 'text.primary',
 								'&:hover': {
-									backgroundColor: 'action.hover',
+									backgroundColor: 'action.hover'
 								}
 							}}
 						>
@@ -78,6 +81,5 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 		</AppBar>
 	);
 };
-
 
 export default AppNavbar;

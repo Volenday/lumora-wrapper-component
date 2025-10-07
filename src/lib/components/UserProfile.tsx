@@ -48,31 +48,37 @@ const UserProfile: React.FC<UserProfileProps> = ({
 	return (
 		<>
 			<Stack
-				direction="row"
+				direction='row'
 				sx={{
 					p: 2,
 					gap: 1,
 					alignItems: 'center',
 					borderTop: '1px solid',
-					borderColor: 'divider',
+					borderColor: 'divider'
 				}}
 			>
 				<Avatar
-					sizes="small"
+					sizes='small'
 					alt={userName}
 					src={userAvatar}
 					sx={{ width: 36, height: 36 }}
 				/>
 				<Box sx={{ mr: 'auto' }}>
-					<Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
+					<Typography
+						variant='body2'
+						sx={{ fontWeight: 500, lineHeight: '16px' }}
+					>
 						{userName}
 					</Typography>
-					<Typography variant="caption" sx={{ color: 'text.secondary' }}>
+					<Typography
+						variant='caption'
+						sx={{ color: 'text.secondary' }}
+					>
 						{userEmail}
 					</Typography>
 				</Box>
 				<IconButton
-					size="small"
+					size='small'
 					onClick={handleClick}
 					sx={{ borderColor: 'transparent' }}
 				>
@@ -87,14 +93,14 @@ const UserProfile: React.FC<UserProfileProps> = ({
 				anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
 				sx={{
 					'& .MuiList-root': {
-						padding: '4px',
+						padding: '4px'
 					},
 					'& .MuiPaper-root': {
-						padding: 0,
+						padding: 0
 					},
 					'& .MuiDivider-root': {
-						margin: '4px -4px',
-					},
+						margin: '4px -4px'
+					}
 				}}
 			>
 				<MenuItem onClick={() => handleMenuItemClick(onProfileClick)}>
@@ -110,7 +116,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
 				<Divider />
 				<MenuItem onClick={() => handleMenuItemClick(onLogout)}>
 					<Typography sx={{ flexGrow: 1 }}>Logout</Typography>
-					<LogoutRoundedIcon fontSize="small" />
+					<LogoutRoundedIcon fontSize='small' />
 				</MenuItem>
 			</Menu>
 		</>

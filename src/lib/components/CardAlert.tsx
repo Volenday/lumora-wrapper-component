@@ -23,18 +23,21 @@ const CardAlert: React.FC<CardAlertProps> = ({
 	if (!show) return null;
 
 	return (
-		<Card variant="outlined" sx={{ m: 1.5, flexShrink: 0 }}>
+		<Card variant='outlined' sx={{ m: 1.5, flexShrink: 0 }}>
 			<CardContent>
-				<AutoAwesomeRoundedIcon fontSize="small" />
+				<AutoAwesomeRoundedIcon fontSize='small' />
 				<Typography gutterBottom sx={{ fontWeight: 600 }}>
 					{title}
 				</Typography>
-				<Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+				<Typography
+					variant='body2'
+					sx={{ mb: 2, color: 'text.secondary' }}
+				>
 					{message}
 				</Typography>
-				<Button 
-					variant="contained" 
-					size="small" 
+				<Button
+					variant='contained'
+					size='small'
 					fullWidth
 					onClick={onButtonClick}
 				>

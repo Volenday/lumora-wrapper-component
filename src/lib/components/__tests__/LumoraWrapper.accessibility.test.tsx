@@ -8,28 +8,22 @@ import '@testing-library/jest-dom';
 describe('LumoraWrapper - Accessibility', () => {
 	describe('Header Accessibility', () => {
 		it('has proper header structure with banner role', () => {
-		render(
-			<LumoraWrapper 
-				showHeader={true} 
-				appName="Test Application"
-			>
-				<div data-testid="test-content">Test Content</div>
-			</LumoraWrapper>
-		);
+			render(
+				<LumoraWrapper showHeader={true} appName='Test Application'>
+					<div data-testid='test-content'>Test Content</div>
+				</LumoraWrapper>
+			);
 
 			const header = screen.getByRole('banner');
 			expect(header).toBeInTheDocument();
 		});
 
 		it('has accessible header title', () => {
-		render(
-			<LumoraWrapper 
-				showHeader={true} 
-				appName="My Application"
-			>
-				<div data-testid="test-content">Test Content</div>
-			</LumoraWrapper>
-		);
+			render(
+				<LumoraWrapper showHeader={true} appName='My Application'>
+					<div data-testid='test-content'>Test Content</div>
+				</LumoraWrapper>
+			);
 
 			const title = screen.getByText('My Application');
 			expect(title).toBeInTheDocument();
@@ -37,34 +31,35 @@ describe('LumoraWrapper - Accessibility', () => {
 		});
 
 		it('header is not rendered when showHeader is false', () => {
-		render(
-			<LumoraWrapper 
-				showHeader={false} 
-				appName="Should not appear"
-			>
-				<div data-testid="test-content">Test Content</div>
-			</LumoraWrapper>
-		);
+			render(
+				<LumoraWrapper showHeader={false} appName='Should not appear'>
+					<div data-testid='test-content'>Test Content</div>
+				</LumoraWrapper>
+			);
 
 			expect(screen.queryByRole('banner')).not.toBeInTheDocument();
-			expect(screen.queryByText('Should not appear')).not.toBeInTheDocument();
+			expect(
+				screen.queryByText('Should not appear')
+			).not.toBeInTheDocument();
 		});
 	});
 
 	describe('Sidebar Accessibility', () => {
 		it('has proper navigation structure', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={true} 
+				<LumoraWrapper
+					showSidebar={true}
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
 			// Check that links are properly structured
 			const homeLink = screen.getByRole('link', { name: /home/i });
-			const settingsLink = screen.getByRole('link', { name: /settings/i });
+			const settingsLink = screen.getByRole('link', {
+				name: /settings/i
+			});
 			const profileLink = screen.getByRole('link', { name: /profile/i });
 
 			expect(homeLink).toBeInTheDocument();
@@ -74,18 +69,20 @@ describe('LumoraWrapper - Accessibility', () => {
 
 		it('has proper link attributes', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={true} 
+				<LumoraWrapper
+					showSidebar={true}
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
 			const homeLink = screen.getByRole('link', { name: /home/i });
 			expect(homeLink).toHaveAttribute('href', '/home');
 
-			const settingsLink = screen.getByRole('link', { name: /settings/i });
+			const settingsLink = screen.getByRole('link', {
+				name: /settings/i
+			});
 			expect(settingsLink).toHaveAttribute('href', '/settings');
 
 			const profileLink = screen.getByRole('link', { name: /profile/i });
@@ -94,11 +91,11 @@ describe('LumoraWrapper - Accessibility', () => {
 
 		it('has proper icon structure', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={true} 
+				<LumoraWrapper
+					showSidebar={true}
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
@@ -110,26 +107,29 @@ describe('LumoraWrapper - Accessibility', () => {
 
 		it('sidebar is not rendered when showSidebar is false', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={false} 
+				<LumoraWrapper
+					showSidebar={false}
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
-			expect(screen.queryByRole('link', { name: /home/i })).not.toBeInTheDocument();
-			expect(screen.queryByRole('link', { name: /settings/i })).not.toBeInTheDocument();
-			expect(screen.queryByRole('link', { name: /profile/i })).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole('link', { name: /home/i })
+			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole('link', { name: /settings/i })
+			).not.toBeInTheDocument();
+			expect(
+				screen.queryByRole('link', { name: /profile/i })
+			).not.toBeInTheDocument();
 		});
 
 		it('handles empty sidebar links gracefully', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={true} 
-					sidebarLinks={[]}
-				>
-					<div data-testid="test-content">Test Content</div>
+				<LumoraWrapper showSidebar={true} sidebarLinks={[]}>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
@@ -142,13 +142,13 @@ describe('LumoraWrapper - Accessibility', () => {
 		it('has proper main content structure', () => {
 			render(
 				<LumoraWrapper>
-					<div data-testid="main-content">Main content here</div>
+					<div data-testid='main-content'>Main content here</div>
 				</LumoraWrapper>
 			);
 
 			const mainContent = screen.getByTestId('main-content');
 			const mainElement = mainContent.closest('main');
-			
+
 			expect(mainElement).toBeInTheDocument();
 			// MUI Box doesn't have role="main" by default, just check it exists
 			expect(mainElement).toBeInTheDocument();
@@ -157,7 +157,7 @@ describe('LumoraWrapper - Accessibility', () => {
 		it('content is accessible when header is shown', () => {
 			render(
 				<LumoraWrapper showHeader={true}>
-					<div data-testid="content">Content</div>
+					<div data-testid='content'>Content</div>
 				</LumoraWrapper>
 			);
 
@@ -168,7 +168,7 @@ describe('LumoraWrapper - Accessibility', () => {
 		it('content is accessible when header is hidden', () => {
 			render(
 				<LumoraWrapper showHeader={false}>
-					<div data-testid="content">Content</div>
+					<div data-testid='content'>Content</div>
 				</LumoraWrapper>
 			);
 
@@ -180,16 +180,18 @@ describe('LumoraWrapper - Accessibility', () => {
 	describe('Keyboard Navigation', () => {
 		it('sidebar links are keyboard accessible', () => {
 			render(
-				<LumoraWrapper 
-					showSidebar={true} 
+				<LumoraWrapper
+					showSidebar={true}
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
 			const homeLink = screen.getByRole('link', { name: /home/i });
-			const settingsLink = screen.getByRole('link', { name: /settings/i });
+			const settingsLink = screen.getByRole('link', {
+				name: /settings/i
+			});
 
 			// Links should be focusable
 			expect(homeLink).toBeInTheDocument();
@@ -204,13 +206,13 @@ describe('LumoraWrapper - Accessibility', () => {
 	describe('Screen Reader Support', () => {
 		it('provides meaningful text for screen readers', () => {
 			render(
-				<LumoraWrapper 
+				<LumoraWrapper
 					showHeader={true}
 					showSidebar={true}
-					appName="My Application"
+					appName='My Application'
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
@@ -225,10 +227,7 @@ describe('LumoraWrapper - Accessibility', () => {
 
 		it('maintains proper heading hierarchy', () => {
 			render(
-			<LumoraWrapper 
-				showHeader={true}
-				appName="Application Title"
-			>
+				<LumoraWrapper showHeader={true} appName='Application Title'>
 					<h1>Page Title</h1>
 					<h2>Section Title</h2>
 				</LumoraWrapper>
@@ -239,29 +238,39 @@ describe('LumoraWrapper - Accessibility', () => {
 			expect(headerTitle.tagName).toBe('P');
 
 			// Page content should maintain proper hierarchy
-			expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-			expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
+			expect(
+				screen.getByRole('heading', { level: 1 })
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole('heading', { level: 2 })
+			).toBeInTheDocument();
 		});
 	});
 
 	describe('Focus Management', () => {
 		it('maintains focus order with header and sidebar', () => {
 			render(
-				<LumoraWrapper 
+				<LumoraWrapper
 					showHeader={true}
 					showSidebar={true}
-					appName="Test App"
+					appName='Test App'
 					sidebarLinks={mockSidebarLinks}
 				>
-					<div data-testid="test-content">Test Content</div>
+					<div data-testid='test-content'>Test Content</div>
 				</LumoraWrapper>
 			);
 
 			// All interactive elements should be in the document
 			expect(screen.getByRole('banner')).toBeInTheDocument();
-			expect(screen.getByRole('link', { name: /home/i })).toBeInTheDocument();
-			expect(screen.getByRole('link', { name: /settings/i })).toBeInTheDocument();
-			expect(screen.getByRole('link', { name: /profile/i })).toBeInTheDocument();
+			expect(
+				screen.getByRole('link', { name: /home/i })
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole('link', { name: /settings/i })
+			).toBeInTheDocument();
+			expect(
+				screen.getByRole('link', { name: /profile/i })
+			).toBeInTheDocument();
 		});
 	});
 });
