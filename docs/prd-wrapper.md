@@ -12,4 +12,4 @@ If the refresh fails, log the user out.
 Tech Stack:
 Framework: React
 Language: TypeScript
-UI: MUI Material UI (Joy UI can be used for optional custom styling).
+UI: MUI Material UI
