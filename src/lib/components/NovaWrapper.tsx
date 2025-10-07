@@ -283,10 +283,11 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 				component="main"
 				sx={{
 					flexGrow: 1,
-					p: 3,
+					p: 3, 
+					m: 1,
 					width: isMobile ? '100%' : showSidebar ? `calc(100% - 240px)` : '100%',
-					mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
-					ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
+					// mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
+					// ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
 					overflow: 'auto',
 					...contentStyles
 				}}

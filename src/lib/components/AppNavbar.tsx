@@ -10,12 +10,12 @@ import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 
 const Toolbar = styled(MuiToolbar)({
 	width: '100%',
-	padding: '12px',
+	padding: '8px',
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'start',
 	justifyContent: 'center',
-	gap: '12px',
+	gap: '8px',
 	flexShrink: 0,
 });
 
@@ -35,17 +35,18 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 	return (
 		<AppBar
 			position="fixed"
-			sx={{
+			sx={{ 
 				boxShadow: 0,
-				background: 'transparent',
+				background: 'white',
 				backgroundImage: 'none',
 				top: 'var(--template-frame-height, 0px)',
 				left: { xs: 0, md: '240px' }, // Full width on mobile, right of sidebar on desktop
 				width: { xs: '100%', md: 'calc(100% - 240px)' }, // Full width on mobile, excluding sidebar on desktop
-				zIndex: 1, // Lower z-index so sidebar appears above
+				zIndex: 1, // Lower z-index so sidebar appears above,
+				height: '50px'
 			}}
 		>
-			<Toolbar variant="regular">
+			<Toolbar variant="dense">
 				<Stack
 					direction="row"
 					sx={{
