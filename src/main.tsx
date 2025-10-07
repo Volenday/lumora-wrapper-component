@@ -11,7 +11,7 @@ import {
 	People as PeopleIcon
 } from '@mui/icons-material'
 import './index.css'
-import { NovaWrapper, type SidebarLink } from './lib'
+import { LumoraWrapper, type SidebarLink } from './lib'
 
 // Create theme using the comprehensive design system
 const theme = createTheme(getDesignTokens('light'), {
@@ -134,8 +134,8 @@ const demoSecondaryLinks: SidebarLink[] = [
 // Demo content component
 const DemoContent = () => (
 	<div>
-		<h1>NovaWrapper Component Demo</h1>
-		<p>This is a demonstration of the NovaWrapper component with modern sidebar design:</p>
+		<h1>LumoraWrapper Component Demo</h1>
+		<p>This is a demonstration of the LumoraWrapper component with modern sidebar design:</p>
 		<ul>
 			<li>Clean, modern sidebar with main and secondary navigation sections</li>
 			<li>User profile section with avatar and options menu</li>
@@ -167,7 +167,7 @@ const DemoContent = () => (
 				New Customization Features
 			</h3>
 			<p style={{ fontSize: '0.875rem', color: '#1976d2' }}>
-				The NovaWrapper now supports extensive customization:
+				The LumoraWrapper now supports extensive customization:
 			</p>
 			<ul style={{ fontSize: '0.875rem', color: '#1e88e5' }}>
 				<li><strong>headerTitle:</strong> Custom header title (currently "My Custom App")</li>
@@ -240,7 +240,7 @@ createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			<NovaWrapper 
+			<LumoraWrapper 
 				sidebarLinks={demoMainLinks}
 				secondarySidebarLinks={demoSecondaryLinks}
 				appName="Dashboard"
@@ -263,7 +263,7 @@ createRoot(document.getElementById('root')!).render(
 				// enableRefreshToken={false} // Disable token refresh logic
 			>
 				<DemoContent />
-			</NovaWrapper>
+			</LumoraWrapper>
 		</ThemeProvider>
 	</StrictMode>,
 )

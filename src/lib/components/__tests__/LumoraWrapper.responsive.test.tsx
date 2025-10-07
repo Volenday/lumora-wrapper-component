@@ -2,7 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';
-import NovaWrapper from '../NovaWrapper';
+import LumoraWrapper from '../LumoraWrapper';
 import { render, mockSidebarLinks } from './testUtils';
 import '@testing-library/jest-dom';
 
@@ -14,7 +14,7 @@ jest.mock('@mui/material', () => ({
 
 const mockUseMediaQuery = useMediaQuery as jest.MockedFunction<typeof useMediaQuery>;
 
-describe('NovaWrapper - Responsive Behavior', () => {
+describe('LumoraWrapper - Responsive Behavior', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
@@ -23,12 +23,12 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<NovaWrapper 
+			<LumoraWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
 			>
 				<div data-testid="test-content">Test Content</div>
-			</NovaWrapper>
+			</LumoraWrapper>
 		);
 
 		const drawer = document.querySelector('.MuiDrawer-root');
@@ -40,12 +40,12 @@ describe('NovaWrapper - Responsive Behavior', () => {
 	// 	mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 	// 	render(
-	// 		<NovaWrapper 
+	// 		<LumoraWrapper 
 	// 			showSidebar={true} 
 	// 			sidebarLinks={mockSidebarLinks}
 	// 		>
 	// 			<div data-testid="test-content">Test Content</div>
-	// 		</NovaWrapper>
+	// 		</LumoraWrapper>
 	// 	);
 
 	// 	// For mobile, check that the sidebar is rendered
@@ -60,12 +60,12 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<NovaWrapper 
+			<LumoraWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
 			>
 				<div data-testid="test-content">Test Content</div>
-			</NovaWrapper>
+			</LumoraWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -76,12 +76,12 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 		render(
-			<NovaWrapper 
+			<LumoraWrapper 
 				showSidebar={true} 
 				sidebarLinks={mockSidebarLinks}
 			>
 				<div data-testid="test-content">Test Content</div>
-			</NovaWrapper>
+			</LumoraWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -92,11 +92,11 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<NovaWrapper 
+			<LumoraWrapper 
 				showSidebar={false}
 			>
 				<div data-testid="test-content">Test Content</div>
-			</NovaWrapper>
+			</LumoraWrapper>
 		);
 
 		const contentArea = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
@@ -107,13 +107,13 @@ describe('NovaWrapper - Responsive Behavior', () => {
 	// 	mockUseMediaQuery.mockReturnValue(true); // Mobile
 
 	// 	render(
-	// 		<NovaWrapper 
+	// 		<LumoraWrapper 
 	// 			showSidebar={true} 
 	// 			showHeader={false}
 	// 			sidebarLinks={mockSidebarLinks}
 	// 		>
 	// 			<div data-testid="test-content">Test Content</div>
-	// 		</NovaWrapper>
+	// 		</LumoraWrapper>
 	// 	);
 
 	// 	// Check that the drawer elements exist
@@ -125,13 +125,13 @@ describe('NovaWrapper - Responsive Behavior', () => {
 		mockUseMediaQuery.mockReturnValue(false); // Not mobile
 
 		render(
-			<NovaWrapper 
+			<LumoraWrapper 
 				showSidebar={true} 
 				showHeader={true}
 				sidebarLinks={mockSidebarLinks}
 			>
 				<div data-testid="test-content">Test Content</div>
-			</NovaWrapper>
+			</LumoraWrapper>
 		);
 
 		const drawer = document.querySelector('.MuiDrawer-paper');

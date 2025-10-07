@@ -18,9 +18,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/lib/index.ts'),
-      name: 'NovaWrapperComponent',
+      name: 'LumoraWrapperComponent',
       formats: ['es', 'umd'],
-      fileName: (format) => `nova-wrapper-component.${format}.js`,
+      fileName: (format) => `lumora-wrapper-component.${format}.js`,
     },
     rollupOptions: {
       external: [

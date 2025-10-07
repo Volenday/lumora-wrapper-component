@@ -18,7 +18,7 @@ Naming Conventions:
 • Use PascalCase for database field names. Example: AgentId
 • Use camelCase for function names. Example: getAgent()
 
-Technologies to Use (React/Next.js projects only):
+Technologies to Use:
 Typescript
 React.js
 MUI

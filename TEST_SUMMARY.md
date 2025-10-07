@@ -1,8 +1,8 @@
-# NovaWrapper Component - Test Implementation Summary
+# LumoraWrapper Component - Test Implementation Summary
 
 ## Overview
 
-I have successfully created a comprehensive Jest testing setup for the NovaWrapper component with React Testing Library and MUI integration. The test suite covers all major functionality including rendering, props handling, token refresh logic, responsive behavior, and accessibility.
+I have successfully created a comprehensive Jest testing setup for the LumoraWrapper component with React Testing Library and MUI integration. The test suite covers all major functionality including rendering, props handling, token refresh logic, responsive behavior, and accessibility.
 
 ## What Was Accomplished
 
@@ -25,7 +25,7 @@ I have successfully created a comprehensive Jest testing setup for the NovaWrapp
 
 ### 3. Test Files Created
 
-#### Main Test Suite (`NovaWrapper.test.tsx`)
+#### Main Test Suite (`LumoraWrapper.test.tsx`)
 
 - **Basic Rendering Tests**: Component renders with default props, children display correctly
 - **Header Functionality**: Shows/hides header, displays logo and title, applies custom styles
@@ -36,10 +36,10 @@ I have successfully created a comprehensive Jest testing setup for the NovaWrapp
 
 #### Specialized Test Files
 
-- **`NovaWrapper.responsive.test.tsx`**: Mobile vs desktop behavior testing
-- **`NovaWrapper.tokenRefresh.test.tsx`**: Detailed token refresh logic testing
-- **`NovaWrapper.accessibility.test.tsx`**: Accessibility and ARIA compliance testing
-- **`NovaWrapper.simple.test.tsx`**: Simplified working test suite
+- **`LumoraWrapper.responsive.test.tsx`**: Mobile vs desktop behavior testing
+- **`LumoraWrapper.tokenRefresh.test.tsx`**: Detailed token refresh logic testing
+- **`LumoraWrapper.accessibility.test.tsx`**: Accessibility and ARIA compliance testing
+- **`LumoraWrapper.simple.test.tsx`**: Simplified working test suite
 
 #### Test Utilities (`testUtils.tsx`)
 
@@ -150,7 +150,7 @@ npm run test:watch
 npm run test:coverage
 
 # Run specific test file
-npm test NovaWrapper.simple.test.tsx
+npm test LumoraWrapper.simple.test.tsx
 ```
 
 ### Test Structure
@@ -177,11 +177,11 @@ Each test file follows a consistent structure:
 
 - `jest.config.js` - Jest configuration
 - `src/setupTests.ts` - Test setup and global mocks
-- `src/lib/components/__tests__/NovaWrapper.test.tsx` - Main test suite
-- `src/lib/components/__tests__/NovaWrapper.simple.test.tsx` - Simplified test suite
-- `src/lib/components/__tests__/NovaWrapper.responsive.test.tsx` - Responsive tests
-- `src/lib/components/__tests__/NovaWrapper.tokenRefresh.test.tsx` - Token refresh tests
-- `src/lib/components/__tests__/NovaWrapper.accessibility.test.tsx` - Accessibility tests
+- `src/lib/components/__tests__/LumoraWrapper.test.tsx` - Main test suite
+- `src/lib/components/__tests__/LumoraWrapper.simple.test.tsx` - Simplified test suite
+- `src/lib/components/__tests__/LumoraWrapper.responsive.test.tsx` - Responsive tests
+- `src/lib/components/__tests__/LumoraWrapper.tokenRefresh.test.tsx` - Token refresh tests
+- `src/lib/components/__tests__/LumoraWrapper.accessibility.test.tsx` - Accessibility tests
 - `src/lib/components/__tests__/testUtils.tsx` - Test utilities
 - `TESTING.md` - Comprehensive testing documentation
 - `TEST_SUMMARY.md` - This summary document
@@ -192,4 +192,4 @@ Each test file follows a consistent structure:
 
 ## Conclusion
 
-The NovaWrapper component now has a comprehensive, production-ready test suite that covers all major functionality. The tests follow React Testing Library best practices and provide excellent coverage for both happy path and edge cases. The setup is ready for immediate use and can be easily extended as the component evolves.
+The LumoraWrapper component now has a comprehensive, production-ready test suite that covers all major functionality. The tests follow React Testing Library best practices and provide excellent coverage for both happy path and edge cases. The setup is ready for immediate use and can be easily extended as the component evolves.

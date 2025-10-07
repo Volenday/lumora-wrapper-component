@@ -2,7 +2,7 @@ import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
-import type { NovaWrapperProps, SidebarLink } from '../NovaWrapper';
+import type { LumoraWrapperProps, SidebarLink } from '../LumoraWrapper';
 
 // Create a test theme
 export const testTheme = createTheme();
@@ -30,7 +30,7 @@ export const mockSidebarLinks: SidebarLink[] = [
 export const mockAppLogo = <div data-testid="app-logo">Test Logo</div>;
 
 // Default test props
-export const defaultTestProps: Partial<NovaWrapperProps> = {
+export const defaultTestProps: Partial<LumoraWrapperProps> = {
 	children: <div data-testid="test-content">Test Content</div>
 };
 
@@ -53,10 +53,10 @@ export * from '@testing-library/react';
 export { customRender as render };
 
 // Helper function to create test props
-export const createTestProps = (overrides: Partial<NovaWrapperProps> = {}): NovaWrapperProps => ({
+export const createTestProps = (overrides: Partial<LumoraWrapperProps> = {}): LumoraWrapperProps => ({
 	...defaultTestProps,
 	...overrides,
-} as NovaWrapperProps);
+} as LumoraWrapperProps);
 
 // Helper function to mock token expiry
 export const mockTokenExpiry = (minutesFromNow: number) => {

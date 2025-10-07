@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Home, Settings, Person } from '@mui/icons-material';
 import Cookies from 'js-cookie';
-import NovaWrapper, { type NovaWrapperProps, type SidebarLink } from '../NovaWrapper';
+import LumoraWrapper, { type LumoraWrapperProps, type SidebarLink } from '../LumoraWrapper';
 import '@testing-library/jest-dom';
 
 // Mock js-cookie
@@ -38,20 +38,20 @@ const mockSidebarLinks: SidebarLink[] = [
 const mockAppLogo = <div data-testid="app-logo">Test Logo</div>;
 
 // Helper function to render component with theme
-const renderWithTheme = (props: Partial<NovaWrapperProps> = {}) => {
-	const defaultProps: NovaWrapperProps = {
+const renderWithTheme = (props: Partial<LumoraWrapperProps> = {}) => {
+	const defaultProps: LumoraWrapperProps = {
 		children: <div data-testid="test-content">Test Content</div>,
 		...props
 	};
 
 	return render(
 		<ThemeProvider theme={theme}>
-			<NovaWrapper {...defaultProps} />
+			<LumoraWrapper {...defaultProps} />
 		</ThemeProvider>
 	);
 };
 
-describe('NovaWrapper', () => {
+describe('LumoraWrapper', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});

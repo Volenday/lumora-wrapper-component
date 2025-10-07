@@ -1,6 +1,6 @@
-# Testing Guide for NovaWrapper Component
+# Testing Guide for LumoraWrapper Component
 
-This document provides comprehensive information about testing the NovaWrapper component using Jest and React Testing Library.
+This document provides comprehensive information about testing the LumoraWrapper component using Jest and React Testing Library.
 
 ## Test Setup
 
@@ -15,11 +15,11 @@ The project uses the following testing stack:
 
 ```
 src/lib/components/__tests__/
-├── NovaWrapper.test.tsx              # Main comprehensive test suite
-├── NovaWrapper.simple.test.tsx       # Simplified test suite (working)
-├── NovaWrapper.responsive.test.tsx   # Responsive behavior tests
-├── NovaWrapper.tokenRefresh.test.tsx # Token refresh logic tests
-├── NovaWrapper.accessibility.test.tsx # Accessibility tests
+├── LumoraWrapper.test.tsx              # Main comprehensive test suite
+├── LumoraWrapper.simple.test.tsx       # Simplified test suite (working)
+├── LumoraWrapper.responsive.test.tsx   # Responsive behavior tests
+├── LumoraWrapper.tokenRefresh.test.tsx # Token refresh logic tests
+├── LumoraWrapper.accessibility.test.tsx # Accessibility tests
 └── testUtils.tsx                     # Test utilities and helpers
 ```
 
@@ -46,7 +46,7 @@ npm run test:coverage
 ### Run Specific Test File
 
 ```bash
-npm test NovaWrapper.simple.test.tsx
+npm test LumoraWrapper.simple.test.tsx
 ```
 
 ## Test Categories
@@ -196,7 +196,7 @@ it("handles async operations", async () => {
 
 1. **Window.location navigation errors**: These are expected in jsdom and don't affect test functionality
 2. **Style assertions failing**: MUI uses CSS-in-JS which can cause style assertion issues
-3. **Missing children props**: Ensure all NovaWrapper components in tests have children
+3. **Missing children props**: Ensure all LumoraWrapper components in tests have children
 
 ### Debugging Tips
 

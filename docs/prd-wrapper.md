@@ -1,7 +1,7 @@
-PRD: Nova Wrapper Component
+PRD: Lumora Wrapper Component
 
 1. Objective
-   To create a foundational, reusable React component, NovaWrapper, that provides a consistent UI layout (header, sidebar, main content) for all authenticated sections of the application. This component will also encapsulate a critical piece of session management logic: proactively refreshing the user's authentication token to prevent session expiry during active use.
+   To create a foundational, reusable React component, LumoraWrapper, that provides a consistent UI layout (header, sidebar, main content) for all authenticated sections of the application. This component will also encapsulate a critical piece of session management logic: proactively refreshing the user's authentication token to prevent session expiry during active use.
 
 2. Background & Problem Statement
    Currently, our application lacks a standardized page structure, leading to inconsistent layouts and duplicated code. More critically, our session management is reactive; users can be abruptly logged out when their authentication token expires, leading to a frustrating user experience and potential loss of unsaved work.
@@ -14,10 +14,10 @@ PRD: Nova Wrapper Component
 
 4. Functional Requirements
    4.1. Component Signature & Props
-   The component, named NovaWrapper, will accept children as a prop to render the main page content.
+   The component, named LumoraWrapper, will accept children as a prop to render the main page content.
    TypeScript
 
-interface NovaWrapperProps {
+interface LumoraWrapperProps {
 children: React.ReactNode;
 }
 
@@ -56,6 +56,6 @@ Error Handling: If the refresh API call fails, the user should be logged out and
    API Endpoint Creation: This PRD assumes the refresh token API endpoint (/api/auth/refresh) already exists and is functional.
 
 8. Success Metrics
-   The NovaWrapper component is used on all authenticated pages.
+   The LumoraWrapper component is used on all authenticated pages.
    Manual and automated testing confirms that the refresh token API is called only when the tokenExpiry is within the 10-minute window.
    A significant reduction in user-reported session timeout issues.

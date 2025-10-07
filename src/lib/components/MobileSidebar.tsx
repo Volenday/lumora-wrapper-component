@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuContent from './MenuContent';
 import CardAlert from './CardAlert';
-import type { SidebarLink } from './NovaWrapper';
+import type { SidebarLink } from './LumoraWrapper';
 
 interface MobileSidebarProps {
 	open: boolean;

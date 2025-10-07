@@ -1,7 +1,7 @@
-// Export the NovaWrapper component and its props interface
-import NovaWrapper from './components/NovaWrapper';
-export { NovaWrapper };
-export type { NovaWrapperProps, SidebarLink } from './components/NovaWrapper';
+// Export the LumoraWrapper component and its props interface
+import LumoraWrapper from './components/LumoraWrapper';
+export { LumoraWrapper };
+export type { LumoraWrapperProps, SidebarLink } from './components/LumoraWrapper';
 
 // Re-export for better tree-shaking
-export default NovaWrapper;
+export default LumoraWrapper;

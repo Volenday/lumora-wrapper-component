@@ -1,15 +1,15 @@
 {
-  "name": "@volenday/nova-wrapper-component",
+  "name": "@volenday/lumora-wrapper-component",
   "private": false,
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/nova-wrapper-component.umd.js",
-  "module": "./dist/nova-wrapper-component.es.js",
+  "main": "./dist/lumora-wrapper-component.umd.js",
+  "module": "./dist/lumora-wrapper-component.es.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/nova-wrapper-component.es.js",
-      "require": "./dist/nova-wrapper-component.umd.js"
+      "import": "./dist/lumora-wrapper-component.es.js",
+      "require": "./dist/lumora-wrapper-component.umd.js"
     }
   },
   "files": [

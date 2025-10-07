@@ -1,4 +1,4 @@
-# Nova Wrapper Component
+# Lumora Wrapper Component
 
 A flexible and customizable React wrapper component built with Material-UI that provides a consistent layout structure for authenticated pages. The component includes a header, sidebar navigation, and main content area, along with built-in automatic token refresh logic to prevent unexpected session logouts.
 
@@ -15,16 +15,16 @@ Create or update your `.npmrc` file in your project root with the following cont
 Then install the package using npm:
 
 ```bash
-npm install @volenday/nova-wrapper-component
+npm install @volenday/lumora-wrapper-component
 ```
 
 ## Usage
 
-Import and use the NovaWrapper component to wrap your page content:
+Import and use the LumoraWrapper component to wrap your page content:
 
 ```tsx
 import React from "react";
-import { NovaWrapper } from "@volenday/nova-wrapper-component";
+import { LumoraWrapper } from "@volenday/lumora-wrapper-component";
 import { Home, Settings, Dashboard } from "@mui/icons-material";
 
 const App = () => {
@@ -35,7 +35,7 @@ const App = () => {
   ];
 
   return (
-    <NovaWrapper
+    <LumoraWrapper
       headerTitle="My Application"
       sidebarLinks={sidebarLinks}
       appLogo={<img src="/logo.png" alt="Logo" />}
@@ -44,7 +44,7 @@ const App = () => {
         <h1>Welcome to your application</h1>
         <p>Your page content goes here...</p>
       </div>
-    </NovaWrapper>
+    </LumoraWrapper>
   );
 };
 
@@ -85,11 +85,11 @@ The component's layout can be customized using the `style`, `headerStyles`, `sid
 ### Example: Customizing Header Background
 
 ```tsx
-import { NovaWrapper } from "@volenday/nova-wrapper-component";
+import { LumoraWrapper } from "@volenday/lumora-wrapper-component";
 
 const App = () => {
   return (
-    <NovaWrapper
+    <LumoraWrapper
       headerTitle="My App"
       headerStyles={{
         backgroundColor: "#1976d2",
@@ -103,7 +103,7 @@ const App = () => {
       }}
     >
       <div>Your content here</div>
-    </NovaWrapper>
+    </LumoraWrapper>
   );
 };
 ```
@@ -113,7 +113,7 @@ const App = () => {
 ```tsx
 const App = () => {
   return (
-    <NovaWrapper
+    <LumoraWrapper
       sidebarStyles={{
         "& .MuiDrawer-paper": {
           backgroundColor: "#2c3e50",
@@ -127,7 +127,7 @@ const App = () => {
       }}
     >
       <div>Your content here</div>
-    </NovaWrapper>
+    </LumoraWrapper>
   );
 };
 ```
