@@ -97,10 +97,12 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+	// Handle mobile sidebar toggle for responsive design
 	const handleMobileSidebarToggle = () => {
 		setMobileSidebarOpen(!mobileSidebarOpen);
 	};
 
+	// Handle mobile sidebar close
 	const handleMobileSidebarClose = () => {
 		setMobileSidebarOpen(false);
 	};
@@ -208,7 +210,7 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 			{/* Desktop Sidebar */}
 			{showSidebar && !isMobile && (
 				<Drawer
-					variant="permanent"
+					variant='permanent'
 					sx={{
 						width: 240,
 						flexShrink: 0,
@@ -280,7 +282,7 @@ const NovaWrapper: React.FC<NovaWrapperProps> = ({
 
 			{/* Main Content Area */}
 			<Box
-				component="main"
+				component='main'
 				sx={{
 					flexGrow: 1,
 					p: 3, 

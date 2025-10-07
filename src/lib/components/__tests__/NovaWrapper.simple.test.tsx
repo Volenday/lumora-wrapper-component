@@ -81,7 +81,7 @@ describe('NovaWrapper - Basic Functionality', () => {
 
 	describe('Header Functionality', () => {
 		it('renders header when showHeader is true', () => {
-			renderWithTheme({ showHeader: true, headerTitle: 'Test App' });
+			renderWithTheme({ showHeader: true, appName: 'Test App' });
 			expect(screen.getByRole('banner')).toBeInTheDocument();
 			expect(screen.getByText('Test App')).toBeInTheDocument();
 		});
@@ -91,18 +91,18 @@ describe('NovaWrapper - Basic Functionality', () => {
 			expect(screen.queryByRole('banner')).not.toBeInTheDocument();
 		});
 
-		it('renders app logo when provided', () => {
+		it('renders app name when provided', () => {
 			renderWithTheme({ 
 				showHeader: true, 
-				appLogo: mockAppLogo 
+				appName: 'My App' 
 			});
-			expect(screen.getByTestId('app-logo')).toBeInTheDocument();
+			expect(screen.getByText('My App')).toBeInTheDocument();
 		});
 
-		it('renders header title when provided', () => {
+		it('renders page name when provided', () => {
 			renderWithTheme({ 
 				showHeader: true, 
-				headerTitle: 'My Application' 
+				pageName: 'My Application' 
 			});
 			expect(screen.getByText('My Application')).toBeInTheDocument();
 		});
@@ -182,15 +182,15 @@ describe('NovaWrapper - Basic Functionality', () => {
 			renderWithTheme({
 				showHeader: true,
 				showSidebar: true,
-				headerTitle: 'My App',
-				appLogo: mockAppLogo,
+				appName: 'My App',
+				pageName: 'Dashboard',
 				sidebarLinks: mockSidebarLinks
 			});
 
 			// Check all components are rendered
 			expect(screen.getByRole('banner')).toBeInTheDocument();
 			expect(screen.getByText('My App')).toBeInTheDocument();
-			expect(screen.getByTestId('app-logo')).toBeInTheDocument();
+			expect(screen.getByText('Dashboard')).toBeInTheDocument();
 			expect(screen.getByRole('list')).toBeInTheDocument();
 			expect(screen.getByText('Home')).toBeInTheDocument();
 			expect(screen.getByText('Settings')).toBeInTheDocument();

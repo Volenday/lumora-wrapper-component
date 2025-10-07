@@ -55,7 +55,7 @@ export { customRender as render };
 // Helper function to create test props
 export const createTestProps = (overrides: Partial<NovaWrapperProps> = {}): NovaWrapperProps => ({
 	...defaultTestProps,
-	...overrides
+	...overrides,
 } as NovaWrapperProps);
 
 // Helper function to mock token expiry

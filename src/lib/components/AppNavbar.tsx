@@ -34,7 +34,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 }) => {
 	return (
 		<AppBar
-			position="fixed"
+			position='fixed'
 			sx={{ 
 				boxShadow: 0,
 				background: 'white',
@@ -46,9 +46,9 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 				height: '50px'
 			}}
 		>
-			<Toolbar variant="dense">
+			<Toolbar variant='dense'>
 				<Stack
-					direction="row"
+					direction='row'
 					sx={{
 						alignItems: 'center',
 						flexGrow: 1,
@@ -61,7 +61,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 					</Box>
 					{showMenuButton && (
 						<IconButton
-							aria-label="menu"
+							aria-label='menu'
 							onClick={onMenuClick}
 							sx={{ 
 								color: 'text.primary',

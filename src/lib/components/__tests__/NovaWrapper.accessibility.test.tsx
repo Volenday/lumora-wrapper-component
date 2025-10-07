@@ -8,43 +8,43 @@ import '@testing-library/jest-dom';
 describe('NovaWrapper - Accessibility', () => {
 	describe('Header Accessibility', () => {
 		it('has proper header structure with banner role', () => {
-			render(
-				<NovaWrapper 
-					showHeader={true} 
-					headerTitle="Test Application"
-				>
-					<div data-testid="test-content">Test Content</div>
-				</NovaWrapper>
-			);
+		render(
+			<NovaWrapper 
+				showHeader={true} 
+				appName="Test Application"
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
+		);
 
 			const header = screen.getByRole('banner');
 			expect(header).toBeInTheDocument();
 		});
 
 		it('has accessible header title', () => {
-			render(
-				<NovaWrapper 
-					showHeader={true} 
-					headerTitle="My Application"
-				>
-					<div data-testid="test-content">Test Content</div>
-				</NovaWrapper>
-			);
+		render(
+			<NovaWrapper 
+				showHeader={true} 
+				appName="My Application"
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
+		);
 
 			const title = screen.getByText('My Application');
 			expect(title).toBeInTheDocument();
-			expect(title.tagName).toBe('DIV'); // MUI Typography renders as div
+			expect(title.tagName).toBe('P'); // MUI Typography with variant="body1" renders as p
 		});
 
 		it('header is not rendered when showHeader is false', () => {
-			render(
-				<NovaWrapper 
-					showHeader={false} 
-					headerTitle="Should not appear"
-				>
-					<div data-testid="test-content">Test Content</div>
-				</NovaWrapper>
-			);
+		render(
+			<NovaWrapper 
+				showHeader={false} 
+				appName="Should not appear"
+			>
+				<div data-testid="test-content">Test Content</div>
+			</NovaWrapper>
+		);
 
 			expect(screen.queryByRole('banner')).not.toBeInTheDocument();
 			expect(screen.queryByText('Should not appear')).not.toBeInTheDocument();
@@ -207,7 +207,7 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showHeader={true}
 					showSidebar={true}
-					headerTitle="My Application"
+					appName="My Application"
 					sidebarLinks={mockSidebarLinks}
 				>
 					<div data-testid="test-content">Test Content</div>
@@ -225,18 +225,18 @@ describe('NovaWrapper - Accessibility', () => {
 
 		it('maintains proper heading hierarchy', () => {
 			render(
-				<NovaWrapper 
-					showHeader={true}
-					headerTitle="Application Title"
-				>
+			<NovaWrapper 
+				showHeader={true}
+				appName="Application Title"
+			>
 					<h1>Page Title</h1>
 					<h2>Section Title</h2>
 				</NovaWrapper>
 			);
 
-			// Header title should be div (MUI Typography renders as div)
+			// Header title should be p (MUI Typography with variant="body1" renders as p)
 			const headerTitle = screen.getByText('Application Title');
-			expect(headerTitle.tagName).toBe('DIV');
+			expect(headerTitle.tagName).toBe('P');
 
 			// Page content should maintain proper hierarchy
 			expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
@@ -250,7 +250,7 @@ describe('NovaWrapper - Accessibility', () => {
 				<NovaWrapper 
 					showHeader={true}
 					showSidebar={true}
-					headerTitle="Test App"
+					appName="Test App"
 					sidebarLinks={mockSidebarLinks}
 				>
 					<div data-testid="test-content">Test Content</div>

@@ -78,7 +78,7 @@ describe('NovaWrapper', () => {
 
 	describe('Header Functionality', () => {
 		it('renders header when showHeader is true', () => {
-			renderWithTheme({ showHeader: true, headerTitle: 'Test App' });
+			renderWithTheme({ showHeader: true, appName: 'Test App' });
 			expect(screen.getByRole('banner')).toBeInTheDocument();
 			expect(screen.getByText('Test App')).toBeInTheDocument();
 		});
@@ -88,31 +88,31 @@ describe('NovaWrapper', () => {
 			expect(screen.queryByRole('banner')).not.toBeInTheDocument();
 		});
 
-		it('renders app logo when provided', () => {
+		it('renders app name when provided', () => {
 			renderWithTheme({ 
 				showHeader: true, 
-				appLogo: mockAppLogo 
+				appName: 'My App' 
 			});
-			expect(screen.getByTestId('app-logo')).toBeInTheDocument();
+			expect(screen.getByText('My App')).toBeInTheDocument();
 		});
 
-		it('renders header title when provided', () => {
+		it('renders page name when provided', () => {
 			renderWithTheme({ 
 				showHeader: true, 
-				headerTitle: 'My Application' 
+				pageName: 'My Application' 
 			});
 			expect(screen.getByText('My Application')).toBeInTheDocument();
 		});
 
-		it('applies custom header styles', () => {
-			const headerStyles = { backgroundColor: 'blue' };
+		it('applies custom styles to main container', () => {
+			const customStyle = { backgroundColor: 'blue' };
 			renderWithTheme({ 
 				showHeader: true, 
-				headerStyles 
+				style: customStyle 
 			});
 			
-			const header = screen.getByRole('banner');
-			expect(header).toHaveStyle('background-color: rgb(0, 0, 255)');
+			const mainContainer = screen.getByTestId('test-content').closest('[class*="MuiBox-root"]');
+			expect(mainContainer).toHaveStyle('background-color: rgb(0, 0, 255)');
 		});
 	});
 
@@ -427,15 +427,15 @@ describe('NovaWrapper', () => {
 			renderWithTheme({
 				showHeader: true,
 				showSidebar: true,
-				headerTitle: 'My App',
-				appLogo: mockAppLogo,
+				appName: 'My App',
+				pageName: 'Dashboard',
 				sidebarLinks: mockSidebarLinks
 			});
 
 			// Check all components are rendered
 			expect(screen.getByRole('banner')).toBeInTheDocument();
 			expect(screen.getByText('My App')).toBeInTheDocument();
-			expect(screen.getByTestId('app-logo')).toBeInTheDocument();
+			expect(screen.getByText('Dashboard')).toBeInTheDocument();
 			expect(screen.getByRole('list')).toBeInTheDocument();
 			expect(screen.getByText('Home')).toBeInTheDocument();
 			expect(screen.getByText('Settings')).toBeInTheDocument();
