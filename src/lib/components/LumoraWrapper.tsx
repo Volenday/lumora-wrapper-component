@@ -55,6 +55,7 @@ export interface LumoraWrapperProps {
 	};
 	// Styling props
 	style?: SxProps<Theme>;
+	headerStyles?: SxProps<Theme>;
 	sidebarStyles?: SxProps<Theme>;
 	contentStyles?: SxProps<Theme>;
 }
@@ -90,6 +91,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	notificationCount = 0,
 	alertProps,
 	style,
+	headerStyles,
 	sidebarStyles,
 	contentStyles
 }) => {
@@ -214,6 +216,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							: undefined
 					}
 					showMenuButton={isMobile && showSidebar}
+					headerStyles={headerStyles}
 				/>
 			)}
 

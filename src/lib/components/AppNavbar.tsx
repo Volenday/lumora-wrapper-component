@@ -7,6 +7,7 @@ import MuiToolbar from '@mui/material/Toolbar';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import IconButton from '@mui/material/IconButton';
 import NavbarBreadcrumbs from './NavbarBreadcrumbs';
+import type { SxProps, Theme } from '@mui/material';
 
 const Toolbar = styled(MuiToolbar)({
 	width: '100%',
@@ -24,13 +25,15 @@ interface AppNavbarProps {
 	pageName?: string;
 	onMenuClick?: () => void;
 	showMenuButton?: boolean;
+	headerStyles?: SxProps<Theme>;
 }
 
 const AppNavbar: React.FC<AppNavbarProps> = ({
 	appName = 'Dashboard',
 	pageName = 'Home',
 	onMenuClick,
-	showMenuButton = true
+	showMenuButton = true,
+	headerStyles
 }) => {
 	return (
 		<AppBar
@@ -43,7 +46,8 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 				left: { xs: 0, md: '240px' }, // Full width on mobile, right of sidebar on desktop
 				width: { xs: '100%', md: 'calc(100% - 240px)' }, // Full width on mobile, excluding sidebar on desktop
 				zIndex: 1, // Lower z-index so sidebar appears above,
-				height: '50px'
+				height: '50px',
+				...headerStyles
 			}}
 		>
 			<Toolbar variant='dense'>
