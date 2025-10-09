@@ -19,6 +19,7 @@ const theme = createTheme(getDesignTokens('light'), {
 		MuiCssBaseline: {
 			styleOverrides: {
 				'*': {
+					// Webkit scrollbar styling
 					'&::-webkit-scrollbar': {
 						width: '8px',
 						height: '8px'
@@ -35,10 +36,8 @@ const theme = createTheme(getDesignTokens('light'), {
 					},
 					'&::-webkit-scrollbar-corner': {
 						background: 'transparent'
-					}
-				},
-				// Firefox scrollbar styling
-				'*': {
+					},
+					// Firefox scrollbar styling
 					scrollbarWidth: 'thin',
 					scrollbarColor: 'rgba(0, 0, 0, 0.1) transparent'
 				}

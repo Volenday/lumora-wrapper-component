@@ -4,19 +4,64 @@ A flexible and customizable React wrapper component built with Material-UI that 
 
 ## Installation
 
-Since this is a private package hosted on GitHub Packages, you must first configure your `.npmrc` file to authenticate with GitHub Packages.
+### Authentication Setup
 
-Create or update your `.npmrc` file in your project root with the following content:
+For private repositories, you'll need to set up GitHub authentication:
 
-```
-@volenday:registry=https://npm.pkg.github.com
-```
+#### Create a GitHub Personal Access Token:
 
-Then install the package using npm:
+1. Go to GitHub Settings → Developer settings → Personal access tokens
+2. Click "Generate new token (classic)"
+3. Select the `repo` scope (for private repositories)
+4. Copy the generated token
+
+#### Configure npm authentication:
 
 ```bash
-npm install @volenday/lumora-wrapper-component
+# Add to your .npmrc file
+echo "//npm.pkg.github.com/:_authToken=YOUR_TOKEN_HERE" >> ~/.npmrc
+
+# Or configure globally
+npm config set //npm.pkg.github.com/:_authToken YOUR_TOKEN_HERE
 ```
+
+### Install from GitHub Repository
+
+#### Install from main branch:
+
+```bash
+# Using npm
+npm install https://github.com/Volenday/lumora-wrapper-component.git
+
+# Using yarn
+yarn add https://github.com/Volenday/lumora-wrapper-component.git
+
+# Using pnpm
+pnpm add https://github.com/Volenday/lumora-wrapper-component.git
+```
+
+#### Install from specific branch or commit:
+
+```bash
+# Install from a specific branch
+npm install https://github.com/Volenday/lumora-wrapper-component.git#feature-branch
+
+# Install from a specific commit hash
+npm install https://github.com/Volenday/lumora-wrapper-component.git#a1b2c3d4e5f6
+
+# Install from a specific tag/version
+npm install https://github.com/Volenday/lumora-wrapper-component.git#v1.0.0
+```
+
+#### Alternative: SSH Authentication
+
+If you have SSH access to the repository:
+
+```bash
+npm install git+ssh://git@github.com:Volenday/lumora-wrapper-component.git
+```
+
+> **Note**: If you encounter authentication issues, make sure your GitHub token has the correct permissions and is properly configured in your `.npmrc` file.
 
 ## Usage
 
@@ -24,7 +69,7 @@ Import and use the LumoraWrapper component to wrap your page content:
 
 ```tsx
 import React from 'react';
-import { LumoraWrapper } from '@volenday/lumora-wrapper-component';
+import { LumoraWrapper } from 'lumora-wrapper-component';
 import { Home, Settings, Dashboard } from '@mui/icons-material';
 
 const App = () => {
@@ -406,3 +451,41 @@ All style props accept the `SxProps<Theme>` type, which means you can use:
 - **Automatic Token Refresh**: Built-in logic that proactively refreshes authentication tokens before they expire, preventing unexpected session logouts and ensuring a seamless user experience
 - **TypeScript Support**: Full TypeScript definitions included for better development experience
 - **Material-UI Integration**: Built on top of Material-UI components for consistent design and theming
+
+## Development
+
+### Building for Distribution
+
+**Important for Plugin Developers**: When pushing changes for a new version, you must run the build command to generate the distributable files:
+
+```bash
+# Build the library for distribution (generates dist/ folder)
+npm run build
+# or explicitly
+npm run build:lib
+```
+
+This command:
+
+- Compiles TypeScript to JavaScript
+- Generates both ES modules (`lumora-wrapper-component.es.js`) and UMD (`lumora-wrapper-component.umd.js`) builds
+- Creates TypeScript declaration files (`.d.ts`)
+- Outputs everything to the `dist/` folder
+
+**⚠️ Always run `npm run build` before pushing changes to ensure the latest code is available for installation via GitHub URL.**
+
+### Why We Commit the /dist Folder
+
+For libraries distributed via GitHub URL (like this one), committing the `/dist` folder is the standard approach. Here's why:
+
+- **GitHub URL installation** (`npm install git+https://github.com/...`) expects the built files to be present in the repository
+- **No CI/CD required** - works immediately after cloning
+- **Simple setup** - developers can install directly without additional steps
+
+This approach ensures that anyone can install the library directly from GitHub without needing to run build steps or have access to CI/CD systems.
+
+### Available Build Commands
+
+- **`npm run build`** or **`npm run build:lib`** - Builds the library for distribution (generates `dist/` folder)
+- **`npm run build:demo`** - Builds the demo page for testing (generates `dist-demo/` folder)
+- **`npm run dev`** - Starts the development server for the demo page

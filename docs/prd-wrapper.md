@@ -43,7 +43,7 @@ Error Handling: If the refresh API call fails, the user should be logged out and
    Framework: React will be used for building the component's structure and handling its lifecycle.
    Language: TypeScript is required for type safety, ensuring robust props and state management.
    UI Component Library: MUI Material UI should be used to build the primary layout components (e.g., AppBar for the header, Drawer for the sidebar, and Box for the main content area). This ensures consistency with our design system.
-   Styling (Optional): While Material UI provides default styling, developers have the option to use Joy UI for more customized styling solutions or for creating new, themed sub-components within the wrapper.
+   Styling (Optional): While Material UI provides default styling, developers have the option to use custom CSS or styled-components for more customized styling solutions or for creating new, themed sub-components within the wrapper.
 
 6. Non-Functional Requirements
    Performance: The token check logic must be highly efficient and non-blocking to avoid any perceptible delay in page rendering.
