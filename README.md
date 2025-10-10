@@ -69,7 +69,7 @@ Import and use the LumoraWrapper component to wrap your page content:
 
 ```tsx
 import React from 'react';
-import { LumoraWrapper } from 'lumora-wrapper-component';
+import { LumoraWrapper } from '@lumora/lumora-wrapper-component';
 import { Home, Settings, Dashboard } from '@mui/icons-material';
 
 const App = () => {
@@ -80,11 +80,7 @@ const App = () => {
 	];
 
 	return (
-		<LumoraWrapper
-			headerTitle='My Application'
-			sidebarLinks={sidebarLinks}
-			appLogo={<img src='/logo.png' alt='Logo' />}
-		>
+		<LumoraWrapper appName='My Application' sidebarLinks={sidebarLinks}>
 			<div>
 				<h1>Welcome to your application</h1>
 				<p>Your page content goes here...</p>
@@ -185,7 +181,7 @@ The LumoraWrapper component provides extensive styling customization through fou
 #### Customizing the Header
 
 ```tsx
-import { LumoraWrapper } from '@volenday/lumora-wrapper-component';
+import { LumoraWrapper } from '@lumora/lumora-wrapper-component';
 
 const App = () => {
 	return (

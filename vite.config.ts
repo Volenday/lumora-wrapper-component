@@ -13,7 +13,9 @@ export default defineConfig({
 			exclude: ['src/lib/**/*.test.*', 'src/lib/**/*.spec.*'],
 			outDir: 'dist',
 			rollupTypes: true,
-			tsconfigPath: './tsconfig.build.json'
+			tsconfigPath: './tsconfig.build.json',
+			declarationMap: true,
+			emitDeclarationOnly: false
 		})
 	],
 	build: {
