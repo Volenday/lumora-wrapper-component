@@ -65,6 +65,8 @@ npm install git+ssh://git@github.com:Volenday/lumora-wrapper-component.git
 
 ## Usage
 
+### Basic Usage
+
 Import and use the LumoraWrapper component to wrap your page content:
 
 ```tsx
@@ -81,6 +83,75 @@ const App = () => {
 
 	return (
 		<LumoraWrapper appName='My Application' sidebarLinks={sidebarLinks}>
+			<div>
+				<h1>Welcome to your application</h1>
+				<p>Your page content goes here...</p>
+			</div>
+		</LumoraWrapper>
+	);
+};
+
+export default App;
+```
+
+### Usage with Authentication
+
+To enable automatic token refresh, ensure tokens are stored in localStorage and enable the feature:
+
+```tsx
+import React, { useEffect, useState } from 'react';
+import { LumoraWrapper } from '@lumora/lumora-wrapper-component';
+import { Home, Settings, Dashboard } from '@mui/icons-material';
+
+const App = () => {
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+	useEffect(() => {
+		// Check if user is authenticated (has tokens in localStorage)
+		const accessToken = localStorage.getItem('accessToken');
+		const refreshToken = localStorage.getItem('refreshToken');
+
+		if (accessToken && refreshToken) {
+			setIsAuthenticated(true);
+		}
+	}, []);
+
+	const handleGoogleLogin = async () => {
+		// Implement your Google OAuth flow here
+		// After successful login, store tokens:
+		// localStorage.setItem('accessToken', response.accessToken);
+		// localStorage.setItem('refreshToken', response.refreshToken);
+		// setIsAuthenticated(true);
+	};
+
+	const handleLogout = () => {
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		setIsAuthenticated(false);
+	};
+
+	const sidebarLinks = [
+		{ text: 'Home', path: '/', icon: <Home /> },
+		{ text: 'Dashboard', path: '/dashboard', icon: <Dashboard /> },
+		{ text: 'Settings', path: '/settings', icon: <Settings /> }
+	];
+
+	if (!isAuthenticated) {
+		return (
+			<div>
+				<h1>Please log in</h1>
+				<button onClick={handleGoogleLogin}>Login with Google</button>
+			</div>
+		);
+	}
+
+	return (
+		<LumoraWrapper
+			appName='My Application'
+			sidebarLinks={sidebarLinks}
+			enableRefreshToken={true}
+			onLogout={handleLogout}
+		>
 			<div>
 				<h1>Welcome to your application</h1>
 				<p>Your page content goes here...</p>
@@ -147,11 +218,11 @@ export default App;
 
 ### Other Props
 
-| Prop                 | Type       | Default Value | Description                              |
-| -------------------- | ---------- | ------------- | ---------------------------------------- |
-| `enableRefreshToken` | `boolean`  | `false`       | Enable automatic token refresh           |
-| `onLinkClick`        | `function` | -             | Callback when navigation link is clicked |
-| `alertProps`         | `object`   | -             | Alert card configuration                 |
+| Prop                 | Type       | Default Value | Description                                              |
+| -------------------- | ---------- | ------------- | -------------------------------------------------------- |
+| `enableRefreshToken` | `boolean`  | `false`       | Enable automatic Axios-based token refresh on 401 errors |
+| `onLinkClick`        | `function` | -             | Callback when navigation link is clicked                 |
+| `alertProps`         | `object`   | -             | Alert card configuration                                 |
 
 ### SidebarLink Type
 
@@ -439,12 +510,71 @@ All style props accept the `SxProps<Theme>` type, which means you can use:
 - **Nested selectors**: `{ '& .MuiButton-root': { color: 'red' } }`
 - **Theme functions**: `{ spacing: 2, palette: { primary: { main: 'red' } } }`
 
+## Authentication Flow
+
+The LumoraWrapper component includes built-in automatic token refresh functionality that works with the Lumora authentication API. Here's how the authentication flow works:
+
+### Prerequisites
+
+The wrapper expects the following tokens to be available in `localStorage`:
+
+- `accessToken`: The current access token for API authentication
+- `refreshToken`: The refresh token used to obtain new access tokens
+
+### Host Application Responsibilities
+
+1. **Handle Google OAuth Login**: Implement the Google OAuth flow in your application
+2. **Store Tokens**: After successful OAuth callback, store the received tokens in localStorage:
+    ```typescript
+    // After OAuth callback
+    localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    ```
+3. **Enable Token Refresh**: Set the `enableRefreshToken` prop to `true` on the LumoraWrapper component
+
+### Automatic Token Refresh
+
+When `enableRefreshToken` is enabled, the wrapper automatically:
+
+- Attaches the access token to all API requests via Axios request interceptor
+- Detects 401 Unauthorized responses from API calls
+- Automatically calls the `/auth/refresh` endpoint with the refresh token
+- Updates the access token in localStorage with the new token
+- Retries the original failed request with the new token
+- Redirects to `/login` if token refresh fails
+
+## Environment Variables
+
+The component requires the following environment variables to be set in your `.env` file:
+
+| Variable            | Description                                                  | Default Value                    |
+| ------------------- | ------------------------------------------------------------ | -------------------------------- |
+| `VITE_API_BASE_URL` | Base URL for the Lumora API                                  | `https://dev.api.lumora.capital` |
+| `VITE_API_KEY`      | API key for authentication (required for all auth endpoints) | -                                |
+
+### Setup Instructions
+
+1. Copy the `.env.example` file to `.env`:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+2. Fill in your API key in the `.env` file:
+
+    ```env
+    VITE_API_BASE_URL=https://dev.api.lumora.capital
+    VITE_API_KEY=your_api_key_here
+    ```
+
+3. The component will automatically use these variables for API communication.
+
 ## Core Features
 
 - **Responsive Design**: Automatically adapts to mobile and desktop screen sizes
 - **Flexible Layout**: Optional header and sidebar components that can be toggled on/off
 - **Customizable Styling**: Full MUI SxProps support for complete visual customization
-- **Automatic Token Refresh**: Built-in logic that proactively refreshes authentication tokens before they expire, preventing unexpected session logouts and ensuring a seamless user experience
+- **Automatic Token Refresh**: Built-in Axios interceptor that automatically refreshes authentication tokens when API calls receive 401 errors, ensuring seamless user experience without unexpected logouts
 - **TypeScript Support**: Full TypeScript definitions included for better development experience
 - **Material-UI Integration**: Built on top of Material-UI components for consistent design and theming
 
