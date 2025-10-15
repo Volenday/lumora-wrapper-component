@@ -1,4 +1,5 @@
-import * as React from 'react';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -7,8 +8,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import * as React from 'react';
 
 interface UserProfileProps {
 	userName?: string;
@@ -57,26 +57,45 @@ const UserProfile: React.FC<UserProfileProps> = ({
 					borderColor: 'divider'
 				}}
 			>
-				<Avatar
-					sizes='small'
-					alt={userName}
-					src={userAvatar}
-					sx={{ width: 36, height: 36 }}
-				/>
-				<Box sx={{ mr: 'auto' }}>
-					<Typography
-						variant='body2'
-						sx={{ fontWeight: 500, lineHeight: '16px' }}
-					>
-						{userName}
-					</Typography>
-					<Typography
-						variant='caption'
-						sx={{ color: 'text.secondary' }}
-					>
-						{userEmail}
-					</Typography>
-				</Box>
+			<Avatar
+				sizes='small'
+				alt={userName}
+				src={userAvatar}
+				sx={{ width: 36, height: 36 }}
+			/>
+			<Box
+				sx={{
+					mr: 'auto',
+					minWidth: 0,
+					overflow: 'hidden',
+					flex: 1
+				}}
+			>
+				<Typography
+					variant='body2'
+					sx={{
+						fontWeight: 500,
+						lineHeight: '16px',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap'
+					}}
+				>
+					{userName}
+				</Typography>
+				<Typography
+					variant='caption'
+					sx={{
+						color: 'text.secondary',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						display: 'block'
+					}}
+				>
+					{userEmail}
+				</Typography>
+			</Box>
 				<IconButton
 					size='small'
 					onClick={handleClick}

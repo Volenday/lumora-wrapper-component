@@ -1,6 +1,7 @@
 import type { SxProps, Theme } from '@mui/material';
 import {
 	Box,
+	CircularProgress,
 	CssBaseline,
 	Drawer,
 	useMediaQuery,
@@ -98,6 +99,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+	const [isCheckingSession, setIsCheckingSession] = useState(true);
+	const [hasSession, setHasSession] = useState(false);
 
 	// Handle mobile sidebar toggle for responsive design
 	const handleMobileSidebarToggle = () => {
@@ -133,6 +136,34 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 		}
 	};
 
+	// Session checking: validate that user has a refresh token before rendering
+	useEffect(() => {
+		const checkSession = () => {
+			try {
+				// Check if refresh token exists in localStorage
+				const refreshToken = localStorage.getItem('lumoraRefreshToken');
+
+				if (!refreshToken) {
+					// No refresh token found, redirect to login
+					console.log('No session found, redirecting to login');
+					window.location.href = '/login';
+					return;
+				}
+
+				// Session exists, mark as authenticated
+				setHasSession(true);
+			} catch (error) {
+				console.error('Error checking session:', error);
+				// On error, redirect to login for safety
+				window.location.href = '/login';
+			} finally {
+				setIsCheckingSession(false);
+			}
+		};
+
+		checkSession();
+	}, []);
+
 	// Token refresh interceptor setup
 	useEffect(() => {
 		if (enableRefreshToken) {
@@ -155,6 +186,33 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 		// Validate tokens on mount only
 		validateAndRefreshTokens();
 	}, [enableRefreshToken]);
+
+	// Show loading state while checking session
+	if (isCheckingSession) {
+		return (
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'center',
+					justifyContent: 'center',
+					minHeight: '100vh',
+					backgroundColor: 'background.default'
+				}}
+			>
+				<CircularProgress size={60} thickness={4} />
+				<Box sx={{ mt: 2, color: 'text.secondary' }}>
+					Checking session...
+				</Box>
+			</Box>
+		);
+	}
+
+	// Don't render children if no session exists
+	// (This state should not be reached as we redirect, but adding as safety)
+	if (!hasSession) {
+		return null;
+	}
 
 	return (
 		<Box sx={{ display: 'flex', height: '100vh', ...style }}>
