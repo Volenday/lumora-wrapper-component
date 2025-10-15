@@ -304,7 +304,7 @@ createRoot(document.getElementById('root')!).render(
 				onAccountClick={() => console.log('Account clicked')}
 				onSettingsClick={() => console.log('Settings clicked')}
 				onLinkClick={path => console.log('Link clicked:', path)}
-				enableRefreshToken={true}
+				enableRefreshToken={false}
 				// Uncomment the lines below to test conditional rendering:
 				// showHeader={false}  // Hide the header completely
 				// showSidebar={false} // Hide the sidebar completely

@@ -17,21 +17,31 @@ export const validateAndRefreshTokens = async (): Promise<boolean> => {
 	if (refreshToken) {
 		try {
 			const refreshResponse = await axios.post(
-				`${process.env.NEXT_PUBLIC_LUMORA_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
+				`${(import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
 				{ refresh_token: refreshToken },
 				{
 					headers: {
-						'X-API-Key': process.env.NEXT_PUBLIC_LUMORA_API_KEY || '',
+						'X-API-Key':
+							(import.meta as any).env?.VITE_API_KEY || '',
 						'Content-Type': 'application/json'
 					}
 				}
 			);
 
-			if (refreshResponse.data.success && refreshResponse.data.accessToken) {
+			if (
+				refreshResponse.data.success &&
+				refreshResponse.data.accessToken
+			) {
 				// Store the new tokens
-				localStorage.setItem('lumoraAccessToken', refreshResponse.data.accessToken);
+				localStorage.setItem(
+					'lumoraAccessToken',
+					refreshResponse.data.accessToken
+				);
 				if (refreshResponse.data.refreshToken) {
-					localStorage.setItem('lumoraRefreshToken', refreshResponse.data.refreshToken);
+					localStorage.setItem(
+						'lumoraRefreshToken',
+						refreshResponse.data.refreshToken
+					);
 				}
 				return true;
 			}
@@ -46,4 +56,3 @@ export const validateAndRefreshTokens = async (): Promise<boolean> => {
 	window.location.href = '/login';
 	return false;
 };
-

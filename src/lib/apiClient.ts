@@ -1,8 +1,5 @@
-import axios, {
-	AxiosError,
-	AxiosResponse,
-	InternalAxiosRequestConfig
-} from 'axios';
+import axios, { AxiosError } from 'axios';
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 // Extend the AxiosRequestConfig to include _retry property
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
@@ -26,9 +23,10 @@ const refreshClient = axios.create();
 
 // Main API client with interceptors
 const apiClient = axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
+	baseURL:
+		(import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3000',
 	headers: {
-		'X-API-Key': import.meta.env.VITE_API_KEY || '',
+		'X-API-Key': (import.meta as any).env?.VITE_API_KEY || '',
 		'Content-Type': 'application/json'
 	}
 });
@@ -73,11 +71,12 @@ apiClient.interceptors.response.use(
 
 				// Use the separate refresh client to avoid interceptor loops
 				const refreshResponse = await refreshClient.post(
-					`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
+					`${(import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
 					{ refresh_token: refreshToken },
 					{
 						headers: {
-							'X-API-Key': import.meta.env.VITE_API_KEY || '',
+							'X-API-Key':
+								(import.meta as any).env?.VITE_API_KEY || '',
 							'Content-Type': 'application/json'
 						}
 					}

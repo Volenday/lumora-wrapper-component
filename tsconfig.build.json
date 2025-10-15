@@ -19,8 +19,9 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"allowJs": true,
-		"checkJs": false
+		"checkJs": false,
+		"types": ["node"]
 	},
-	"include": ["src/lib"],
+	"include": ["src/lib", "src/vite-env.d.ts"],
 	"exclude": ["node_modules", "dist", "**/*.test.*", "**/*.spec.*"]
 }
