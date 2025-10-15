@@ -124,4 +124,21 @@ apiClient.interceptors.response.use(
 	}
 );
 
+/**
+ * Logout user by sending refresh token to the logout endpoint
+ * Clears tokens from localStorage and invalidates the session on the server
+ */
+export const logoutUser = async (): Promise<void> => {
+	const refreshToken = localStorage.getItem('lumoraRefreshToken');
+
+	if (!refreshToken) {
+		throw new Error('No refresh token available for logout');
+	}
+
+	// Send logout request to invalidate the refresh token on the server
+	await apiClient.post('/auth/logout', {
+		refresh_token: refreshToken
+	});
+};
+
 export default apiClient;

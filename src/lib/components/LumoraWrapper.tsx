@@ -7,7 +7,11 @@ import {
 	useTheme
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
+import {
+	disableTokenRefresh,
+	enableTokenRefresh,
+	logoutUser
+} from '../apiClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
 import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
@@ -39,7 +43,7 @@ export interface LumoraWrapperProps {
 	userName?: string;
 	userEmail?: string;
 	userAvatar?: string;
-	onLogout?: () => void;
+	onLogout?: (error?: Error) => void;
 	onProfileClick?: () => void;
 	onAccountClick?: () => void;
 	onSettingsClick?: () => void;
@@ -103,6 +107,30 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	// Handle mobile sidebar close
 	const handleMobileSidebarClose = () => {
 		setMobileSidebarOpen(false);
+	};
+
+	// Handle logout: call API, clear tokens, and invoke callback
+	const handleLogout = async () => {
+		try {
+			// Attempt to logout via API
+			await logoutUser();
+
+			// Clear tokens from localStorage
+			localStorage.removeItem('lumoraAccessToken');
+			localStorage.removeItem('lumoraRefreshToken');
+
+			// Call the optional callback without error
+			onLogout?.();
+		} catch (error) {
+			// Even if logout fails, clear tokens locally (user wants to logout)
+			localStorage.removeItem('lumoraAccessToken');
+			localStorage.removeItem('lumoraRefreshToken');
+
+			// Call the optional callback with error info
+			onLogout?.(
+				error instanceof Error ? error : new Error('Logout failed')
+			);
+		}
 	};
 
 	// Token refresh interceptor setup
@@ -193,7 +221,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						userName={userName}
 						userEmail={userEmail}
 						userAvatar={userAvatar}
-						onLogout={onLogout}
+						onLogout={handleLogout}
 						onProfileClick={onProfileClick}
 						onAccountClick={onAccountClick}
 						onSettingsClick={onSettingsClick}
@@ -213,7 +241,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userName={userName}
 					userEmail={userEmail}
 					userAvatar={userAvatar}
-					onLogout={onLogout}
+					onLogout={handleLogout}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 					alertProps={alertProps}

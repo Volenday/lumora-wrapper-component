@@ -3,6 +3,12 @@ import { SxProps } from '@mui/material';
 import { Theme } from '@mui/material';
 
 /**
+ * Logout user by sending refresh token to the logout endpoint
+ * Clears tokens from localStorage and invalidates the session on the server
+ */
+export declare const logoutUser: () => Promise<void>;
+
+/**
  * LumoraWrapper component provides a consistent layout structure for authenticated pages
  * and handles proactive token refresh to prevent session expiry during active use.
  */
@@ -24,7 +30,7 @@ export declare interface LumoraWrapperProps {
     userName?: string;
     userEmail?: string;
     userAvatar?: string;
-    onLogout?: () => void;
+    onLogout?: (error?: Error) => void;
     onProfileClick?: () => void;
     onAccountClick?: () => void;
     onSettingsClick?: () => void;
