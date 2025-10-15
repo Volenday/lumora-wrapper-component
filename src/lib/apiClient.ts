@@ -9,16 +9,26 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 	_retry?: boolean;
 }
 
+// Global flag to control token refresh behavior
+let isRefreshEnabled = false;
+
+// Functions to enable/disable token refresh
+export const enableTokenRefresh = () => {
+	isRefreshEnabled = true;
+};
+
+export const disableTokenRefresh = () => {
+	isRefreshEnabled = false;
+};
+
 // Create a separate axios instance for refresh calls to prevent interceptor loops
 const refreshClient = axios.create();
 
 // Main API client with interceptors
 const apiClient = axios.create({
-	baseURL:
-		(import.meta as any).env?.VITE_API_BASE_URL ||
-		'https://dev.api.lumora.capital',
+	baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000',
 	headers: {
-		'X-API-Key': (import.meta as any).env?.VITE_API_KEY || '',
+		'X-API-Key': import.meta.env.VITE_API_KEY || '',
 		'Content-Type': 'application/json'
 	}
 });
@@ -26,7 +36,7 @@ const apiClient = axios.create({
 // Request interceptor to automatically attach Bearer token
 apiClient.interceptors.request.use(
 	config => {
-		const accessToken = localStorage.getItem('accessToken');
+		const accessToken = localStorage.getItem('lumoraAccessToken');
 		if (accessToken) {
 			config.headers.Authorization = `Bearer ${accessToken}`;
 		}
@@ -45,16 +55,17 @@ apiClient.interceptors.response.use(
 	async (error: AxiosError) => {
 		const originalRequest = error.config as CustomAxiosRequestConfig;
 
-		// Check if this is a 401 error and we haven't already tried to refresh
+		// Check if this is a 401 error, refresh is enabled, and we haven't already tried to refresh
 		if (
 			error.response?.status === 401 &&
+			isRefreshEnabled &&
 			originalRequest &&
 			!originalRequest._retry
 		) {
 			originalRequest._retry = true;
 
 			try {
-				const refreshToken = localStorage.getItem('refreshToken');
+				const refreshToken = localStorage.getItem('lumoraRefreshToken');
 
 				if (!refreshToken) {
 					throw new Error('No refresh token available');
@@ -62,12 +73,11 @@ apiClient.interceptors.response.use(
 
 				// Use the separate refresh client to avoid interceptor loops
 				const refreshResponse = await refreshClient.post(
-					`${(import.meta as any).env?.VITE_API_BASE_URL || 'https://dev.api.lumora.capital'}/auth/refresh`,
+					`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
 					{ refresh_token: refreshToken },
 					{
 						headers: {
-							'X-API-Key':
-								(import.meta as any).env?.VITE_API_KEY || '',
+							'X-API-Key': import.meta.env.VITE_API_KEY || '',
 							'Content-Type': 'application/json'
 						}
 					}
@@ -79,9 +89,17 @@ apiClient.interceptors.response.use(
 				) {
 					// Store the new access token
 					localStorage.setItem(
-						'accessToken',
+						'lumoraAccessToken',
 						refreshResponse.data.accessToken
 					);
+
+					// Store the new refresh token if provided (token rotation)
+					if (refreshResponse.data.refreshToken) {
+						localStorage.setItem(
+							'lumoraRefreshToken',
+							refreshResponse.data.refreshToken
+						);
+					}
 
 					// Update the original request with the new token
 					originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.accessToken}`;
@@ -93,8 +111,8 @@ apiClient.interceptors.response.use(
 				}
 			} catch (refreshError) {
 				// Refresh failed, clear tokens and redirect to login
-				localStorage.removeItem('accessToken');
-				localStorage.removeItem('refreshToken');
+				localStorage.removeItem('lumoraAccessToken');
+				localStorage.removeItem('lumoraRefreshToken');
 
 				// Redirect to login page
 				window.location.href = '/login';

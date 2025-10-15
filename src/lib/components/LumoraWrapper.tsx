@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import type { SxProps, Theme } from '@mui/material';
 import {
 	Box,
-	Drawer,
 	CssBaseline,
-	useTheme,
-	useMediaQuery
+	Drawer,
+	useMediaQuery,
+	useTheme
 } from '@mui/material';
-import type { SxProps, Theme } from '@mui/material';
-import MenuContent from './MenuContent';
-import UserProfile from './UserProfile';
-import CardAlert from './CardAlert';
-import MobileSidebar from './MobileSidebar';
+import React, { useEffect, useState } from 'react';
+import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
+import { validateAndRefreshTokens } from '../tokenValidator';
 import AppNavbar from './AppNavbar';
-import apiClient from '../apiClient';
+import CardAlert from './CardAlert';
+import MenuContent from './MenuContent';
+import MobileSidebar from './MobileSidebar';
+import UserProfile from './UserProfile';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -106,16 +107,25 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 
 	// Token refresh interceptor setup
 	useEffect(() => {
+		if (enableRefreshToken) {
+			// Enable the token refresh interceptor when the component mounts
+			enableTokenRefresh();
+		}
+
+		// Cleanup function to disable token refresh when component unmounts or prop changes
+		return () => {
+			disableTokenRefresh();
+		};
+	}, [enableRefreshToken]);
+
+	// Initial token validation when component mounts and refresh is enabled
+	useEffect(() => {
 		if (!enableRefreshToken) {
 			return;
 		}
 
-		// The interceptor is already set up in apiClient.ts
-		// This effect ensures the interceptor is active when enableRefreshToken is true
-		// The interceptor will automatically handle 401 errors and token refresh
-
-		// No cleanup needed as the interceptor is global and will be reused
-		// The interceptor only activates when enableRefreshToken is true and tokens exist
+		// Validate tokens on mount only
+		validateAndRefreshTokens();
 	}, [enableRefreshToken]);
 
 	return (
