@@ -1,10 +1,10 @@
-import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
+import * as React from 'react';
 import type { SidebarLink } from './LumoraWrapper';
 
 interface MenuContentProps {
@@ -27,8 +27,8 @@ const MenuContent: React.FC<MenuContentProps> = ({
 	};
 
 	return (
-		<Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
-			<List dense>
+		<Stack sx={{ flexGrow: 1, justifyContent: 'space-between' }}>
+			<List dense sx={{ p: 0 }}>
 				{mainLinks.map((link, index) => (
 					<ListItem
 						key={index}
@@ -41,23 +41,28 @@ const MenuContent: React.FC<MenuContentProps> = ({
 							component='a'
 							href={link.path}
 							sx={{
-								borderRadius: '10px',
-								'&:hover': {
-									backgroundColor: 'action.hover',
-									'& .MuiListItemText-primary': {
-										color: 'text.primary'
-									},
-									'& .MuiListItemIcon-root': {
-										color: 'text.primary'
-									}
+								px: 1.5,
+								py: 1,
+								mb: 0.5,
+								'& .MuiListItemIcon-root': {
+									minWidth: 36,
+									color: 'text.secondary'
 								},
-								'&.Mui-selected': {
-									backgroundColor: 'action.selected',
+								'& .MuiListItemText-primary': {
+									color: 'text.primary'
+								},
+								'&:hover': {
+									backgroundColor: 'action.hover'
+								},
+								'&.Mui-selected, &.Mui-selected:hover': {
+									backgroundColor: '#01584F',
+									color: '#ffffff',
 									'& .MuiListItemText-primary': {
-										color: 'text.primary'
+										color: '#ffffff',
+										fontWeight: 600
 									},
 									'& .MuiListItemIcon-root': {
-										color: 'text.primary'
+										color: '#ffffff'
 									}
 								}
 							}}
@@ -83,22 +88,28 @@ const MenuContent: React.FC<MenuContentProps> = ({
 								href={link.path}
 								sx={{
 									borderRadius: '10px',
-									'&:hover': {
-										backgroundColor: 'action.hover',
-										'& .MuiListItemText-primary': {
-											color: 'text.primary'
-										},
-										'& .MuiListItemIcon-root': {
-											color: 'text.primary'
-										}
+									px: 1.5,
+									py: 1,
+									mb: 0.5,
+									'& .MuiListItemIcon-root': {
+										minWidth: 36,
+										color: 'text.secondary'
 									},
-									'&.Mui-selected': {
-										backgroundColor: 'action.selected',
+									'& .MuiListItemText-primary': {
+										color: 'text.primary'
+									},
+									'&:hover': {
+										backgroundColor: 'action.hover'
+									},
+									'&.Mui-selected, &.Mui-selected:hover': {
+										backgroundColor: '#01584F',
+										color: '#ffffff',
 										'& .MuiListItemText-primary': {
-											color: 'text.primary'
+											color: '#ffffff',
+											fontWeight: 600
 										},
 										'& .MuiListItemIcon-root': {
-											color: 'text.primary'
+											color: '#ffffff'
 										}
 									}
 								}}

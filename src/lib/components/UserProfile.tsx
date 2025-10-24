@@ -57,45 +57,45 @@ const UserProfile: React.FC<UserProfileProps> = ({
 					borderColor: 'divider'
 				}}
 			>
-			<Avatar
-				sizes='small'
-				alt={userName}
-				src={userAvatar}
-				sx={{ width: 36, height: 36 }}
-			/>
-			<Box
-				sx={{
-					mr: 'auto',
-					minWidth: 0,
-					overflow: 'hidden',
-					flex: 1
-				}}
-			>
-				<Typography
-					variant='body2'
+				<Avatar
+					sizes='small'
+					alt={userName}
+					src={userAvatar}
+					sx={{ width: 36, height: 36 }}
+				/>
+				<Box
 					sx={{
-						fontWeight: 500,
-						lineHeight: '16px',
+						mr: 'auto',
+						minWidth: 0,
 						overflow: 'hidden',
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap'
+						flex: 1
 					}}
 				>
-					{userName}
-				</Typography>
-				<Typography
-					variant='caption'
-					sx={{
-						color: 'text.secondary',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis',
-						whiteSpace: 'nowrap',
-						display: 'block'
-					}}
-				>
-					{userEmail}
-				</Typography>
-			</Box>
+					<Typography
+						variant='body2'
+						sx={{
+							fontWeight: 500,
+							lineHeight: '16px',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap'
+						}}
+					>
+						{userName}
+					</Typography>
+					<Typography
+						variant='caption'
+						sx={{
+							color: 'text.secondary',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis',
+							whiteSpace: 'nowrap',
+							display: 'block'
+						}}
+					>
+						{userEmail}
+					</Typography>
+				</Box>
 				<IconButton
 					size='small'
 					onClick={handleClick}

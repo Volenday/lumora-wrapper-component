@@ -1,17 +1,17 @@
-import * as React from 'react';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import MenuContent from './MenuContent';
+import * as React from 'react';
 import CardAlert from './CardAlert';
 import type { SidebarLink } from './LumoraWrapper';
+import MenuContent from './MenuContent';
 
 interface MobileSidebarProps {
 	open: boolean;
@@ -24,6 +24,7 @@ interface MobileSidebarProps {
 	userEmail?: string;
 	userAvatar?: string;
 	onLogout?: () => void;
+	onProfileClick?: () => void;
 	showNotifications?: boolean;
 	notificationCount?: number;
 	alertProps?: {
