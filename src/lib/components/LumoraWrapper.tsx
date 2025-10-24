@@ -18,7 +18,7 @@ import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
 import MenuContent from './MenuContent';
 import MobileSidebar from './MobileSidebar';
-import UserProfile from './UserProfile';
+import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -88,7 +88,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	onProfileClick,
 	onAccountClick,
 	onSettingsClick,
-	showNotifications = false,
+	showNotifications = true,
 	notificationCount = 0,
 	alertProps,
 	style,
@@ -121,6 +121,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			// Clear tokens from localStorage
 			localStorage.removeItem('lumoraAccessToken');
 			localStorage.removeItem('lumoraRefreshToken');
+			localStorage.removeItem('lumoraUser');
 
 			// Call the optional callback without error
 			onLogout?.();
@@ -128,6 +129,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			// Even if logout fails, clear tokens locally (user wants to logout)
 			localStorage.removeItem('lumoraAccessToken');
 			localStorage.removeItem('lumoraRefreshToken');
+			localStorage.removeItem('lumoraUser');
 
 			// Call the optional callback with error info
 			onLogout?.(
@@ -200,7 +202,11 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					backgroundColor: 'background.default'
 				}}
 			>
-				<CircularProgress size={60} thickness={4} />
+				<CircularProgress
+					size={60}
+					thickness={4}
+					sx={{ color: '#01584f' }}
+				/>
 				<Box sx={{ mt: 2, color: 'text.secondary' }}>
 					Checking session...
 				</Box>
@@ -215,7 +221,14 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	}
 
 	return (
-		<Box sx={{ display: 'flex', height: '100vh', ...style }}>
+		<Box
+			sx={{
+				display: 'flex',
+				height: '100vh',
+				...style,
+				overflow: 'auto'
+			}}
+		>
 			<CssBaseline />
 
 			{/* Header */}
@@ -230,6 +243,13 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					}
 					showMenuButton={isMobile && showSidebar}
 					headerStyles={headerStyles}
+					userName={userName}
+					userEmail={userEmail}
+					userAvatar={userAvatar}
+					onProfileClick={onProfileClick}
+					onLogout={handleLogout}
+					showNotifications={showNotifications}
+					notificationCount={notificationCount}
 				/>
 			)}
 
@@ -244,7 +264,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						'& .MuiDrawer-paper': {
 							width: 240,
 							boxSizing: 'border-box',
-							backgroundColor: 'background.paper',
+							backgroundColor: '#ffffff',
+							borderRight: '1px solid #f4f4f2',
 							mt: 0 // Extend to top
 						},
 						...sidebarStyles
@@ -252,12 +273,16 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				>
 					<Box
 						sx={{
+							height: '60px',
+							p: 3,
 							display: 'flex',
-							mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-							p: 1.5
+							alignItems: 'center'
 						}}
 					>
-						{/* Optional: Add SelectContent component here if needed */}
+						<NavbarBreadcrumbs
+							appName={appName}
+							pageName={pageName}
+						/>
 					</Box>
 					<Box
 						sx={{
@@ -275,7 +300,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						/>
 						{alertProps?.show && <CardAlert {...alertProps} />}
 					</Box>
-					<UserProfile
+					{/* <UserProfile
 						userName={userName}
 						userEmail={userEmail}
 						userAvatar={userAvatar}
@@ -283,7 +308,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						onProfileClick={onProfileClick}
 						onAccountClick={onAccountClick}
 						onSettingsClick={onSettingsClick}
-					/>
+					/> */}
 				</Drawer>
 			)}
 
@@ -300,6 +325,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userEmail={userEmail}
 					userAvatar={userAvatar}
 					onLogout={handleLogout}
+					onProfileClick={onProfileClick}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 					alertProps={alertProps}
@@ -320,7 +346,6 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							: '100%',
 					// mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
 					// ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
-					overflow: 'auto',
 					...contentStyles
 				}}
 			>

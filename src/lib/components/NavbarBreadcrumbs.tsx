@@ -1,8 +1,7 @@
-import * as React from 'react';
+import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
-import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import * as React from 'react';
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
 	margin: theme.spacing(1, 0),
@@ -25,16 +24,16 @@ const NavbarBreadcrumbs: React.FC<NavbarBreadcrumbsProps> = ({
 	pageName = 'Home'
 }) => {
 	return (
-		<StyledBreadcrumbs
-			aria-label='breadcrumb'
-			separator={<NavigateNextRoundedIcon fontSize='small' />}
-		>
-			<Typography variant='body1'>{appName}</Typography>
+		<StyledBreadcrumbs aria-label='breadcrumb'>
 			<Typography
 				variant='body1'
-				sx={{ color: 'text.primary', fontWeight: 600 }}
+				sx={{
+					fontWeight: 600,
+					fontSize: theme => theme.typography.pxToRem(24),
+					color: '#01584f'
+				}}
 			>
-				{pageName}
+				{appName}
 			</Typography>
 		</StyledBreadcrumbs>
 	);
