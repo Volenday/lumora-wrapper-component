@@ -121,6 +121,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			// Clear tokens from localStorage
 			localStorage.removeItem('lumoraAccessToken');
 			localStorage.removeItem('lumoraRefreshToken');
+			localStorage.removeItem('lumoraUser');
 
 			// Call the optional callback without error
 			onLogout?.();
@@ -128,6 +129,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			// Even if logout fails, clear tokens locally (user wants to logout)
 			localStorage.removeItem('lumoraAccessToken');
 			localStorage.removeItem('lumoraRefreshToken');
+			localStorage.removeItem('lumoraUser');
 
 			// Call the optional callback with error info
 			onLogout?.(
@@ -200,7 +202,11 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					backgroundColor: 'background.default'
 				}}
 			>
-				<CircularProgress size={60} thickness={4} />
+				<CircularProgress
+					size={60}
+					thickness={4}
+					sx={{ color: '#01584f' }}
+				/>
 				<Box sx={{ mt: 2, color: 'text.secondary' }}>
 					Checking session...
 				</Box>
@@ -215,7 +221,14 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	}
 
 	return (
-		<Box sx={{ display: 'flex', height: '100vh', ...style }}>
+		<Box
+			sx={{
+				display: 'flex',
+				height: '100vh',
+				...style,
+				overflow: 'auto'
+			}}
+		>
 			<CssBaseline />
 
 			{/* Header */}
@@ -260,8 +273,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				>
 					<Box
 						sx={{
-							height: '100px',
-							p: 4,
+							height: '60px',
+							p: 3,
 							display: 'flex',
 							alignItems: 'center'
 						}}
@@ -333,7 +346,6 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							: '100%',
 					// mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
 					// ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
-					overflow: 'auto',
 					...contentStyles
 				}}
 			>

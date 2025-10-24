@@ -12331,7 +12331,7 @@ const hf = Ei, gf = q(hf)(({ theme: e }) => ({
         // Full width on mobile, excluding sidebar on desktop
         zIndex: 1,
         // Lower z-index so sidebar appears above,
-        height: "100px",
+        height: "60px",
         ...s
       },
       children: /* @__PURE__ */ E.jsx(yf, { variant: "dense", sx: { height: "100%" }, children: /* @__PURE__ */ E.jsxs(
@@ -14155,9 +14155,9 @@ const Jf = Mi, Zf = ({
     z(!1);
   }, F = async () => {
     try {
-      await Ji(), localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), g == null || g();
+      await Ji(), localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), g == null || g();
     } catch (L) {
-      localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), g == null || g(
+      localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), g == null || g(
         L instanceof Error ? L : new Error("Logout failed")
       );
     }
@@ -14192,130 +14192,147 @@ const Jf = Mi, Zf = ({
         backgroundColor: "background.default"
       },
       children: [
-        /* @__PURE__ */ E.jsx(Fi, { size: 60, thickness: 4 }),
+        /* @__PURE__ */ E.jsx(
+          Fi,
+          {
+            size: 60,
+            thickness: 4,
+            sx: { color: "#01584f" }
+          }
+        ),
         /* @__PURE__ */ E.jsx(lt, { sx: { mt: 2, color: "text.secondary" }, children: "Checking session..." })
       ]
     }
-  ) : w ? /* @__PURE__ */ E.jsxs(lt, { sx: { display: "flex", height: "100vh", ...v }, children: [
-    /* @__PURE__ */ E.jsx(Vi, {}),
-    i && /* @__PURE__ */ E.jsx(
-      bf,
-      {
-        appName: o,
-        pageName: s,
-        onMenuClick: D && a ? A : void 0,
-        showMenuButton: D && a,
-        headerStyles: C,
-        userName: f,
-        userEmail: m,
-        userAvatar: h,
-        onProfileClick: y,
-        onLogout: F,
-        showNotifications: S,
-        notificationCount: R
-      }
-    ),
-    a && !D && /* @__PURE__ */ E.jsxs(
-      zi,
-      {
-        variant: "permanent",
-        sx: {
-          width: 240,
-          flexShrink: 0,
-          zIndex: 2,
-          // Higher z-index than app bar
-          "& .MuiDrawer-paper": {
-            width: 240,
-            boxSizing: "border-box",
-            backgroundColor: "#ffffff",
-            borderRight: "1px solid #f4f4f2",
-            mt: 0
-            // Extend to top
-          },
-          ...k
-        },
-        children: [
-          /* @__PURE__ */ E.jsx(
-            lt,
-            {
-              sx: {
-                height: "100px",
-                p: 4,
-                display: "flex",
-                alignItems: "center"
+  ) : w ? /* @__PURE__ */ E.jsxs(
+    lt,
+    {
+      sx: {
+        display: "flex",
+        height: "100vh",
+        ...v,
+        overflow: "auto"
+      },
+      children: [
+        /* @__PURE__ */ E.jsx(Vi, {}),
+        i && /* @__PURE__ */ E.jsx(
+          bf,
+          {
+            appName: o,
+            pageName: s,
+            onMenuClick: D && a ? A : void 0,
+            showMenuButton: D && a,
+            headerStyles: C,
+            userName: f,
+            userEmail: m,
+            userAvatar: h,
+            onProfileClick: y,
+            onLogout: F,
+            showNotifications: S,
+            notificationCount: R
+          }
+        ),
+        a && !D && /* @__PURE__ */ E.jsxs(
+          zi,
+          {
+            variant: "permanent",
+            sx: {
+              width: 240,
+              flexShrink: 0,
+              zIndex: 2,
+              // Higher z-index than app bar
+              "& .MuiDrawer-paper": {
+                width: 240,
+                boxSizing: "border-box",
+                backgroundColor: "#ffffff",
+                borderRight: "1px solid #f4f4f2",
+                mt: 0
+                // Extend to top
               },
-              children: /* @__PURE__ */ E.jsx(
-                Ci,
+              ...k
+            },
+            children: [
+              /* @__PURE__ */ E.jsx(
+                lt,
                 {
-                  appName: o,
-                  pageName: s
+                  sx: {
+                    height: "60px",
+                    p: 3,
+                    display: "flex",
+                    alignItems: "center"
+                  },
+                  children: /* @__PURE__ */ E.jsx(
+                    Ci,
+                    {
+                      appName: o,
+                      pageName: s
+                    }
+                  )
+                }
+              ),
+              /* @__PURE__ */ E.jsxs(
+                lt,
+                {
+                  sx: {
+                    overflow: "auto",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column"
+                  },
+                  children: [
+                    /* @__PURE__ */ E.jsx(
+                      $i,
+                      {
+                        mainLinks: t,
+                        secondaryLinks: n,
+                        activePath: l,
+                        onLinkClick: u
+                      }
+                    ),
+                    (O == null ? void 0 : O.show) && /* @__PURE__ */ E.jsx(wi, { ...O })
+                  ]
                 }
               )
-            }
-          ),
-          /* @__PURE__ */ E.jsxs(
-            lt,
-            {
-              sx: {
-                overflow: "auto",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column"
-              },
-              children: [
-                /* @__PURE__ */ E.jsx(
-                  $i,
-                  {
-                    mainLinks: t,
-                    secondaryLinks: n,
-                    activePath: l,
-                    onLinkClick: u
-                  }
-                ),
-                (O == null ? void 0 : O.show) && /* @__PURE__ */ E.jsx(wi, { ...O })
-              ]
-            }
-          )
-        ]
-      }
-    ),
-    a && D && /* @__PURE__ */ E.jsx(
-      Zf,
-      {
-        open: Y,
-        onClose: G,
-        mainLinks: t,
-        secondaryLinks: n,
-        activePath: l,
-        onLinkClick: u,
-        userName: f,
-        userEmail: m,
-        userAvatar: h,
-        onLogout: F,
-        onProfileClick: y,
-        showNotifications: S,
-        notificationCount: R,
-        alertProps: O
-      }
-    ),
-    /* @__PURE__ */ E.jsx(
-      lt,
-      {
-        component: "main",
-        sx: {
-          flexGrow: 1,
-          p: 3,
-          m: 1,
-          width: D ? "100%" : a ? "calc(100% - 240px)" : "100%",
-          // mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
-          // ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
-          overflow: "auto",
-          ...M
-        },
-        children: e
-      }
-    )
-  ] }) : null;
+            ]
+          }
+        ),
+        a && D && /* @__PURE__ */ E.jsx(
+          Zf,
+          {
+            open: Y,
+            onClose: G,
+            mainLinks: t,
+            secondaryLinks: n,
+            activePath: l,
+            onLinkClick: u,
+            userName: f,
+            userEmail: m,
+            userAvatar: h,
+            onLogout: F,
+            onProfileClick: y,
+            showNotifications: S,
+            notificationCount: R,
+            alertProps: O
+          }
+        ),
+        /* @__PURE__ */ E.jsx(
+          lt,
+          {
+            component: "main",
+            sx: {
+              flexGrow: 1,
+              p: 3,
+              m: 1,
+              width: D ? "100%" : a ? "calc(100% - 240px)" : "100%",
+              // mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
+              // ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
+              ...M
+            },
+            children: e
+          }
+        )
+      ]
+    }
+  ) : null;
 };
 export {
   am as LumoraWrapper,

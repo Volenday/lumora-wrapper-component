@@ -82,7 +82,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 				left: { xs: 0, md: '240px' }, // Full width on mobile, right of sidebar on desktop
 				width: { xs: '100%', md: 'calc(100% - 240px)' }, // Full width on mobile, excluding sidebar on desktop
 				zIndex: 1, // Lower z-index so sidebar appears above,
-				height: '100px',
+				height: '60px',
 				...headerStyles
 			}}
 		>
