@@ -8,11 +8,7 @@ import {
 	useTheme
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import {
-	disableTokenRefresh,
-	enableTokenRefresh,
-	logoutUser
-} from '../apiClient';
+import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
 import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
@@ -44,7 +40,7 @@ export interface LumoraWrapperProps {
 	userName?: string;
 	userEmail?: string;
 	userAvatar?: string;
-	onLogout?: (error?: Error) => void;
+	onLogout: (error?: Error) => void;
 	onProfileClick?: () => void;
 	onAccountClick?: () => void;
 	onSettingsClick?: () => void;
@@ -110,32 +106,6 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	// Handle mobile sidebar close
 	const handleMobileSidebarClose = () => {
 		setMobileSidebarOpen(false);
-	};
-
-	// Handle logout: call API, clear tokens, and invoke callback
-	const handleLogout = async () => {
-		try {
-			// Attempt to logout via API
-			await logoutUser();
-
-			// Clear tokens from localStorage
-			localStorage.removeItem('lumoraAccessToken');
-			localStorage.removeItem('lumoraRefreshToken');
-			localStorage.removeItem('lumoraUser');
-
-			// Call the optional callback without error
-			onLogout?.();
-		} catch (error) {
-			// Even if logout fails, clear tokens locally (user wants to logout)
-			localStorage.removeItem('lumoraAccessToken');
-			localStorage.removeItem('lumoraRefreshToken');
-			localStorage.removeItem('lumoraUser');
-
-			// Call the optional callback with error info
-			onLogout?.(
-				error instanceof Error ? error : new Error('Logout failed')
-			);
-		}
 	};
 
 	// Session checking: validate that user has a refresh token before rendering
@@ -247,7 +217,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userEmail={userEmail}
 					userAvatar={userAvatar}
 					onProfileClick={onProfileClick}
-					onLogout={handleLogout}
+					onLogout={onLogout}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 				/>
@@ -304,7 +274,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						userName={userName}
 						userEmail={userEmail}
 						userAvatar={userAvatar}
-						onLogout={handleLogout}
+						onLogout={onLogout}
 						onProfileClick={onProfileClick}
 						onAccountClick={onAccountClick}
 						onSettingsClick={onSettingsClick}
@@ -324,7 +294,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userName={userName}
 					userEmail={userEmail}
 					userAvatar={userAvatar}
-					onLogout={handleLogout}
+					onLogout={onLogout}
 					onProfileClick={onProfileClick}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}

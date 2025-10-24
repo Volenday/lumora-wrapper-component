@@ -30,7 +30,7 @@ export declare interface LumoraWrapperProps {
     userName?: string;
     userEmail?: string;
     userAvatar?: string;
-    onLogout?: (error?: Error) => void;
+    onLogout: (error?: Error) => void;
     onProfileClick?: () => void;
     onAccountClick?: () => void;
     onSettingsClick?: () => void;
