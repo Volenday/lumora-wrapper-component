@@ -14,7 +14,7 @@ import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
 import MenuContent from './MenuContent';
 import MobileSidebar from './MobileSidebar';
-import NavbarBreadcrumbs from './NavbarBreadcrumbs';
+import SidebarBrand from './SidebarBrand';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -82,8 +82,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	userAvatar,
 	onLogout,
 	onProfileClick,
-	onAccountClick,
-	onSettingsClick,
+	onAccountClick: _onAccountClick,
+	onSettingsClick: _onSettingsClick,
 	showNotifications = true,
 	notificationCount = 0,
 	alertProps,
@@ -249,10 +249,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							alignItems: 'center'
 						}}
 					>
-						<NavbarBreadcrumbs
-							appName={appName}
-							pageName={pageName}
-						/>
+						<SidebarBrand title={appName} />
 					</Box>
 					<Box
 						sx={{
@@ -296,6 +293,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userAvatar={userAvatar}
 					onLogout={onLogout}
 					onProfileClick={onProfileClick}
+					appName={appName}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 					alertProps={alertProps}

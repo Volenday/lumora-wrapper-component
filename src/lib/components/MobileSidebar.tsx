@@ -1,17 +1,16 @@
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
-import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import CardAlert from './CardAlert';
 import type { SidebarLink } from './LumoraWrapper';
 import MenuContent from './MenuContent';
+import SidebarBrand from './SidebarBrand';
 
 interface MobileSidebarProps {
 	open: boolean;
@@ -34,6 +33,7 @@ interface MobileSidebarProps {
 		onButtonClick?: () => void;
 		show?: boolean;
 	};
+	appName?: string;
 }
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({
@@ -43,12 +43,11 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 	secondaryLinks = [],
 	activePath,
 	onLinkClick,
-	userName = 'User Name',
-	userAvatar,
 	onLogout,
 	showNotifications = false,
 	notificationCount = 0,
-	alertProps
+	alertProps,
+	appName = 'Dashboard'
 }) => {
 	const handleLinkClick = (path: string) => {
 		onLinkClick?.(path);
@@ -75,19 +74,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 				}}
 			>
 				<Stack direction='row' sx={{ p: 2, pb: 0, gap: 1 }}>
-					<Stack
-						direction='row'
-						sx={{ gap: 1, alignItems: 'center', flexGrow: 1, p: 1 }}
-					>
-						<Avatar
-							sizes='small'
-							alt={userName}
-							src={userAvatar}
-							sx={{ width: 24, height: 24 }}
-						/>
-						<Typography component='p' variant='h6'>
-							{userName}
-						</Typography>
+					<Stack direction='row' sx={{ flexGrow: 1, p: 1 }}>
+						<SidebarBrand title={appName} />
 					</Stack>
 					{showNotifications && (
 						<Badge
