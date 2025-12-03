@@ -36,6 +36,12 @@ export declare interface LumoraWrapperProps {
     onSettingsClick?: () => void;
     showNotifications?: boolean;
     notificationCount?: number;
+    showSearchbar?: boolean;
+    searchValue?: string;
+    onSearchChange?: (value: string) => void;
+    onSearchSubmit?: (value: string) => void;
+    showProfile?: boolean;
+    userRole?: string;
     alertProps?: {
         title?: string;
         message?: string;
@@ -47,6 +53,14 @@ export declare interface LumoraWrapperProps {
     headerStyles?: SxProps<Theme>;
     sidebarStyles?: SxProps<Theme>;
     contentStyles?: SxProps<Theme>;
+    accentColor?: string;
+    contentBackgroundColor?: string;
+    navbarBackground?: string;
+    navbarAccentColor?: string;
+    GlobalChatSidebar?: default_2.ComponentType;
+    useChatSidebar?: () => {
+        isOpen: boolean;
+    };
 }
 
 export declare type SidebarLink = {
