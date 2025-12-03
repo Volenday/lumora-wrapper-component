@@ -34,6 +34,7 @@ interface MobileSidebarProps {
 		onButtonClick?: () => void;
 		show?: boolean;
 	};
+	accentColor?: string;
 }
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({
@@ -48,7 +49,8 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 	onLogout,
 	showNotifications = false,
 	notificationCount = 0,
-	alertProps
+	alertProps,
+	accentColor = '#01584f'
 }) => {
 	const handleLinkClick = (path: string) => {
 		onLinkClick?.(path);
@@ -109,6 +111,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
 						secondaryLinks={secondaryLinks}
 						activePath={activePath}
 						onLinkClick={handleLinkClick}
+						accentColor={accentColor}
 					/>
 					<Divider />
 				</Stack>

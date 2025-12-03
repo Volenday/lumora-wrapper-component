@@ -17,11 +17,13 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
 interface NavbarBreadcrumbsProps {
 	appName?: string;
 	pageName?: string;
+	accentColor?: string;
 }
 
 const NavbarBreadcrumbs: React.FC<NavbarBreadcrumbsProps> = ({
 	appName = 'Dashboard',
-	pageName = 'Home'
+	pageName = 'Home',
+	accentColor = '#01584f'
 }) => {
 	return (
 		<StyledBreadcrumbs aria-label='breadcrumb'>
@@ -30,7 +32,7 @@ const NavbarBreadcrumbs: React.FC<NavbarBreadcrumbsProps> = ({
 				sx={{
 					fontWeight: 600,
 					fontSize: theme => theme.typography.pxToRem(24),
-					color: '#01584f'
+					color: accentColor
 				}}
 			>
 				{appName}

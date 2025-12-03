@@ -1,12 +1,5 @@
 import type { SxProps, Theme } from '@mui/material';
-import {
-	Box,
-	CircularProgress,
-	CssBaseline,
-	Drawer,
-	useMediaQuery,
-	useTheme
-} from '@mui/material';
+import { Box, CircularProgress, CssBaseline, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
@@ -14,7 +7,6 @@ import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
 import MenuContent from './MenuContent';
 import MobileSidebar from './MobileSidebar';
-import NavbarBreadcrumbs from './NavbarBreadcrumbs';
 
 // Type for sidebar navigation links
 export type SidebarLink = {
@@ -47,6 +39,14 @@ export interface LumoraWrapperProps {
 	// Notification props
 	showNotifications?: boolean;
 	notificationCount?: number;
+	// Search bar props
+	showSearchbar?: boolean;
+	searchValue?: string;
+	onSearchChange?: (value: string) => void;
+	onSearchSubmit?: (value: string) => void;
+	// Profile props
+	showProfile?: boolean;
+	userRole?: string;
 	// Alert card props
 	alertProps?: {
 		title?: string;
@@ -60,6 +60,15 @@ export interface LumoraWrapperProps {
 	headerStyles?: SxProps<Theme>;
 	sidebarStyles?: SxProps<Theme>;
 	contentStyles?: SxProps<Theme>;
+	// Accent color prop
+	accentColor?: string;
+	contentBackgroundColor?: string;
+	// Navbar styling props
+	navbarBackground?: string;
+	navbarAccentColor?: string;
+	// Chat sidebar props
+	GlobalChatSidebar?: React.ComponentType;
+	useChatSidebar?: () => { isOpen: boolean };
 }
 
 /**
@@ -86,17 +95,31 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	onSettingsClick,
 	showNotifications = true,
 	notificationCount = 0,
+	showSearchbar = true,
+	searchValue,
+	onSearchChange,
+	onSearchSubmit,
+	showProfile = true,
+	userRole,
 	alertProps,
 	style,
 	headerStyles,
 	sidebarStyles,
-	contentStyles
+	contentStyles,
+	accentColor = '#01584f',
+	contentBackgroundColor = '#f2f9fc',
+	navbarBackground = '#ffffff',
+	navbarAccentColor = '#000000',
+	GlobalChatSidebar,
+	useChatSidebar
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 	const [isCheckingSession, setIsCheckingSession] = useState(true);
 	const [hasSession, setHasSession] = useState(false);
+	const chatSidebarHook = useChatSidebar?.();
+	const isChatOpen = chatSidebarHook?.isOpen ?? false;
 
 	// Handle mobile sidebar toggle for responsive design
 	const handleMobileSidebarToggle = () => {
@@ -170,16 +193,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					justifyContent: 'center',
 					minHeight: '100vh',
 					backgroundColor: 'background.default'
-				}}
-			>
-				<CircularProgress
-					size={60}
-					thickness={4}
-					sx={{ color: '#01584f' }}
-				/>
-				<Box sx={{ mt: 2, color: 'text.secondary' }}>
-					Checking session...
-				</Box>
+				}}>
+				<CircularProgress size={60} thickness={4} sx={{ color: accentColor }} />
+				<Box sx={{ mt: 2, color: 'text.secondary' }}>Checking session...</Box>
 			</Box>
 		);
 	}
@@ -194,11 +210,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 		<Box
 			sx={{
 				display: 'flex',
-				height: '100vh',
-				...style,
-				overflow: 'auto'
-			}}
-		>
+				minHeight: '100vh',
+				...style
+			}}>
 			<CssBaseline />
 
 			{/* Header */}
@@ -206,79 +220,66 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				<AppNavbar
 					appName={appName}
 					pageName={pageName}
-					onMenuClick={
-						isMobile && showSidebar
-							? handleMobileSidebarToggle
-							: undefined
-					}
+					onMenuClick={isMobile && showSidebar ? handleMobileSidebarToggle : undefined}
 					showMenuButton={isMobile && showSidebar}
 					headerStyles={headerStyles}
 					userName={userName}
 					userEmail={userEmail}
 					userAvatar={userAvatar}
 					onProfileClick={onProfileClick}
+					onAccountClick={onAccountClick}
+					onSettingsClick={onSettingsClick}
 					onLogout={onLogout}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
+					showSearchbar={showSearchbar}
+					searchValue={searchValue}
+					onSearchChange={onSearchChange}
+					onSearchSubmit={onSearchSubmit}
+					showProfile={showProfile}
+					userRole={userRole}
+					accentColor={accentColor}
+					contentBackgroundColor={contentBackgroundColor}
+					navbarBackground={navbarBackground}
+					navbarAccentColor={navbarAccentColor}
 				/>
 			)}
 
 			{/* Desktop Sidebar */}
 			{showSidebar && !isMobile && (
 				<Drawer
-					variant='permanent'
+					variant="permanent"
 					sx={{
-						width: 240,
+						width: 80,
 						flexShrink: 0,
 						zIndex: 2, // Higher z-index than app bar
 						'& .MuiDrawer-paper': {
-							width: 240,
+							width: 80,
 							boxSizing: 'border-box',
-							backgroundColor: '#ffffff',
-							borderRight: '1px solid #f4f4f2',
-							mt: 0 // Extend to top
+							bgcolor: contentBackgroundColor,
+							borderRight: 'none',
+							top: showHeader ? '60px' : 0, // Position below header
+							height: showHeader ? 'calc(100vh - 60px)' : '100vh'
 						},
 						...sidebarStyles
-					}}
-				>
-					<Box
-						sx={{
-							height: '60px',
-							p: 3,
-							display: 'flex',
-							alignItems: 'center'
-						}}
-					>
-						<NavbarBreadcrumbs
-							appName={appName}
-							pageName={pageName}
-						/>
-					</Box>
+					}}>
 					<Box
 						sx={{
 							overflow: 'auto',
 							height: '100%',
 							display: 'flex',
-							flexDirection: 'column'
-						}}
-					>
+							flexDirection: 'column',
+							pt: 2
+						}}>
 						<MenuContent
 							mainLinks={sidebarLinks}
 							secondaryLinks={secondarySidebarLinks}
 							activePath={activePath}
 							onLinkClick={onLinkClick}
+							accentColor={accentColor}
 						/>
 						{alertProps?.show && <CardAlert {...alertProps} />}
 					</Box>
-					{/* <UserProfile
-						userName={userName}
-						userEmail={userEmail}
-						userAvatar={userAvatar}
-						onLogout={onLogout}
-						onProfileClick={onProfileClick}
-						onAccountClick={onAccountClick}
-						onSettingsClick={onSettingsClick}
-					/> */}
 				</Drawer>
 			)}
 
@@ -299,27 +300,54 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 					alertProps={alertProps}
+					accentColor={accentColor}
 				/>
 			)}
 
 			{/* Main Content Area */}
 			<Box
-				component='main'
+				component="main"
 				sx={{
 					flexGrow: 1,
 					p: 3,
 					m: 1,
-					width: isMobile
-						? '100%'
-						: showSidebar
-							? `calc(100% - 240px)`
-							: '100%',
-					// mt: showHeader ? '80px' : 0, // Account for AppNavbar height only if header is shown
-					// ml: isMobile ? 0 : showSidebar ? '240px' : 0, // Offset for sidebar on desktop
+					width: isMobile ? '100%' : showSidebar ? `calc(100% - 80px)` : '100%',
+					mt: showHeader ? '60px' : 0, // Account for AppNavbar height (60px)
+					ml: isMobile ? 0 : showSidebar ? 0 : 0, // Offset for sidebar on desktop
+					backgroundColor: contentBackgroundColor, // White background for main content
 					...contentStyles
-				}}
-			>
-				{children}
+				}}>
+				<Grid container spacing={3}>
+					<Grid
+						size={{ xs: 12, md: isChatOpen && GlobalChatSidebar ? 8.5 : 12 }}
+						sx={{
+							display: 'flex',
+							flexDirection: 'column'
+						}}>
+						{children}
+					</Grid>
+					{isChatOpen && GlobalChatSidebar && (
+						<Grid
+							size={{ xs: 12, md: 3.5 }}
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								position: { xs: 'static', md: 'sticky' },
+								top: { xs: 'auto', md: showHeader ? '60px' : '0px' }, // Stick below navbar
+								alignSelf: 'flex-start',
+								height: {
+									xs: 'auto',
+									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
+								}, // Viewport - navbar - top padding - top margin
+								maxHeight: {
+									xs: 'none',
+									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
+								} // Viewport - navbar - top padding - top margin
+							}}>
+							<GlobalChatSidebar />
+						</Grid>
+					)}
+				</Grid>
 			</Box>
 		</Box>
 	);

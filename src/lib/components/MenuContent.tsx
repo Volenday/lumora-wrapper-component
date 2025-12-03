@@ -1,9 +1,8 @@
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import * as React from 'react';
 import type { SidebarLink } from './LumoraWrapper';
 
@@ -12,13 +11,15 @@ interface MenuContentProps {
 	secondaryLinks?: SidebarLink[];
 	activePath?: string;
 	onLinkClick?: (path: string) => void;
+	accentColor?: string;
 }
 
 const MenuContent: React.FC<MenuContentProps> = ({
 	mainLinks,
 	secondaryLinks = [],
 	activePath,
-	onLinkClick
+	onLinkClick,
+	accentColor = '#01584f'
 }) => {
 	const handleLinkClick = (path: string) => {
 		if (onLinkClick) {
@@ -27,99 +28,81 @@ const MenuContent: React.FC<MenuContentProps> = ({
 	};
 
 	return (
-		<Stack sx={{ flexGrow: 1, justifyContent: 'space-between' }}>
-			<List dense sx={{ p: 0 }}>
-				{mainLinks.map((link, index) => (
-					<ListItem
-						key={index}
-						disablePadding
-						sx={{ display: 'block' }}
-					>
-						<ListItemButton
-							selected={activePath === link.path}
-							onClick={() => handleLinkClick(link.path)}
-							component='a'
+		<Stack
+			sx={{
+				flexGrow: 1,
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				pt: 2,
+				gap: 1
+			}}>
+			{mainLinks.map((link, index) => (
+				<React.Fragment key={index}>
+					<Tooltip title={link.text} placement="right" arrow>
+						<IconButton
+							component="a"
 							href={link.path}
+							onClick={() => handleLinkClick(link.path)}
 							sx={{
-								px: 1.5,
-								py: 1,
-								mb: 0.5,
-								'& .MuiListItemIcon-root': {
-									minWidth: 36,
-									color: 'text.secondary'
-								},
-								'& .MuiListItemText-primary': {
-									color: 'text.primary'
-								},
+								width: 44,
+								height: 44,
+								color: activePath === link.path ? '#ffffff' : accentColor,
+								backgroundColor: activePath === link.path ? accentColor : 'transparent',
+								borderRadius: activePath === link.path ? '4px' : '50%',
 								'&:hover': {
-									backgroundColor: 'action.hover'
-								},
-								'&.Mui-selected, &.Mui-selected:hover': {
-									backgroundColor: '#01584F',
-									color: '#ffffff',
-									'& .MuiListItemText-primary': {
-										color: '#ffffff',
-										fontWeight: 600
-									},
-									'& .MuiListItemIcon-root': {
-										color: '#ffffff'
-									}
+									backgroundColor: activePath === link.path ? accentColor : 'action.hover',
+									borderRadius: '4px'
 								}
-							}}
-						>
-							<ListItemIcon>{link.icon}</ListItemIcon>
-							<ListItemText primary={link.text} />
-						</ListItemButton>
-					</ListItem>
-				))}
-			</List>
+							}}>
+							{link.icon}
+						</IconButton>
+					</Tooltip>
+					{index < mainLinks.length - 1 && (
+						<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+							<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+						</Box>
+					)}
+				</React.Fragment>
+			))}
 			{secondaryLinks.length > 0 && (
-				<List dense>
-					{secondaryLinks.map((link, index) => (
-						<ListItem
-							key={index}
-							disablePadding
-							sx={{ display: 'block' }}
-						>
-							<ListItemButton
-								selected={activePath === link.path}
-								onClick={() => handleLinkClick(link.path)}
-								component='a'
-								href={link.path}
-								sx={{
-									borderRadius: '10px',
-									px: 1.5,
-									py: 1,
-									mb: 0.5,
-									'& .MuiListItemIcon-root': {
-										minWidth: 36,
-										color: 'text.secondary'
-									},
-									'& .MuiListItemText-primary': {
-										color: 'text.primary'
-									},
-									'&:hover': {
-										backgroundColor: 'action.hover'
-									},
-									'&.Mui-selected, &.Mui-selected:hover': {
-										backgroundColor: '#01584F',
-										color: '#ffffff',
-										'& .MuiListItemText-primary': {
-											color: '#ffffff',
-											fontWeight: 600
-										},
-										'& .MuiListItemIcon-root': {
-											color: '#ffffff'
-										}
-									}
-								}}
-							>
-								<ListItemIcon>{link.icon}</ListItemIcon>
-								<ListItemText primary={link.text} />
-							</ListItemButton>
-						</ListItem>
-					))}
-				</List>
+				<>
+					<Box sx={{ width: '100%', my: 2, display: 'flex', justifyContent: 'center' }}>
+						<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+					</Box>
+					<Box sx={{ mt: 'auto', pb: 2 }}>
+						<Stack gap={1} alignItems="center">
+							{secondaryLinks.map((link, index) => (
+								<React.Fragment key={index}>
+									<Tooltip title={link.text} placement="right" arrow>
+										<IconButton
+											component="a"
+											href={link.path}
+											onClick={() => handleLinkClick(link.path)}
+											sx={{
+												width: 48,
+												height: 48,
+												color: activePath === link.path ? '#ffffff' : 'text.secondary',
+												backgroundColor: activePath === link.path ? '#01584F' : 'transparent',
+												borderRadius: activePath === link.path ? '4px' : '50%',
+												'&:hover': {
+													backgroundColor:
+														activePath === link.path ? '#01584F' : 'action.hover',
+													borderRadius: '4px'
+												}
+											}}>
+											{link.icon}
+										</IconButton>
+									</Tooltip>
+									{index < secondaryLinks.length - 1 && (
+										<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+											<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+										</Box>
+									)}
+								</React.Fragment>
+							))}
+						</Stack>
+					</Box>
+				</>
 			)}
 		</Stack>
 	);
