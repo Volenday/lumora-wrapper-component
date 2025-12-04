@@ -62,6 +62,9 @@ interface AppNavbarProps {
 	// Navbar styling props
 	navbarBackground?: string;
 	navbarAccentColor?: string;
+	// Custom navbar component
+	customNavbar?: React.ComponentType<any>;
+	customNavbarProps?: Record<string, any>;
 }
 
 const AppNavbar: React.FC<AppNavbarProps> = ({
@@ -88,7 +91,9 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 	accentColor = '#01584f',
 	contentBackgroundColor = '#f2f9fc',
 	navbarBackground = '#ff0000',
-	navbarAccentColor = '#000000'
+	navbarAccentColor = '#000000',
+	customNavbar: CustomNavbar,
+	customNavbarProps
 }) => {
 	const isUpMd = useMediaQuery(theme => theme.breakpoints.up('md'));
 	const [profileMenuAnchor, setProfileMenuAnchor] =
@@ -195,40 +200,43 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 							style={{ flexShrink: 0 }}
 						/>
 					</Stack>
-					{/* Search Bar */}
-					{showSearchbar && isUpMd && (
-						<TextField
-							placeholder='Search for deals or documents...'
-							value={searchValue || ''}
-							onChange={handleSearchChange}
-							onKeyDown={handleSearchKeyDown}
-							size='small'
-							sx={{
-								width: '400px',
-								'& .MuiOutlinedInput-root': {
-									backgroundColor: contentBackgroundColor,
-									borderRadius: '8px',
-									'& fieldset': {
-										borderColor: 'transparent'
-									},
-									'&:hover fieldset': {
-										borderColor: 'transparent'
-									},
-									'&.Mui-focused fieldset': {
-										borderColor: accentColor
+					{/* Custom Navbar or Search Bar */}
+					{CustomNavbar ? (
+						<CustomNavbar {...(customNavbarProps || {})} />
+					) : (
+						showSearchbar &&
+						isUpMd && (
+							<TextField
+								placeholder="Search for deals or documents..."
+								value={searchValue || ''}
+								onChange={handleSearchChange}
+								onKeyDown={handleSearchKeyDown}
+								size="small"
+								sx={{
+									width: '400px',
+									'& .MuiOutlinedInput-root': {
+										backgroundColor: contentBackgroundColor,
+										borderRadius: '8px',
+										'& fieldset': {
+											borderColor: 'transparent'
+										},
+										'&:hover fieldset': {
+											borderColor: 'transparent'
+										},
+										'&.Mui-focused fieldset': {
+											borderColor: accentColor
+										}
 									}
-								}
-							}}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position='start'>
-										<SearchRoundedIcon
-											sx={{ color: navbarAccentColor }}
-										/>
-									</InputAdornment>
-								)
-							}}
-						/>
+								}}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<SearchRoundedIcon sx={{ color: navbarAccentColor }} />
+										</InputAdornment>
+									)
+								}}
+							/>
+						)
 					)}
 				</Stack>
 

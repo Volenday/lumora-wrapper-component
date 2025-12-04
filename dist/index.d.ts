@@ -61,6 +61,8 @@ export declare interface LumoraWrapperProps {
     useChatSidebar?: () => {
         isOpen: boolean;
     };
+    customNavbar?: default_2.ComponentType<any>;
+    customNavbarProps?: Record<string, any>;
 }
 
 export declare type SidebarLink = {
