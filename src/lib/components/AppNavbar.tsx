@@ -91,14 +91,17 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 	navbarAccentColor = '#000000'
 }) => {
 	const isUpMd = useMediaQuery(theme => theme.breakpoints.up('md'));
-	const [profileMenuAnchor, setProfileMenuAnchor] = React.useState<null | HTMLElement>(null);
+	const [profileMenuAnchor, setProfileMenuAnchor] =
+		React.useState<null | HTMLElement>(null);
 	const profileMenuOpen = Boolean(profileMenuAnchor);
 
 	const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		onSearchChange?.(event.target.value);
 	};
 
-	const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+	const handleSearchKeyDown = (
+		event: React.KeyboardEvent<HTMLInputElement>
+	) => {
 		if (event.key === 'Enter' && onSearchSubmit && searchValue) {
 			onSearchSubmit(searchValue);
 		}
@@ -126,70 +129,80 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 
 	return (
 		<AppBar
-			position="fixed"
+			position='fixed'
 			sx={{
 				boxShadow: 0,
 				background: navbarBackground,
-				backgroundImage: 'none',
 				top: 'var(--template-frame-height, 0px)',
 				left: 0,
 				width: '100%',
 				zIndex: 1,
 				height: '60px',
 				...headerStyles
-			}}>
-			<Toolbar variant="dense" sx={{ height: '100%' }}>
+			}}
+		>
+			<Toolbar variant='dense' sx={{ height: '100%' }}>
 				{/* Left Section: Logo + Search Bar */}
 				<Stack
-					direction="row"
+					direction='row'
 					sx={{
 						alignItems: 'center',
 						gap: 2,
 						flexShrink: 0,
 						flexGrow: 1
-					}}>
+					}}
+				>
 					{showMenuButton && !isUpMd && (
 						<IconButton
-							aria-label="menu"
+							aria-label='menu'
 							onClick={onMenuClick}
 							sx={{
 								color: navbarAccentColor,
 								'&:hover': {
 									backgroundColor: 'action.hover'
 								}
-							}}>
+							}}
+						>
 							<MenuRoundedIcon />
 						</IconButton>
 					)}
 					{/* Logo */}
 					<Stack
-						direction="row"
+						direction='row'
 						sx={{
 							alignItems: 'center',
 							gap: 1,
 							flexShrink: 0
-						}}>
+						}}
+					>
 						<Typography
-							variant="h6"
+							variant='h6'
 							sx={{
 								color: navbarAccentColor,
 								fontWeight: 600,
 								fontSize: '20px',
 								lineHeight: 1,
 								textTransform: 'uppercase'
-							}}>
+							}}
+						>
 							{appName}
 						</Typography>
-						<img src="/lumora-logo.svg" alt="NEXA Logo" width={24} height={24} style={{ flexShrink: 0 }} />
+						<img
+							src='/lumora-logo.svg'
+							alt='NEXA Logo'
+							width={24}
+							height={24}
+							style={{ flexShrink: 0 }}
+						/>
 					</Stack>
 					{/* Search Bar */}
 					{showSearchbar && isUpMd && (
 						<TextField
-							placeholder="Search for deals or documents..."
+							placeholder='Search for deals or documents...'
 							value={searchValue || ''}
 							onChange={handleSearchChange}
 							onKeyDown={handleSearchKeyDown}
-							size="small"
+							size='small'
 							sx={{
 								width: '400px',
 								'& .MuiOutlinedInput-root': {
@@ -208,8 +221,10 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 							}}
 							InputProps={{
 								startAdornment: (
-									<InputAdornment position="start">
-										<SearchRoundedIcon sx={{ color: navbarAccentColor }} />
+									<InputAdornment position='start'>
+										<SearchRoundedIcon
+											sx={{ color: navbarAccentColor }}
+										/>
 									</InputAdornment>
 								)
 							}}
@@ -219,25 +234,30 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 
 				{/* Right Section: Notifications + Profile */}
 				<Stack
-					direction="row"
+					direction='row'
 					sx={{
 						alignItems: 'center',
 						gap: 1.5,
 						flexShrink: 0
-					}}>
+					}}
+				>
 					{/* Notifications */}
 					{showNotifications && (
 						<Badge
-							color="error"
-							variant="dot"
+							color='error'
+							variant='dot'
 							invisible={notificationCount === 0}
 							sx={{
 								'& .MuiBadge-badge': {
 									right: 2,
 									top: 2
 								}
-							}}>
-							<IconButton size="small" sx={{ color: navbarAccentColor }}>
+							}}
+						>
+							<IconButton
+								size='small'
+								sx={{ color: navbarAccentColor }}
+							>
 								<NotificationsOutlinedIcon />
 							</IconButton>
 						</Badge>
@@ -245,7 +265,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 					{/* Divider */}
 					{showNotifications && showProfile && (
 						<Divider
-							orientation="vertical"
+							orientation='vertical'
 							flexItem
 							sx={{
 								borderColor: 'rgba(0, 0, 0, 0.12)',
@@ -258,7 +278,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 					{showProfile && (
 						<>
 							<Stack
-								direction="row"
+								direction='row'
 								onClick={handleProfileMenuClick}
 								sx={{
 									alignItems: 'center',
@@ -269,9 +289,13 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 									'&:hover': {
 										backgroundColor: 'action.hover'
 									}
-								}}>
+								}}
+							>
 								{userAvatar ? (
-									<Avatar src={userAvatar} sx={{ width: 32, height: 32 }} />
+									<Avatar
+										src={userAvatar}
+										sx={{ width: 32, height: 32 }}
+									/>
 								) : (
 									<AccountCircleRoundedIcon
 										sx={{
@@ -287,9 +311,10 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 										flexDirection: 'column',
 										alignItems: 'flex-start',
 										minWidth: 0
-									}}>
+									}}
+								>
 									<Typography
-										variant="body2"
+										variant='body2'
 										sx={{
 											color: navbarAccentColor,
 											fontWeight: 500,
@@ -298,11 +323,12 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
 											maxWidth: '150px'
-										}}>
+										}}
+									>
 										{userName}
 									</Typography>
 									<Typography
-										variant="caption"
+										variant='caption'
 										sx={{
 											color: navbarAccentColor,
 											lineHeight: 1.2,
@@ -310,7 +336,8 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap',
 											maxWidth: '150px'
-										}}>
+										}}
+									>
 										{formatRole(userRole)}
 									</Typography>
 								</Box>
@@ -319,8 +346,14 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 								anchorEl={profileMenuAnchor}
 								open={profileMenuOpen}
 								onClose={handleProfileMenuClose}
-								transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-								anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+								transformOrigin={{
+									horizontal: 'right',
+									vertical: 'top'
+								}}
+								anchorOrigin={{
+									horizontal: 'right',
+									vertical: 'bottom'
+								}}
 								sx={{
 									'& .MuiList-root': {
 										padding: '4px'
@@ -331,19 +364,31 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 									'& .MuiDivider-root': {
 										margin: '4px -4px'
 									}
-								}}>
-								<MenuItem onClick={() => handleMenuItemClick(onSettingsClick)}>Settings</MenuItem>
+								}}
+							>
+								<MenuItem
+									onClick={() =>
+										handleMenuItemClick(onSettingsClick)
+									}
+								>
+									Settings
+								</MenuItem>
 								<Divider />
 								<MenuItem
-									onClick={() => handleMenuItemClick(onLogout)}
+									onClick={() =>
+										handleMenuItemClick(onLogout)
+									}
 									sx={{
 										color: 'error.main',
 										'&:hover': {
 											color: 'error.dark'
 										}
-									}}>
-									<Typography sx={{ flexGrow: 1 }}>Logout</Typography>
-									<LogoutRoundedIcon fontSize="small" />
+									}}
+								>
+									<Typography sx={{ flexGrow: 1 }}>
+										Logout
+									</Typography>
+									<LogoutRoundedIcon fontSize='small' />
 								</MenuItem>
 							</Menu>
 						</>

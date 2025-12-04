@@ -1,5 +1,13 @@
 import type { SxProps, Theme } from '@mui/material';
-import { Box, CircularProgress, CssBaseline, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import {
+	Box,
+	CircularProgress,
+	CssBaseline,
+	Drawer,
+	Grid,
+	useMediaQuery,
+	useTheme
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
@@ -193,9 +201,16 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					justifyContent: 'center',
 					minHeight: '100vh',
 					backgroundColor: 'background.default'
-				}}>
-				<CircularProgress size={60} thickness={4} sx={{ color: accentColor }} />
-				<Box sx={{ mt: 2, color: 'text.secondary' }}>Checking session...</Box>
+				}}
+			>
+				<CircularProgress
+					size={60}
+					thickness={4}
+					sx={{ color: accentColor }}
+				/>
+				<Box sx={{ mt: 2, color: 'text.secondary' }}>
+					Checking session...
+				</Box>
 			</Box>
 		);
 	}
@@ -212,7 +227,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				display: 'flex',
 				minHeight: '100vh',
 				...style
-			}}>
+			}}
+		>
 			<CssBaseline />
 
 			{/* Header */}
@@ -220,7 +236,11 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				<AppNavbar
 					appName={appName}
 					pageName={pageName}
-					onMenuClick={isMobile && showSidebar ? handleMobileSidebarToggle : undefined}
+					onMenuClick={
+						isMobile && showSidebar
+							? handleMobileSidebarToggle
+							: undefined
+					}
 					showMenuButton={isMobile && showSidebar}
 					headerStyles={headerStyles}
 					userName={userName}
@@ -248,7 +268,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			{/* Desktop Sidebar */}
 			{showSidebar && !isMobile && (
 				<Drawer
-					variant="permanent"
+					variant='permanent'
 					sx={{
 						width: 80,
 						flexShrink: 0,
@@ -262,7 +282,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							height: showHeader ? 'calc(100vh - 60px)' : '100vh'
 						},
 						...sidebarStyles
-					}}>
+					}}
+				>
 					<Box
 						sx={{
 							overflow: 'auto',
@@ -270,7 +291,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							display: 'flex',
 							flexDirection: 'column',
 							pt: 2
-						}}>
+						}}
+					>
 						<MenuContent
 							mainLinks={sidebarLinks}
 							secondaryLinks={secondarySidebarLinks}
@@ -306,24 +328,33 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 
 			{/* Main Content Area */}
 			<Box
-				component="main"
+				component='main'
 				sx={{
 					flexGrow: 1,
 					p: 3,
 					m: 1,
-					width: isMobile ? '100%' : showSidebar ? `calc(100% - 80px)` : '100%',
+					width: isMobile
+						? '100%'
+						: showSidebar
+							? `calc(100% - 80px)`
+							: '100%',
 					mt: showHeader ? '60px' : 0, // Account for AppNavbar height (60px)
 					ml: isMobile ? 0 : showSidebar ? 0 : 0, // Offset for sidebar on desktop
 					backgroundColor: contentBackgroundColor, // White background for main content
 					...contentStyles
-				}}>
+				}}
+			>
 				<Grid container spacing={3}>
 					<Grid
-						size={{ xs: 12, md: isChatOpen && GlobalChatSidebar ? 8.5 : 12 }}
+						size={{
+							xs: 12,
+							md: isChatOpen && GlobalChatSidebar ? 8.5 : 12
+						}}
 						sx={{
 							display: 'flex',
 							flexDirection: 'column'
-						}}>
+						}}
+					>
 						{children}
 					</Grid>
 					{isChatOpen && GlobalChatSidebar && (
@@ -333,17 +364,25 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 								display: 'flex',
 								flexDirection: 'column',
 								position: { xs: 'static', md: 'sticky' },
-								top: { xs: 'auto', md: showHeader ? '60px' : '0px' }, // Stick below navbar
+								top: {
+									xs: 'auto',
+									md: showHeader ? '60px' : '0px'
+								}, // Stick below navbar
 								alignSelf: 'flex-start',
 								height: {
 									xs: 'auto',
-									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
+									md: showHeader
+										? 'calc(100vh - 60px - 24px - 8px)'
+										: 'calc(100vh - 24px - 8px)'
 								}, // Viewport - navbar - top padding - top margin
 								maxHeight: {
 									xs: 'none',
-									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
+									md: showHeader
+										? 'calc(100vh - 60px - 24px - 8px)'
+										: 'calc(100vh - 24px - 8px)'
 								} // Viewport - navbar - top padding - top margin
-							}}>
+							}}
+						>
 							<GlobalChatSidebar />
 						</Grid>
 					)}
