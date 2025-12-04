@@ -29,6 +29,8 @@ export default defineConfig({
 			external: [
 				'react',
 				'react-dom',
+				'react/jsx-dev-runtime',
+				'react/jsx-runtime',
 				'@mui/material',
 				'@mui/icons-material',
 				'@emotion/react',
