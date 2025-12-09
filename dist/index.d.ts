@@ -61,6 +61,13 @@ export declare interface LumoraWrapperProps {
     useChatSidebar?: () => {
         isOpen: boolean;
     };
+    rightExtraContent?: Array<{
+        name: string;
+        role: string;
+        avatar?: string;
+        onClick?: () => void;
+        type: 'profile' | 'divider';
+    }>;
 }
 
 export declare type SidebarLink = {
