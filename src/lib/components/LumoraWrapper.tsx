@@ -77,6 +77,13 @@ export interface LumoraWrapperProps {
 	// Chat sidebar props
 	GlobalChatSidebar?: React.ComponentType;
 	useChatSidebar?: () => { isOpen: boolean };
+	rightExtraContent?: Array<{
+		name: string;
+		role: string;
+		avatar?: string;
+		onClick?: () => void;
+		type: 'profile' | 'divider';
+	}>;
 }
 
 /**
@@ -119,7 +126,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	navbarBackground = '#ffffff',
 	navbarAccentColor = '#000000',
 	GlobalChatSidebar,
-	useChatSidebar
+	useChatSidebar,
+	rightExtraContent
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -262,6 +270,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					contentBackgroundColor={contentBackgroundColor}
 					navbarBackground={navbarBackground}
 					navbarAccentColor={navbarAccentColor}
+					rightExtraContent={rightExtraContent}
 				/>
 			)}
 

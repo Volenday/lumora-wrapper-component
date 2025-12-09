@@ -62,6 +62,13 @@ interface AppNavbarProps {
 	// Navbar styling props
 	navbarBackground?: string;
 	navbarAccentColor?: string;
+	rightExtraContent?: Array<{
+		name: string;
+		role: string;
+		avatar?: string;
+		onClick?: () => void;
+		type: 'profile' | 'divider';
+	}>;
 }
 
 const AppNavbar: React.FC<AppNavbarProps> = ({
@@ -88,7 +95,8 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 	accentColor = '#01584f',
 	contentBackgroundColor = '#f2f9fc',
 	navbarBackground = '#ff0000',
-	navbarAccentColor = '#000000'
+	navbarAccentColor = '#000000',
+	rightExtraContent = []
 }) => {
 	const isUpMd = useMediaQuery(theme => theme.breakpoints.up('md'));
 	const [profileMenuAnchor, setProfileMenuAnchor] =
@@ -393,6 +401,94 @@ const AppNavbar: React.FC<AppNavbarProps> = ({
 							</Menu>
 						</>
 					)}
+					{rightExtraContent.length !== 0 &&
+						rightExtraContent.map(d => {
+							if (d.type === 'divider') {
+								return (
+									<Divider
+										orientation='vertical'
+										flexItem
+										sx={{
+											borderColor: 'rgba(0, 0, 0, 0.12)',
+											height: '24px',
+											alignSelf: 'center'
+										}}
+									/>
+								);
+							}
+
+							if (d.type === 'profile') {
+								return (
+									<Stack
+										direction='row'
+										onClick={d.onClick}
+										sx={{
+											alignItems: 'center',
+											gap: 1,
+											cursor: 'pointer',
+											borderRadius: '8px',
+											padding: '4px 8px',
+											'&:hover': {
+												backgroundColor: 'action.hover'
+											}
+										}}
+									>
+										{d.avatar ? (
+											<Avatar
+												src={d.avatar}
+												sx={{ width: 32, height: 32 }}
+											/>
+										) : (
+											<AccountCircleRoundedIcon
+												sx={{
+													width: 32,
+													height: 32,
+													color: navbarAccentColor
+												}}
+											/>
+										)}
+										<Box
+											sx={{
+												display: 'flex',
+												flexDirection: 'column',
+												alignItems: 'flex-start',
+												minWidth: 0
+											}}
+										>
+											<Typography
+												variant='body2'
+												sx={{
+													color: navbarAccentColor,
+													fontWeight: 500,
+													lineHeight: 1.2,
+													overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													maxWidth: '150px'
+												}}
+											>
+												{d.name}
+											</Typography>
+											<Typography
+												variant='caption'
+												sx={{
+													color: navbarAccentColor,
+													lineHeight: 1.2,
+													overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													maxWidth: '150px'
+												}}
+											>
+												{d.role}
+											</Typography>
+										</Box>
+									</Stack>
+								);
+							}
+
+							return null;
+						})}
 				</Stack>
 			</Toolbar>
 		</AppBar>
