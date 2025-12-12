@@ -35,67 +35,131 @@ const MenuContent: React.FC<MenuContentProps> = ({
 				alignItems: 'center',
 				pt: 2,
 				gap: 1
-			}}>
+			}}
+		>
 			{mainLinks.map((link, index) => (
 				<React.Fragment key={index}>
-					<Tooltip title={link.text} placement="right" arrow>
+					<Tooltip title={link.text} placement='right' arrow>
 						<IconButton
-							component="a"
+							component='a'
 							href={link.path}
-							onClick={() => handleLinkClick(link.path)}
+							onClick={e => {
+								e.preventDefault();
+								e.stopPropagation();
+								handleLinkClick(link.path);
+							}}
 							sx={{
 								width: 44,
 								height: 44,
-								color: activePath === link.path ? '#ffffff' : accentColor,
-								backgroundColor: activePath === link.path ? accentColor : 'transparent',
-								borderRadius: activePath === link.path ? '4px' : '50%',
+								color:
+									activePath === link.path
+										? '#ffffff'
+										: accentColor,
+								backgroundColor:
+									activePath === link.path
+										? accentColor
+										: 'transparent',
+								borderRadius:
+									activePath === link.path ? '4px' : '50%',
 								'&:hover': {
-									backgroundColor: activePath === link.path ? accentColor : 'action.hover',
+									backgroundColor:
+										activePath === link.path
+											? accentColor
+											: 'action.hover',
 									borderRadius: '4px'
 								}
-							}}>
+							}}
+						>
 							{link.icon}
 						</IconButton>
 					</Tooltip>
 					{index < mainLinks.length - 1 && (
-						<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-							<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+						<Box
+							sx={{
+								width: '100%',
+								display: 'flex',
+								justifyContent: 'center'
+							}}
+						>
+							<Divider
+								sx={{ width: '60%', borderColor: 'divider' }}
+							/>
 						</Box>
 					)}
 				</React.Fragment>
 			))}
 			{secondaryLinks.length > 0 && (
 				<>
-					<Box sx={{ width: '100%', my: 2, display: 'flex', justifyContent: 'center' }}>
-						<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+					<Box
+						sx={{
+							width: '100%',
+							my: 2,
+							display: 'flex',
+							justifyContent: 'center'
+						}}
+					>
+						<Divider
+							sx={{ width: '60%', borderColor: 'divider' }}
+						/>
 					</Box>
 					<Box sx={{ mt: 'auto', pb: 2 }}>
-						<Stack gap={1} alignItems="center">
+						<Stack gap={1} alignItems='center'>
 							{secondaryLinks.map((link, index) => (
 								<React.Fragment key={index}>
-									<Tooltip title={link.text} placement="right" arrow>
+									<Tooltip
+										title={link.text}
+										placement='right'
+										arrow
+									>
 										<IconButton
-											component="a"
+											component='a'
 											href={link.path}
-											onClick={() => handleLinkClick(link.path)}
+											onClick={e => {
+												e.preventDefault();
+												e.stopPropagation();
+												handleLinkClick(link.path);
+											}}
 											sx={{
 												width: 48,
 												height: 48,
-												color: activePath === link.path ? '#ffffff' : 'text.secondary',
-												backgroundColor: activePath === link.path ? '#01584F' : 'transparent',
-												borderRadius: activePath === link.path ? '4px' : '50%',
+												color:
+													activePath === link.path
+														? '#ffffff'
+														: 'text.secondary',
+												backgroundColor:
+													activePath === link.path
+														? '#01584F'
+														: 'transparent',
+												borderRadius:
+													activePath === link.path
+														? '4px'
+														: '50%',
 												'&:hover': {
 													backgroundColor:
-														activePath === link.path ? '#01584F' : 'action.hover',
+														activePath === link.path
+															? '#01584F'
+															: 'action.hover',
 													borderRadius: '4px'
 												}
-											}}>
+											}}
+										>
 											{link.icon}
 										</IconButton>
 									</Tooltip>
 									{index < secondaryLinks.length - 1 && (
-										<Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-											<Divider sx={{ width: '60%', borderColor: 'divider' }} />
+										<Box
+											sx={{
+												width: '100%',
+												display: 'flex',
+												justifyContent: 'center'
+											}}
+										>
+											<Divider
+												sx={{
+													width: '60%',
+													borderColor: 'divider'
+												}}
+											/>
 										</Box>
 									)}
 								</React.Fragment>
