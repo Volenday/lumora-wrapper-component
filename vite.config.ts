@@ -5,17 +5,19 @@ import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	mode: 'production',
 	plugins: [
-		react(),
+		react({
+			jsxRuntime: 'automatic',
+			jsxImportSource: 'react'
+		}),
 		dts({
 			insertTypesEntry: true,
 			include: ['src/lib/**/*'],
 			exclude: ['src/lib/**/*.test.*', 'src/lib/**/*.spec.*'],
 			outDir: 'dist',
 			rollupTypes: true,
-			tsconfigPath: './tsconfig.build.json',
-			declarationMap: true,
-			emitDeclarationOnly: false
+			tsconfigPath: './tsconfig.build.json'
 		})
 	],
 	build: {
@@ -26,31 +28,49 @@ export default defineConfig({
 			fileName: format => `lumora-wrapper-component.${format}.js`
 		},
 		rollupOptions: {
-			external: [
-				'react',
-				'react-dom',
-				'react/jsx-dev-runtime',
-				'react/jsx-runtime',
-				'@mui/material',
-				'@mui/icons-material',
-				'@emotion/react',
-				'@emotion/styled',
-				'js-cookie',
-				'axios'
-			],
-			output: {
-				exports: 'named',
-				globals: {
-					react: 'React',
-					'react-dom': 'ReactDOM',
-					'@mui/material': 'MaterialUI',
-					'@mui/icons-material': 'MaterialUIIcons',
-					'@emotion/react': 'EmotionReact',
-					'@emotion/styled': 'EmotionStyled',
-					'js-cookie': 'Cookies',
-					axios: 'axios'
+			external: id => {
+				// Externalize React and its JSX runtime modules
+				if (
+					id === 'react' ||
+					id === 'react-dom' ||
+					id === 'react/jsx-runtime' ||
+					id === 'react/jsx-dev-runtime'
+				) {
+					return true;
 				}
-			}
+				// Externalize peer dependencies
+				if (
+					id.startsWith('@mui/') ||
+					id.startsWith('@emotion/') ||
+					id === 'axios'
+				) {
+					return true;
+				}
+				return false;
+			},
+			output: [
+				{
+					format: 'es',
+					exports: 'named',
+					preserveModules: false,
+					entryFileNames: 'lumora-wrapper-component.es.js'
+				},
+				{
+					format: 'umd',
+					name: 'LumoraWrapperComponent',
+					exports: 'named',
+					globals: {
+						react: 'React',
+						'react-dom': 'ReactDOM',
+						'@mui/material': 'MaterialUI',
+						'@mui/icons-material': 'MaterialUIIcons',
+						'@emotion/react': 'EmotionReact',
+						'@emotion/styled': 'EmotionStyled',
+						axios: 'axios'
+					},
+					entryFileNames: 'lumora-wrapper-component.umd.js'
+				}
+			]
 		}
 	}
 });
