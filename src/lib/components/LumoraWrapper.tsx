@@ -84,6 +84,9 @@ export interface LumoraWrapperProps {
 		onClick?: () => void;
 		type: 'profile' | 'divider';
 	}>;
+	// Custom navbar component (replaces search bar)
+	customNavbar?: React.ComponentType<any>;
+	customNavbarProps?: Record<string, any>;
 }
 
 /**
@@ -127,7 +130,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	navbarAccentColor = '#000000',
 	GlobalChatSidebar,
 	useChatSidebar,
-	rightExtraContent
+	rightExtraContent,
+	customNavbar: CustomNavbar,
+	customNavbarProps
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -260,7 +265,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					onLogout={onLogout}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
-					showSearchbar={showSearchbar}
+					showSearchbar={showSearchbar && !CustomNavbar}
 					searchValue={searchValue}
 					onSearchChange={onSearchChange}
 					onSearchSubmit={onSearchSubmit}
@@ -271,6 +276,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					navbarBackground={navbarBackground}
 					navbarAccentColor={navbarAccentColor}
 					rightExtraContent={rightExtraContent}
+					customNavbar={CustomNavbar}
+					customNavbarProps={customNavbarProps}
 				/>
 			)}
 
