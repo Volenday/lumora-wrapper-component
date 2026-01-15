@@ -42,6 +42,12 @@ export declare interface LumoraWrapperProps {
     onSearchSubmit?: (value: string) => void;
     showProfile?: boolean;
     userRole?: string;
+    onVerify?: (userData: {
+        name: string;
+        email: string;
+        profilePicture: string;
+        role: string;
+    }) => void;
     alertProps?: {
         title?: string;
         message?: string;

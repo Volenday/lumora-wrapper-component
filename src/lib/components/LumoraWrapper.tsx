@@ -8,7 +8,7 @@ import {
 	useMediaQuery,
 	useTheme
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
 import AppNavbar from './AppNavbar';
@@ -55,6 +55,13 @@ export interface LumoraWrapperProps {
 	// Profile props
 	showProfile?: boolean;
 	userRole?: string;
+	// User data callback
+	onVerify?: (userData: {
+		name: string;
+		email: string;
+		profilePicture: string;
+		role: string;
+	}) => void;
 	// Alert card props
 	alertProps?: {
 		title?: string;
@@ -119,6 +126,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	onSearchSubmit,
 	showProfile = true,
 	userRole,
+	onVerify,
 	alertProps,
 	style,
 	headerStyles,
@@ -139,8 +147,21 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 	const [isCheckingSession, setIsCheckingSession] = useState(true);
 	const [hasSession, setHasSession] = useState(false);
+	const [userData, setUserData] = useState<{
+		name: string;
+		email: string;
+		profilePicture: string;
+		role: string;
+	} | null>(null);
 	const chatSidebarHook = useChatSidebar?.();
 	const isChatOpen = chatSidebarHook?.isOpen ?? false;
+	const onVerifyRef = useRef(onVerify);
+	const hasLoadedUserDataRef = useRef(false);
+
+	// Update ref when callback changes
+	useEffect(() => {
+		onVerifyRef.current = onVerify;
+	}, [onVerify]);
 
 	// Handle mobile sidebar toggle for responsive design
 	const handleMobileSidebarToggle = () => {
@@ -152,25 +173,71 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 		setMobileSidebarOpen(false);
 	};
 
-	// Session checking: validate that user has a refresh token before rendering
+	// Wrap logout handler to clear user data
+	const handleLogout = (error?: Error) => {
+		// Clear all tokens including user data
+		localStorage.removeItem('lumoraAccessToken');
+		localStorage.removeItem('lumoraRefreshToken');
+		localStorage.removeItem('lumoraUser');
+		// Clear user data state
+		setUserData(null);
+		// Call original logout handler
+		onLogout(error);
+	};
+
+	// Session checking: validate that user has a refresh token and user data before rendering
 	useEffect(() => {
 		const checkSession = () => {
 			try {
 				// Check if refresh token exists in localStorage
 				const refreshToken = localStorage.getItem('lumoraRefreshToken');
+				const accessToken = localStorage.getItem('lumoraAccessToken');
+				const lumoraUser = localStorage.getItem('lumoraUser');
 
 				if (!refreshToken) {
-					// No refresh token found, redirect to login
+					// No refresh token found, clear all tokens and redirect to login
 					console.log('No session found, redirecting to login');
+					localStorage.removeItem('lumoraAccessToken');
+					localStorage.removeItem('lumoraRefreshToken');
+					localStorage.removeItem('lumoraUser');
 					window.location.href = '/login';
 					return;
+				}
+
+				// Parse and validate user data (only once)
+				if (lumoraUser && !hasLoadedUserDataRef.current) {
+					try {
+						const user = JSON.parse(lumoraUser);
+						const parsedUserData = {
+							name: user.name || '',
+							email: user.email || '',
+							profilePicture: user.profilePicture || '',
+							role: user.role || ''
+						};
+						setUserData(parsedUserData);
+						hasLoadedUserDataRef.current = true;
+						// Call callback if provided (using ref to avoid dependency issues)
+						if (onVerifyRef.current) {
+							onVerifyRef.current(parsedUserData);
+						}
+					} catch (parseError) {
+						console.error(
+							'Error parsing user data from localStorage:',
+							parseError
+						);
+						// Invalid user data, clear it but continue with session
+						localStorage.removeItem('lumoraUser');
+					}
 				}
 
 				// Session exists, mark as authenticated
 				setHasSession(true);
 			} catch (error) {
 				console.error('Error checking session:', error);
-				// On error, redirect to login for safety
+				// On error, clear tokens and redirect to login for safety
+				localStorage.removeItem('lumoraAccessToken');
+				localStorage.removeItem('lumoraRefreshToken');
+				localStorage.removeItem('lumoraUser');
 				window.location.href = '/login';
 			} finally {
 				setIsCheckingSession(false);
@@ -262,7 +329,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					onProfileClick={onProfileClick}
 					onAccountClick={onAccountClick}
 					onSettingsClick={onSettingsClick}
-					onLogout={onLogout}
+					onLogout={handleLogout}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}
 					showSearchbar={showSearchbar && !CustomNavbar}
@@ -333,7 +400,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					userName={userName}
 					userEmail={userEmail}
 					userAvatar={userAvatar}
-					onLogout={onLogout}
+					onLogout={handleLogout}
 					onProfileClick={onProfileClick}
 					showNotifications={showNotifications}
 					notificationCount={notificationCount}

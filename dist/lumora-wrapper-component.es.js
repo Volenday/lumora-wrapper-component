@@ -1,66 +1,66 @@
-import { jsx as e, jsxs as s, Fragment as ce } from "react/jsx-runtime";
-import { useTheme as ye, useMediaQuery as Re, Box as O, CircularProgress as Te, CssBaseline as be, Drawer as Ee, Grid as Q } from "@mui/material";
-import * as J from "react";
-import { useState as Y, useEffect as q } from "react";
-import ee from "axios";
-import se from "@mui/icons-material/AccountCircleRounded";
-import de from "@mui/icons-material/LogoutRounded";
-import De from "@mui/icons-material/MenuRounded";
-import Me from "@mui/icons-material/NotificationsOutlined";
-import Ce from "@mui/icons-material/SearchRounded";
-import Ae from "@mui/material/AppBar";
-import Z from "@mui/material/Avatar";
-import he from "@mui/material/Badge";
-import R from "@mui/material/Box";
-import w from "@mui/material/Divider";
+import { jsx as e, jsxs as s, Fragment as we } from "react/jsx-runtime";
+import { useTheme as Oe, useMediaQuery as _e, Box as _, CircularProgress as Be, CssBaseline as ze, Drawer as Le, Grid as ee } from "@mui/material";
+import * as re from "react";
+import { useState as K, useRef as ue, useEffect as N } from "react";
+import te from "axios";
+import xe from "@mui/icons-material/AccountCircleRounded";
+import Se from "@mui/icons-material/LogoutRounded";
+import je from "@mui/icons-material/MenuRounded";
+import We from "@mui/icons-material/NotificationsOutlined";
+import Ve from "@mui/icons-material/SearchRounded";
+import Ke from "@mui/material/AppBar";
+import oe from "@mui/material/Avatar";
+import ve from "@mui/material/Badge";
+import D from "@mui/material/Box";
+import g from "@mui/material/Divider";
 import B from "@mui/material/IconButton";
-import _e from "@mui/material/InputAdornment";
-import Oe from "@mui/material/Menu";
-import le from "@mui/material/MenuItem";
+import Ne from "@mui/material/InputAdornment";
+import Pe from "@mui/material/Menu";
+import ge from "@mui/material/MenuItem";
 import f from "@mui/material/Stack";
-import { styled as Be } from "@mui/material/styles";
-import ze from "@mui/material/TextField";
-import Ue from "@mui/material/Toolbar";
+import { styled as $e } from "@mui/material/styles";
+import Fe from "@mui/material/TextField";
+import Ge from "@mui/material/Toolbar";
 import u from "@mui/material/Typography";
-import je from "@mui/material/useMediaQuery";
-import We from "@mui/material/Card";
-import Le from "@mui/material/CardContent";
-import fe from "@mui/material/Button";
-import Ve from "@mui/icons-material/AutoAwesomeRounded";
-import ae from "@mui/material/Tooltip";
-import Ke from "@mui/icons-material/NotificationsRounded";
-import Ne from "@mui/material/Drawer";
-let re = !1;
-const $e = () => {
-  re = !0;
-}, Fe = () => {
-  re = !1;
-}, Pe = ee.create(), V = ee.create({
+import He from "@mui/material/useMediaQuery";
+import Xe from "@mui/material/Card";
+import Qe from "@mui/material/CardContent";
+import ke from "@mui/material/Button";
+import Ye from "@mui/icons-material/AutoAwesomeRounded";
+import Ie from "@mui/material/Tooltip";
+import qe from "@mui/icons-material/NotificationsRounded";
+import Je from "@mui/material/Drawer";
+let ne = !1;
+const Ze = () => {
+  ne = !0;
+}, er = () => {
+  ne = !1;
+}, rr = te.create(), P = te.create({
   baseURL: { BASE_URL: "/", MODE: "production", DEV: !1, PROD: !0, SSR: !1 }.VITE_API_BASE_URL || "http://localhost:3000",
   headers: {
     "X-API-Key": { BASE_URL: "/", MODE: "production", DEV: !1, PROD: !0, SSR: !1 }.VITE_API_KEY || "",
     "Content-Type": "application/json"
   }
 });
-V.interceptors.request.use(
+P.interceptors.request.use(
   (t) => {
     const i = localStorage.getItem("lumoraAccessToken");
     return i && (t.headers.Authorization = `Bearer ${i}`), t;
   },
   (t) => Promise.reject(t)
 );
-V.interceptors.response.use(
+P.interceptors.response.use(
   (t) => t,
   async (t) => {
     var o;
     const i = t.config;
-    if (((o = t.response) == null ? void 0 : o.status) === 401 && re && i && !i._retry) {
+    if (((o = t.response) == null ? void 0 : o.status) === 401 && ne && i && !i._retry) {
       i._retry = !0;
       try {
         const c = localStorage.getItem("lumoraRefreshToken");
         if (!c)
           throw new Error("No refresh token available");
-        const l = await Pe.post(
+        const l = await rr.post(
           `${{ BASE_URL: "/", MODE: "production", DEV: !1, PROD: !0, SSR: !1 }.VITE_API_BASE_URL || "http://localhost:3000"}/auth/refresh`,
           { refresh_token: c },
           {
@@ -77,29 +77,29 @@ V.interceptors.response.use(
           ), l.data.refreshToken && localStorage.setItem(
             "lumoraRefreshToken",
             l.data.refreshToken
-          ), i.headers.Authorization = `Bearer ${l.data.accessToken}`, V(i);
+          ), i.headers.Authorization = `Bearer ${l.data.accessToken}`, P(i);
         throw new Error("Invalid refresh response");
       } catch (c) {
-        return localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), window.location.href = "/login", Promise.reject(c);
+        return localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), window.location.href = "/login", Promise.reject(c);
       }
     }
     return Promise.reject(t);
   }
 );
-const Dr = async () => {
+const Wr = async () => {
   const t = localStorage.getItem("lumoraRefreshToken");
   if (!t)
     throw new Error("No refresh token available for logout");
-  await V.post("/auth/logout", {
+  await P.post("/auth/logout", {
     refresh_token: t
   });
-}, Ge = async () => {
+}, or = async () => {
   const t = localStorage.getItem("lumoraAccessToken"), i = localStorage.getItem("lumoraRefreshToken");
   if (t)
     return !0;
   if (i)
     try {
-      const o = await ee.post(
+      const o = await te.post(
         `${{ BASE_URL: "/", MODE: "production", DEV: !1, PROD: !0, SSR: !1 }.VITE_API_BASE_URL || "http://localhost:3000"}/auth/refresh`,
         { refresh_token: i },
         {
@@ -120,8 +120,8 @@ const Dr = async () => {
     } catch (o) {
       console.error("Token refresh failed:", o);
     }
-  return localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), window.location.href = "/login", !1;
-}, He = Be(Ue)({
+  return localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), window.location.href = "/login", !1;
+}, tr = $e(Ge)({
   width: "100%",
   padding: "8px 16px",
   display: "flex",
@@ -130,7 +130,7 @@ const Dr = async () => {
   justifyContent: "space-between",
   gap: "16px",
   flexShrink: 0
-}), Xe = ({
+}), nr = ({
   appName: t = "Dashboard",
   pageName: i = "Home",
   onMenuClick: o,
@@ -139,44 +139,44 @@ const Dr = async () => {
   userName: a = "User Name",
   userEmail: r,
   userAvatar: d,
-  onProfileClick: p,
-  onAccountClick: T,
-  onSettingsClick: k,
-  onLogout: m,
+  onProfileClick: m,
+  onAccountClick: E,
+  onSettingsClick: S,
+  onLogout: p,
   showNotifications: I = !1,
-  notificationCount: b = 0,
+  notificationCount: z = 0,
   showSearchbar: x = !0,
-  searchValue: E,
-  onSearchChange: D,
-  onSearchSubmit: M,
-  showProfile: C = !0,
-  userRole: K,
-  accentColor: N = "#01584f",
-  contentBackgroundColor: $ = "#f2f9fc",
-  navbarBackground: F = "#ff0000",
+  searchValue: M,
+  onSearchChange: A,
+  onSearchSubmit: C,
+  showProfile: U = !0,
+  userRole: $,
+  accentColor: F = "#01584f",
+  contentBackgroundColor: G = "#f2f9fc",
+  navbarBackground: H = "#ff0000",
   navbarAccentColor: h = "#000000",
-  rightExtraContent: z = [],
-  customNavbar: g,
-  customNavbarProps: P
+  rightExtraContent: L = [],
+  customNavbar: v,
+  customNavbarProps: w
 }) => {
-  const U = je((n) => n.breakpoints.up("md")), [j, W] = J.useState(null), v = !!j, A = (n) => {
-    D == null || D(n.target.value);
-  }, G = (n) => {
-    n.key === "Enter" && M && E && M(E);
-  }, H = (n) => n ? n.charAt(0).toUpperCase() + n.slice(1).toLowerCase() : "User", _ = (n) => {
-    W(n.currentTarget);
-  }, S = () => {
-    W(null);
-  }, L = (n) => {
-    n == null || n(), S();
+  const j = He((n) => n.breakpoints.up("md")), [W, V] = re.useState(null), X = !!W, k = (n) => {
+    A == null || A(n.target.value);
+  }, O = (n) => {
+    n.key === "Enter" && C && M && C(M);
+  }, Q = (n) => n ? n.charAt(0).toUpperCase() + n.slice(1).toLowerCase() : "User", Y = (n) => {
+    V(n.currentTarget);
+  }, R = () => {
+    V(null);
+  }, T = (n) => {
+    n == null || n(), R();
   };
   return /* @__PURE__ */ e(
-    Ae,
+    Ke,
     {
       position: "fixed",
       sx: {
         boxShadow: 0,
-        background: F,
+        background: H,
         top: "var(--template-frame-height, 0px)",
         left: 0,
         width: "100%",
@@ -184,7 +184,7 @@ const Dr = async () => {
         height: "60px",
         ...l
       },
-      children: /* @__PURE__ */ s(He, { variant: "dense", sx: { height: "100%" }, children: [
+      children: /* @__PURE__ */ s(tr, { variant: "dense", sx: { height: "100%" }, children: [
         /* @__PURE__ */ s(
           f,
           {
@@ -196,7 +196,7 @@ const Dr = async () => {
               flexGrow: 1
             },
             children: [
-              c && !U && /* @__PURE__ */ e(
+              c && !j && /* @__PURE__ */ e(
                 B,
                 {
                   "aria-label": "menu",
@@ -207,7 +207,7 @@ const Dr = async () => {
                       backgroundColor: "action.hover"
                     }
                   },
-                  children: /* @__PURE__ */ e(De, {})
+                  children: /* @__PURE__ */ e(je, {})
                 }
               ),
               /* @__PURE__ */ s(
@@ -247,18 +247,18 @@ const Dr = async () => {
                   ]
                 }
               ),
-              g ? /* @__PURE__ */ e(g, { ...P || {} }) : x && U && /* @__PURE__ */ e(
-                ze,
+              v ? /* @__PURE__ */ e(v, { ...w || {} }) : x && j && /* @__PURE__ */ e(
+                Fe,
                 {
                   placeholder: "Search for deals or documents...",
-                  value: E || "",
-                  onChange: A,
-                  onKeyDown: G,
+                  value: M || "",
+                  onChange: k,
+                  onKeyDown: O,
                   size: "small",
                   sx: {
                     width: "400px",
                     "& .MuiOutlinedInput-root": {
-                      backgroundColor: $,
+                      backgroundColor: G,
                       borderRadius: "8px",
                       "& fieldset": {
                         borderColor: "transparent"
@@ -267,13 +267,13 @@ const Dr = async () => {
                         borderColor: "transparent"
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: N
+                        borderColor: F
                       }
                     }
                   },
                   InputProps: {
-                    startAdornment: /* @__PURE__ */ e(_e, { position: "start", children: /* @__PURE__ */ e(
-                      Ce,
+                    startAdornment: /* @__PURE__ */ e(Ne, { position: "start", children: /* @__PURE__ */ e(
+                      Ve,
                       {
                         sx: {
                           color: h
@@ -297,11 +297,11 @@ const Dr = async () => {
             },
             children: [
               I && /* @__PURE__ */ e(
-                he,
+                ve,
                 {
                   color: "error",
                   variant: "dot",
-                  invisible: b === 0,
+                  invisible: z === 0,
                   sx: {
                     "& .MuiBadge-badge": {
                       right: 2,
@@ -313,13 +313,13 @@ const Dr = async () => {
                     {
                       size: "small",
                       sx: { color: h },
-                      children: /* @__PURE__ */ e(Me, {})
+                      children: /* @__PURE__ */ e(We, {})
                     }
                   )
                 }
               ),
-              I && C && /* @__PURE__ */ e(
-                w,
+              I && U && /* @__PURE__ */ e(
+                g,
                 {
                   orientation: "vertical",
                   flexItem: !0,
@@ -330,12 +330,12 @@ const Dr = async () => {
                   }
                 }
               ),
-              C && /* @__PURE__ */ s(ce, { children: [
+              U && /* @__PURE__ */ s(we, { children: [
                 /* @__PURE__ */ s(
                   f,
                   {
                     direction: "row",
-                    onClick: _,
+                    onClick: Y,
                     sx: {
                       alignItems: "center",
                       gap: 1,
@@ -348,13 +348,13 @@ const Dr = async () => {
                     },
                     children: [
                       d ? /* @__PURE__ */ e(
-                        Z,
+                        oe,
                         {
                           src: d,
                           sx: { width: 32, height: 32 }
                         }
                       ) : /* @__PURE__ */ e(
-                        se,
+                        xe,
                         {
                           sx: {
                             width: 32,
@@ -364,7 +364,7 @@ const Dr = async () => {
                         }
                       ),
                       /* @__PURE__ */ s(
-                        R,
+                        D,
                         {
                           sx: {
                             display: "flex",
@@ -401,7 +401,7 @@ const Dr = async () => {
                                   whiteSpace: "nowrap",
                                   maxWidth: "150px"
                                 },
-                                children: H(K)
+                                children: Q($)
                               }
                             )
                           ]
@@ -411,11 +411,11 @@ const Dr = async () => {
                   }
                 ),
                 /* @__PURE__ */ s(
-                  Oe,
+                  Pe,
                   {
-                    anchorEl: j,
-                    open: v,
-                    onClose: S,
+                    anchorEl: W,
+                    open: X,
+                    onClose: R,
                     transformOrigin: {
                       horizontal: "right",
                       vertical: "top"
@@ -437,17 +437,17 @@ const Dr = async () => {
                     },
                     children: [
                       /* @__PURE__ */ e(
-                        le,
+                        ge,
                         {
-                          onClick: () => L(k),
+                          onClick: () => T(S),
                           children: "Settings"
                         }
                       ),
-                      /* @__PURE__ */ e(w, {}),
+                      /* @__PURE__ */ e(g, {}),
                       /* @__PURE__ */ s(
-                        le,
+                        ge,
                         {
-                          onClick: () => L(m),
+                          onClick: () => T(p),
                           sx: {
                             color: "error.main",
                             "&:hover": {
@@ -456,7 +456,7 @@ const Dr = async () => {
                           },
                           children: [
                             /* @__PURE__ */ e(u, { sx: { flexGrow: 1 }, children: "Logout" }),
-                            /* @__PURE__ */ e(de, { fontSize: "small" })
+                            /* @__PURE__ */ e(Se, { fontSize: "small" })
                           ]
                         }
                       )
@@ -464,8 +464,8 @@ const Dr = async () => {
                   }
                 )
               ] }),
-              z.length !== 0 && z.map((n) => n.type === "divider" ? /* @__PURE__ */ e(
-                w,
+              L.length !== 0 && L.map((n) => n.type === "divider" ? /* @__PURE__ */ e(
+                g,
                 {
                   orientation: "vertical",
                   flexItem: !0,
@@ -492,13 +492,13 @@ const Dr = async () => {
                   },
                   children: [
                     n.avatar ? /* @__PURE__ */ e(
-                      Z,
+                      oe,
                       {
                         src: n.avatar,
                         sx: { width: 32, height: 32 }
                       }
                     ) : /* @__PURE__ */ e(
-                      se,
+                      xe,
                       {
                         sx: {
                           width: 32,
@@ -508,7 +508,7 @@ const Dr = async () => {
                       }
                     ),
                     /* @__PURE__ */ s(
-                      R,
+                      D,
                       {
                         sx: {
                           display: "flex",
@@ -560,14 +560,14 @@ const Dr = async () => {
       ] })
     }
   );
-}, pe = ({
+}, Re = ({
   title: t = "",
   message: i = "",
   buttonText: o = "",
   onButtonClick: c,
   show: l = !0
-}) => l ? /* @__PURE__ */ e(We, { variant: "outlined", sx: { m: 1.5, flexShrink: 0 }, children: /* @__PURE__ */ s(Le, { children: [
-  /* @__PURE__ */ e(Ve, { fontSize: "small" }),
+}) => l ? /* @__PURE__ */ e(Xe, { variant: "outlined", sx: { m: 1.5, flexShrink: 0 }, children: /* @__PURE__ */ s(Qe, { children: [
+  /* @__PURE__ */ e(Ye, { fontSize: "small" }),
   /* @__PURE__ */ e(u, { gutterBottom: !0, sx: { fontWeight: 600 }, children: t }),
   /* @__PURE__ */ e(
     u,
@@ -578,7 +578,7 @@ const Dr = async () => {
     }
   ),
   /* @__PURE__ */ e(
-    fe,
+    ke,
     {
       variant: "contained",
       size: "small",
@@ -587,7 +587,7 @@ const Dr = async () => {
       children: o
     }
   )
-] }) }) : null, me = ({
+] }) }) : null, Te = ({
   mainLinks: t,
   secondaryLinks: i = [],
   activePath: o,
@@ -608,14 +608,14 @@ const Dr = async () => {
         gap: 1
       },
       children: [
-        t.map((r, d) => /* @__PURE__ */ s(J.Fragment, { children: [
-          /* @__PURE__ */ e(ae, { title: r.text, placement: "right", arrow: !0, children: /* @__PURE__ */ e(
+        t.map((r, d) => /* @__PURE__ */ s(re.Fragment, { children: [
+          /* @__PURE__ */ e(Ie, { title: r.text, placement: "right", arrow: !0, children: /* @__PURE__ */ e(
             B,
             {
               component: "a",
               href: r.path,
-              onClick: (p) => {
-                p.preventDefault(), p.stopPropagation(), a(r.path);
+              onClick: (m) => {
+                m.preventDefault(), m.stopPropagation(), a(r.path);
               },
               sx: {
                 width: 44,
@@ -632,7 +632,7 @@ const Dr = async () => {
             }
           ) }),
           d < t.length - 1 && /* @__PURE__ */ e(
-            R,
+            D,
             {
               sx: {
                 width: "100%",
@@ -640,7 +640,7 @@ const Dr = async () => {
                 justifyContent: "center"
               },
               children: /* @__PURE__ */ e(
-                w,
+                g,
                 {
                   sx: { width: "60%", borderColor: "divider" }
                 }
@@ -648,9 +648,9 @@ const Dr = async () => {
             }
           )
         ] }, d)),
-        i.length > 0 && /* @__PURE__ */ s(ce, { children: [
+        i.length > 0 && /* @__PURE__ */ s(we, { children: [
           /* @__PURE__ */ e(
-            R,
+            D,
             {
               sx: {
                 width: "100%",
@@ -659,16 +659,16 @@ const Dr = async () => {
                 justifyContent: "center"
               },
               children: /* @__PURE__ */ e(
-                w,
+                g,
                 {
                   sx: { width: "60%", borderColor: "divider" }
                 }
               )
             }
           ),
-          /* @__PURE__ */ e(R, { sx: { mt: "auto", pb: 2 }, children: /* @__PURE__ */ e(f, { gap: 1, alignItems: "center", children: i.map((r, d) => /* @__PURE__ */ s(J.Fragment, { children: [
+          /* @__PURE__ */ e(D, { sx: { mt: "auto", pb: 2 }, children: /* @__PURE__ */ e(f, { gap: 1, alignItems: "center", children: i.map((r, d) => /* @__PURE__ */ s(re.Fragment, { children: [
             /* @__PURE__ */ e(
-              ae,
+              Ie,
               {
                 title: r.text,
                 placement: "right",
@@ -678,8 +678,8 @@ const Dr = async () => {
                   {
                     component: "a",
                     href: r.path,
-                    onClick: (p) => {
-                      p.preventDefault(), p.stopPropagation(), a(r.path);
+                    onClick: (m) => {
+                      m.preventDefault(), m.stopPropagation(), a(r.path);
                     },
                     sx: {
                       width: 48,
@@ -698,7 +698,7 @@ const Dr = async () => {
               }
             ),
             d < i.length - 1 && /* @__PURE__ */ e(
-              R,
+              D,
               {
                 sx: {
                   width: "100%",
@@ -706,7 +706,7 @@ const Dr = async () => {
                   justifyContent: "center"
                 },
                 children: /* @__PURE__ */ e(
-                  w,
+                  g,
                   {
                     sx: {
                       width: "60%",
@@ -721,7 +721,7 @@ const Dr = async () => {
       ]
     }
   );
-}, Qe = ({
+}, ir = ({
   open: t,
   onClose: i,
   mainLinks: o,
@@ -730,13 +730,13 @@ const Dr = async () => {
   onLinkClick: a,
   userName: r = "User Name",
   userAvatar: d,
-  onLogout: p,
-  showNotifications: T = !1,
-  notificationCount: k = 0,
-  alertProps: m,
+  onLogout: m,
+  showNotifications: E = !1,
+  notificationCount: S = 0,
+  alertProps: p,
   accentColor: I = "#01584f"
 }) => /* @__PURE__ */ e(
-  Ne,
+  Je,
   {
     anchor: "right",
     open: t,
@@ -764,7 +764,7 @@ const Dr = async () => {
                 sx: { gap: 1, alignItems: "center", flexGrow: 1, p: 1 },
                 children: [
                   /* @__PURE__ */ e(
-                    Z,
+                    oe,
                     {
                       sizes: "small",
                       alt: r,
@@ -776,21 +776,21 @@ const Dr = async () => {
                 ]
               }
             ),
-            T && /* @__PURE__ */ e(
-              he,
+            E && /* @__PURE__ */ e(
+              ve,
               {
                 color: "error",
                 variant: "dot",
-                invisible: k === 0,
+                invisible: S === 0,
                 sx: { "& .MuiBadge-badge": { right: 2, top: 2 } },
-                children: /* @__PURE__ */ e(B, { size: "small", children: /* @__PURE__ */ e(Ke, {}) })
+                children: /* @__PURE__ */ e(B, { size: "small", children: /* @__PURE__ */ e(qe, {}) })
               }
             )
           ] }),
-          /* @__PURE__ */ e(w, {}),
+          /* @__PURE__ */ e(g, {}),
           /* @__PURE__ */ s(f, { sx: { flexGrow: 1 }, children: [
             /* @__PURE__ */ e(
-              me,
+              Te,
               {
                 mainLinks: o,
                 secondaryLinks: c,
@@ -801,16 +801,16 @@ const Dr = async () => {
                 accentColor: I
               }
             ),
-            /* @__PURE__ */ e(w, {})
+            /* @__PURE__ */ e(g, {})
           ] }),
-          (m == null ? void 0 : m.show) && /* @__PURE__ */ e(pe, { ...m }),
+          (p == null ? void 0 : p.show) && /* @__PURE__ */ e(Re, { ...p }),
           /* @__PURE__ */ e(f, { sx: { p: 2 }, children: /* @__PURE__ */ e(
-            fe,
+            ke,
             {
               variant: "outlined",
               fullWidth: !0,
-              startIcon: /* @__PURE__ */ e(de, {}),
-              onClick: p,
+              startIcon: /* @__PURE__ */ e(Se, {}),
+              onClick: m,
               children: "Logout"
             }
           ) })
@@ -818,7 +818,7 @@ const Dr = async () => {
       }
     )
   }
-), Mr = ({
+), Vr = ({
   children: t,
   sidebarLinks: i = [],
   secondarySidebarLinks: o = [],
@@ -827,63 +827,86 @@ const Dr = async () => {
   showHeader: a = !0,
   showSidebar: r = !0,
   enableRefreshToken: d = !1,
-  activePath: p,
-  onLinkClick: T,
-  userName: k,
-  userEmail: m,
+  activePath: m,
+  onLinkClick: E,
+  userName: S,
+  userEmail: p,
   userAvatar: I,
-  onLogout: b,
+  onLogout: z,
   onProfileClick: x,
-  onAccountClick: E,
-  onSettingsClick: D,
-  showNotifications: M = !0,
-  notificationCount: C = 0,
-  showSearchbar: K = !0,
-  searchValue: N,
-  onSearchChange: $,
-  onSearchSubmit: F,
+  onAccountClick: M,
+  onSettingsClick: A,
+  showNotifications: C = !0,
+  notificationCount: U = 0,
+  showSearchbar: $ = !0,
+  searchValue: F,
+  onSearchChange: G,
+  onSearchSubmit: H,
   showProfile: h = !0,
-  userRole: z,
-  alertProps: g,
-  style: P,
-  headerStyles: U,
-  sidebarStyles: j,
-  contentStyles: W,
-  accentColor: v = "#01584f",
-  contentBackgroundColor: A = "#f2f9fc",
-  navbarBackground: G = "#ffffff",
-  navbarAccentColor: H = "#000000",
-  GlobalChatSidebar: _,
-  useChatSidebar: S,
-  rightExtraContent: L,
-  customNavbar: n,
-  customNavbarProps: ue
+  userRole: L,
+  onVerify: v,
+  alertProps: w,
+  style: j,
+  headerStyles: W,
+  sidebarStyles: V,
+  contentStyles: X,
+  accentColor: k = "#01584f",
+  contentBackgroundColor: O = "#f2f9fc",
+  navbarBackground: Q = "#ffffff",
+  navbarAccentColor: Y = "#000000",
+  GlobalChatSidebar: R,
+  useChatSidebar: T,
+  rightExtraContent: n,
+  customNavbar: ie,
+  customNavbarProps: ye
 }) => {
-  const xe = ye(), y = Re(xe.breakpoints.down("md")), [oe, te] = Y(!1), [ge, we] = Y(!0), [Ie, ke] = Y(!1), X = S == null ? void 0 : S(), ne = (X == null ? void 0 : X.isOpen) ?? !1, ve = () => {
-    te(!oe);
-  }, Se = () => {
-    te(!1);
+  const be = Oe(), y = _e(be.breakpoints.down("md")), [se, le] = K(!1), [De, Ee] = K(!0), [Me, Ae] = K(!1), [sr, ae] = K(null), q = T == null ? void 0 : T(), ce = (q == null ? void 0 : q.isOpen) ?? !1, J = ue(v), de = ue(!1);
+  N(() => {
+    J.current = v;
+  }, [v]);
+  const Ce = () => {
+    le(!se);
+  }, Ue = () => {
+    le(!1);
+  }, he = (fe) => {
+    localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), ae(null), z(fe);
   };
-  return q(() => {
+  return N(() => {
     (() => {
       try {
-        if (!localStorage.getItem("lumoraRefreshToken")) {
-          console.log("No session found, redirecting to login"), window.location.href = "/login";
+        const Z = localStorage.getItem("lumoraRefreshToken"), lr = localStorage.getItem("lumoraAccessToken"), me = localStorage.getItem("lumoraUser");
+        if (!Z) {
+          console.log("No session found, redirecting to login"), localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), window.location.href = "/login";
           return;
         }
-        ke(!0);
-      } catch (ie) {
-        console.error("Error checking session:", ie), window.location.href = "/login";
+        if (me && !de.current)
+          try {
+            const b = JSON.parse(me), pe = {
+              name: b.name || "",
+              email: b.email || "",
+              profilePicture: b.profilePicture || "",
+              role: b.role || ""
+            };
+            ae(pe), de.current = !0, J.current && J.current(pe);
+          } catch (b) {
+            console.error(
+              "Error parsing user data from localStorage:",
+              b
+            ), localStorage.removeItem("lumoraUser");
+          }
+        Ae(!0);
+      } catch (Z) {
+        console.error("Error checking session:", Z), localStorage.removeItem("lumoraAccessToken"), localStorage.removeItem("lumoraRefreshToken"), localStorage.removeItem("lumoraUser"), window.location.href = "/login";
       } finally {
-        we(!1);
+        Ee(!1);
       }
     })();
-  }, []), q(() => (d && $e(), () => {
-    Fe();
-  }), [d]), q(() => {
-    d && Ge();
-  }, [d]), ge ? /* @__PURE__ */ s(
-    O,
+  }, []), N(() => (d && Ze(), () => {
+    er();
+  }), [d]), N(() => {
+    d && or();
+  }, [d]), De ? /* @__PURE__ */ s(
+    _,
     {
       sx: {
         display: "flex",
@@ -895,60 +918,60 @@ const Dr = async () => {
       },
       children: [
         /* @__PURE__ */ e(
-          Te,
+          Be,
           {
             size: 60,
             thickness: 4,
-            sx: { color: v }
+            sx: { color: k }
           }
         ),
-        /* @__PURE__ */ e(O, { sx: { mt: 2, color: "text.secondary" }, children: "Checking session..." })
+        /* @__PURE__ */ e(_, { sx: { mt: 2, color: "text.secondary" }, children: "Checking session..." })
       ]
     }
-  ) : Ie ? /* @__PURE__ */ s(
-    O,
+  ) : Me ? /* @__PURE__ */ s(
+    _,
     {
       sx: {
         display: "flex",
         minHeight: "100vh",
-        ...P
+        ...j
       },
       children: [
-        /* @__PURE__ */ e(be, {}),
+        /* @__PURE__ */ e(ze, {}),
         a && /* @__PURE__ */ e(
-          Xe,
+          nr,
           {
             appName: c,
             pageName: l,
-            onMenuClick: y && r ? ve : void 0,
+            onMenuClick: y && r ? Ce : void 0,
             showMenuButton: y && r,
-            headerStyles: U,
-            userName: k,
-            userEmail: m,
+            headerStyles: W,
+            userName: S,
+            userEmail: p,
             userAvatar: I,
             onProfileClick: x,
-            onAccountClick: E,
-            onSettingsClick: D,
-            onLogout: b,
-            showNotifications: M,
-            notificationCount: C,
-            showSearchbar: K && !n,
-            searchValue: N,
-            onSearchChange: $,
-            onSearchSubmit: F,
+            onAccountClick: M,
+            onSettingsClick: A,
+            onLogout: he,
+            showNotifications: C,
+            notificationCount: U,
+            showSearchbar: $ && !ie,
+            searchValue: F,
+            onSearchChange: G,
+            onSearchSubmit: H,
             showProfile: h,
-            userRole: z,
-            accentColor: v,
-            contentBackgroundColor: A,
-            navbarBackground: G,
-            navbarAccentColor: H,
-            rightExtraContent: L,
-            customNavbar: n,
-            customNavbarProps: ue
+            userRole: L,
+            accentColor: k,
+            contentBackgroundColor: O,
+            navbarBackground: Q,
+            navbarAccentColor: Y,
+            rightExtraContent: n,
+            customNavbar: ie,
+            customNavbarProps: ye
           }
         ),
         r && !y && /* @__PURE__ */ e(
-          Ee,
+          Le,
           {
             variant: "permanent",
             sx: {
@@ -959,16 +982,16 @@ const Dr = async () => {
               "& .MuiDrawer-paper": {
                 width: 80,
                 boxSizing: "border-box",
-                bgcolor: A,
+                bgcolor: O,
                 borderRight: "none",
                 top: a ? "60px" : 0,
                 // Position below header
                 height: a ? "calc(100vh - 60px)" : "100vh"
               },
-              ...j
+              ...V
             },
             children: /* @__PURE__ */ s(
-              O,
+              _,
               {
                 sx: {
                   overflow: "auto",
@@ -979,43 +1002,43 @@ const Dr = async () => {
                 },
                 children: [
                   /* @__PURE__ */ e(
-                    me,
+                    Te,
                     {
                       mainLinks: i,
                       secondaryLinks: o,
-                      activePath: p,
-                      onLinkClick: T,
-                      accentColor: v
+                      activePath: m,
+                      onLinkClick: E,
+                      accentColor: k
                     }
                   ),
-                  (g == null ? void 0 : g.show) && /* @__PURE__ */ e(pe, { ...g })
+                  (w == null ? void 0 : w.show) && /* @__PURE__ */ e(Re, { ...w })
                 ]
               }
             )
           }
         ),
         r && y && /* @__PURE__ */ e(
-          Qe,
+          ir,
           {
-            open: oe,
-            onClose: Se,
+            open: se,
+            onClose: Ue,
             mainLinks: i,
             secondaryLinks: o,
-            activePath: p,
-            onLinkClick: T,
-            userName: k,
-            userEmail: m,
+            activePath: m,
+            onLinkClick: E,
+            userName: S,
+            userEmail: p,
             userAvatar: I,
-            onLogout: b,
+            onLogout: he,
             onProfileClick: x,
-            showNotifications: M,
-            notificationCount: C,
-            alertProps: g,
-            accentColor: v
+            showNotifications: C,
+            notificationCount: U,
+            alertProps: w,
+            accentColor: k
           }
         ),
         /* @__PURE__ */ e(
-          O,
+          _,
           {
             component: "main",
             sx: {
@@ -1027,17 +1050,17 @@ const Dr = async () => {
               // Account for AppNavbar height (60px)
               ml: 0,
               // Offset for sidebar on desktop
-              backgroundColor: A,
+              backgroundColor: O,
               // White background for main content
-              ...W
+              ...X
             },
-            children: /* @__PURE__ */ s(Q, { container: !0, spacing: 3, children: [
+            children: /* @__PURE__ */ s(ee, { container: !0, spacing: 3, children: [
               /* @__PURE__ */ e(
-                Q,
+                ee,
                 {
                   size: {
                     xs: 12,
-                    md: ne && _ ? 8.5 : 12
+                    md: ce && R ? 8.5 : 12
                   },
                   sx: {
                     display: "flex",
@@ -1046,8 +1069,8 @@ const Dr = async () => {
                   children: t
                 }
               ),
-              ne && _ && /* @__PURE__ */ e(
-                Q,
+              ce && R && /* @__PURE__ */ e(
+                ee,
                 {
                   size: { xs: 12, md: 3.5 },
                   sx: {
@@ -1071,7 +1094,7 @@ const Dr = async () => {
                     }
                     // Viewport - navbar - top padding - top margin
                   },
-                  children: /* @__PURE__ */ e(_, {})
+                  children: /* @__PURE__ */ e(R, {})
                 }
               )
             ] })
@@ -1082,7 +1105,7 @@ const Dr = async () => {
   ) : null;
 };
 export {
-  Mr as LumoraWrapper,
-  Mr as default,
-  Dr as logoutUser
+  Vr as LumoraWrapper,
+  Vr as default,
+  Wr as logoutUser
 };

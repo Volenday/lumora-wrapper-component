@@ -112,6 +112,7 @@ apiClient.interceptors.response.use(
 				// Refresh failed, clear tokens and redirect to login
 				localStorage.removeItem('lumoraAccessToken');
 				localStorage.removeItem('lumoraRefreshToken');
+				localStorage.removeItem('lumoraUser');
 
 				// Redirect to login page
 				window.location.href = '/login';

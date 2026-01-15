@@ -53,6 +53,7 @@ export const validateAndRefreshTokens = async (): Promise<boolean> => {
 	// No tokens or refresh failed - clear everything and redirect
 	localStorage.removeItem('lumoraAccessToken');
 	localStorage.removeItem('lumoraRefreshToken');
+	localStorage.removeItem('lumoraUser');
 	window.location.href = '/login';
 	return false;
 };
