@@ -1,12 +1,15 @@
-import axios from 'axios';
+import type { AxiosInstance } from 'axios';
+import { clearAuthTokens, getAuthTokens, logAuthError, storeAuthTokens } from './authUtils';
 
 /**
  * Validates tokens on mount and refreshes if needed
  * Returns true if tokens are valid/refreshed, false if redirect to login is needed
+ * Note: This is a proactive check on mount. Token refresh on API calls is handled
+ * automatically by axiosClient interceptors.
+ * @param axiosClient - The axios client instance to use for API calls
  */
-export const validateAndRefreshTokens = async (): Promise<boolean> => {
-	const accessToken = localStorage.getItem('lumoraAccessToken');
-	const refreshToken = localStorage.getItem('lumoraRefreshToken');
+export const validateAndRefreshTokens = async (axiosClient: AxiosInstance): Promise<boolean> => {
+	const { accessToken, refreshToken } = getAuthTokens();
 
 	// If we have an access token, we're good
 	if (accessToken) {
@@ -16,44 +19,23 @@ export const validateAndRefreshTokens = async (): Promise<boolean> => {
 	// No access token, but we have a refresh token - try to refresh
 	if (refreshToken) {
 		try {
-			const refreshResponse = await axios.post(
-				`${(import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3000'}/auth/refresh`,
-				{ refresh_token: refreshToken },
-				{
-					headers: {
-						'X-API-Key':
-							(import.meta as any).env?.VITE_API_KEY || '',
-						'Content-Type': 'application/json'
-					}
-				}
-			);
+			const refreshResponse = await axiosClient.post('/auth/refresh', {
+				refresh_token: refreshToken
+			});
 
-			if (
-				refreshResponse.data.success &&
-				refreshResponse.data.accessToken
-			) {
-				// Store the new tokens
-				localStorage.setItem(
-					'lumoraAccessToken',
-					refreshResponse.data.accessToken
-				);
-				if (refreshResponse.data.refreshToken) {
-					localStorage.setItem(
-						'lumoraRefreshToken',
-						refreshResponse.data.refreshToken
-					);
-				}
+			if (refreshResponse.data.success && refreshResponse.data.accessToken) {
+				// Store the new tokens using centralized utility
+				storeAuthTokens(refreshResponse.data.accessToken, refreshResponse.data.refreshToken || null, null);
 				return true;
 			}
 		} catch (error) {
-			console.error('Token refresh failed:', error);
+			logAuthError(error as Error, 'TokenValidator - Refresh Failed');
 		}
 	}
 
 	// No tokens or refresh failed - clear everything and redirect
-	localStorage.removeItem('lumoraAccessToken');
-	localStorage.removeItem('lumoraRefreshToken');
-	localStorage.removeItem('lumoraUser');
+	clearAuthTokens();
+	// Use window.location.href since this is a utility function without router access
 	window.location.href = '/login';
 	return false;
 };

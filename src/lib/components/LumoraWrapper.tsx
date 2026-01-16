@@ -1,15 +1,8 @@
 import type { SxProps, Theme } from '@mui/material';
-import {
-	Box,
-	CircularProgress,
-	CssBaseline,
-	Drawer,
-	Grid,
-	useMediaQuery,
-	useTheme
-} from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
-import { disableTokenRefresh, enableTokenRefresh } from '../apiClient';
+import { Box, CircularProgress, CssBaseline, Drawer, Grid, useMediaQuery, useTheme } from '@mui/material';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { clearAuthTokens, getCurrentUser, isAuthenticated } from '../authUtils';
+import { createAxiosClient } from '../axiosClient';
 import { validateAndRefreshTokens } from '../tokenValidator';
 import AppNavbar from './AppNavbar';
 import CardAlert from './CardAlert';
@@ -40,7 +33,7 @@ export interface LumoraWrapperProps {
 	userName?: string;
 	userEmail?: string;
 	userAvatar?: string;
-	onLogout: (error?: Error) => void;
+	onLogout: (error?: Error) => void | Promise<void>;
 	onProfileClick?: () => void;
 	onAccountClick?: () => void;
 	onSettingsClick?: () => void;
@@ -56,12 +49,7 @@ export interface LumoraWrapperProps {
 	showProfile?: boolean;
 	userRole?: string;
 	// User data callback
-	onVerify?: (userData: {
-		name: string;
-		email: string;
-		profilePicture: string;
-		role: string;
-	}) => void;
+	onVerify?: (userData: { name: string; email: string; profilePicture: string; role: string }) => void;
 	// Alert card props
 	alertProps?: {
 		title?: string;
@@ -81,6 +69,8 @@ export interface LumoraWrapperProps {
 	// Navbar styling props
 	navbarBackground?: string;
 	navbarAccentColor?: string;
+	// API base URL for axios client
+	apiBaseUrl: string;
 	// Chat sidebar props
 	GlobalChatSidebar?: React.ComponentType;
 	useChatSidebar?: () => { isOpen: boolean };
@@ -94,6 +84,8 @@ export interface LumoraWrapperProps {
 	// Custom navbar component (replaces search bar)
 	customNavbar?: React.ComponentType<any>;
 	customNavbarProps?: Record<string, any>;
+	// Redirect to login function
+	redirectToLogin: () => void;
 }
 
 /**
@@ -140,7 +132,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	useChatSidebar,
 	rightExtraContent,
 	customNavbar: CustomNavbar,
-	customNavbarProps
+	customNavbarProps,
+	redirectToLogin,
+	apiBaseUrl
 }) => {
 	const theme = useTheme();
 	const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -158,6 +152,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	const onVerifyRef = useRef(onVerify);
 	const hasLoadedUserDataRef = useRef(false);
 
+	// Create axios client instance with the provided API base URL
+	const axiosClient = useMemo(() => createAxiosClient(apiBaseUrl), [apiBaseUrl]);
+
 	// Update ref when callback changes
 	useEffect(() => {
 		onVerifyRef.current = onVerify;
@@ -174,40 +171,51 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 	};
 
 	// Wrap logout handler to clear user data
+	// IMPORTANT: Call onLogout FIRST so parent can call logout API before tokens are cleared
 	const handleLogout = (error?: Error) => {
-		// Clear all tokens including user data
-		localStorage.removeItem('lumoraAccessToken');
-		localStorage.removeItem('lumoraRefreshToken');
-		localStorage.removeItem('lumoraUser');
-		// Clear user data state
-		setUserData(null);
-		// Call original logout handler
-		onLogout(error);
+		// Call parent logout handler FIRST (this will call the logout API)
+		// The parent's logout handler will clear tokens via authApi.logout()
+		// Handle both sync and async onLogout handlers
+		const result = onLogout(error);
+
+		// If onLogout returns a promise, handle it
+		if (result instanceof Promise) {
+			result
+				.then(() => {
+					// Clear user data state after logout API is called
+					setUserData(null);
+				})
+				.catch((logoutError: unknown) => {
+					console.error('Error in logout handler:', logoutError);
+					// Still clear user data even if there's an error
+					setUserData(null);
+				});
+		} else {
+			// Synchronous handler, clear user data immediately
+			setUserData(null);
+		}
 	};
 
 	// Session checking: validate that user has a refresh token and user data before rendering
 	useEffect(() => {
 		const checkSession = () => {
 			try {
-				// Check if refresh token exists in localStorage
-				const refreshToken = localStorage.getItem('lumoraRefreshToken');
-				const accessToken = localStorage.getItem('lumoraAccessToken');
-				const lumoraUser = localStorage.getItem('lumoraUser');
+				// Check authentication status using centralized utility
+				const { isAuthenticated: authenticated, error: authError } = isAuthenticated();
 
-				if (!refreshToken) {
-					// No refresh token found, clear all tokens and redirect to login
+				if (!authenticated) {
+					// No valid tokens found, clear all tokens and redirect to login
 					console.log('No session found, redirecting to login');
-					localStorage.removeItem('lumoraAccessToken');
-					localStorage.removeItem('lumoraRefreshToken');
-					localStorage.removeItem('lumoraUser');
-					window.location.href = '/login';
+					clearAuthTokens();
+					redirectToLogin();
 					return;
 				}
 
-				// Parse and validate user data (only once)
-				if (lumoraUser && !hasLoadedUserDataRef.current) {
-					try {
-						const user = JSON.parse(lumoraUser);
+				// Get user data using centralized utility (only once)
+				if (!hasLoadedUserDataRef.current) {
+					const { user, error: userError } = getCurrentUser();
+
+					if (user && !userError) {
 						const parsedUserData = {
 							name: user.name || '',
 							email: user.email || '',
@@ -220,13 +228,8 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						if (onVerifyRef.current) {
 							onVerifyRef.current(parsedUserData);
 						}
-					} catch (parseError) {
-						console.error(
-							'Error parsing user data from localStorage:',
-							parseError
-						);
-						// Invalid user data, clear it but continue with session
-						localStorage.removeItem('lumoraUser');
+					} else if (userError) {
+						console.error('Error getting user data:', userError);
 					}
 				}
 
@@ -235,40 +238,26 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			} catch (error) {
 				console.error('Error checking session:', error);
 				// On error, clear tokens and redirect to login for safety
-				localStorage.removeItem('lumoraAccessToken');
-				localStorage.removeItem('lumoraRefreshToken');
-				localStorage.removeItem('lumoraUser');
-				window.location.href = '/login';
+				clearAuthTokens();
+				redirectToLogin();
 			} finally {
 				setIsCheckingSession(false);
 			}
 		};
 
 		checkSession();
-	}, []);
-
-	// Token refresh interceptor setup
-	useEffect(() => {
-		if (enableRefreshToken) {
-			// Enable the token refresh interceptor when the component mounts
-			enableTokenRefresh();
-		}
-
-		// Cleanup function to disable token refresh when component unmounts or prop changes
-		return () => {
-			disableTokenRefresh();
-		};
-	}, [enableRefreshToken]);
+	}, [redirectToLogin]);
 
 	// Initial token validation when component mounts and refresh is enabled
+	// Note: Token refresh is now handled automatically by axiosClient interceptors
 	useEffect(() => {
 		if (!enableRefreshToken) {
 			return;
 		}
 
 		// Validate tokens on mount only
-		validateAndRefreshTokens();
-	}, [enableRefreshToken]);
+		validateAndRefreshTokens(axiosClient);
+	}, [enableRefreshToken, axiosClient]);
 
 	// Show loading state while checking session
 	if (isCheckingSession) {
@@ -281,16 +270,9 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 					justifyContent: 'center',
 					minHeight: '100vh',
 					backgroundColor: 'background.default'
-				}}
-			>
-				<CircularProgress
-					size={60}
-					thickness={4}
-					sx={{ color: accentColor }}
-				/>
-				<Box sx={{ mt: 2, color: 'text.secondary' }}>
-					Checking session...
-				</Box>
+				}}>
+				<CircularProgress size={60} thickness={4} sx={{ color: accentColor }} />
+				<Box sx={{ mt: 2, color: 'text.secondary' }}>Checking session...</Box>
 			</Box>
 		);
 	}
@@ -307,8 +289,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				display: 'flex',
 				minHeight: '100vh',
 				...style
-			}}
-		>
+			}}>
 			<CssBaseline />
 
 			{/* Header */}
@@ -316,11 +297,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 				<AppNavbar
 					appName={appName}
 					pageName={pageName}
-					onMenuClick={
-						isMobile && showSidebar
-							? handleMobileSidebarToggle
-							: undefined
-					}
+					onMenuClick={isMobile && showSidebar ? handleMobileSidebarToggle : undefined}
 					showMenuButton={isMobile && showSidebar}
 					headerStyles={headerStyles}
 					userName={userName}
@@ -351,7 +328,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 			{/* Desktop Sidebar */}
 			{showSidebar && !isMobile && (
 				<Drawer
-					variant='permanent'
+					variant="permanent"
 					sx={{
 						width: 80,
 						flexShrink: 0,
@@ -365,8 +342,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							height: showHeader ? 'calc(100vh - 60px)' : '100vh'
 						},
 						...sidebarStyles
-					}}
-				>
+					}}>
 					<Box
 						sx={{
 							overflow: 'auto',
@@ -374,8 +350,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 							display: 'flex',
 							flexDirection: 'column',
 							pt: 2
-						}}
-					>
+						}}>
 						<MenuContent
 							mainLinks={sidebarLinks}
 							secondaryLinks={secondarySidebarLinks}
@@ -411,22 +386,17 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 
 			{/* Main Content Area */}
 			<Box
-				component='main'
+				component="main"
 				sx={{
 					flexGrow: 1,
 					p: 3,
 					m: 1,
-					width: isMobile
-						? '100%'
-						: showSidebar
-							? `calc(100% - 80px)`
-							: '100%',
+					width: isMobile ? '100%' : showSidebar ? `calc(100% - 80px)` : '100%',
 					mt: showHeader ? '60px' : 0, // Account for AppNavbar height (60px)
 					ml: isMobile ? 0 : showSidebar ? 0 : 0, // Offset for sidebar on desktop
 					backgroundColor: contentBackgroundColor, // White background for main content
 					...contentStyles
-				}}
-			>
+				}}>
 				<Grid container spacing={3}>
 					<Grid
 						size={{
@@ -436,8 +406,7 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 						sx={{
 							display: 'flex',
 							flexDirection: 'column'
-						}}
-					>
+						}}>
 						{children}
 					</Grid>
 					{isChatOpen && GlobalChatSidebar && (
@@ -454,18 +423,13 @@ const LumoraWrapper: React.FC<LumoraWrapperProps> = ({
 								alignSelf: 'flex-start',
 								height: {
 									xs: 'auto',
-									md: showHeader
-										? 'calc(100vh - 60px - 24px - 8px)'
-										: 'calc(100vh - 24px - 8px)'
+									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
 								}, // Viewport - navbar - top padding - top margin
 								maxHeight: {
 									xs: 'none',
-									md: showHeader
-										? 'calc(100vh - 60px - 24px - 8px)'
-										: 'calc(100vh - 24px - 8px)'
+									md: showHeader ? 'calc(100vh - 60px - 24px - 8px)' : 'calc(100vh - 24px - 8px)'
 								} // Viewport - navbar - top padding - top margin
-							}}
-						>
+							}}>
 							<GlobalChatSidebar />
 						</Grid>
 					)}

@@ -1,12 +1,9 @@
 // Export the LumoraWrapper component and its props interface
+import type { LumoraWrapperProps, SidebarLink } from './components/LumoraWrapper';
 import LumoraWrapper from './components/LumoraWrapper';
-import type {
-	LumoraWrapperProps,
-	SidebarLink
-} from './components/LumoraWrapper';
 
-// Export API client utilities
-export { logoutUser } from './apiClient';
+// Export authentication utilities
+export * from './authUtils';
 
 export { LumoraWrapper };
 export type { LumoraWrapperProps, SidebarLink };
